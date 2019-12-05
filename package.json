@@ -9,7 +9,7 @@
     "build": "yarn tsc:app --declaration false",
     "check:diff": "git diff --exit-code --name-only ./src",
     "ci:build": "yarn tsc:app --noEmit && yarn run tsc:spec --noEmit",
-    "ci:format": "yarn format && yarn check:diff",
+    "ci:lint": "yarn format && yarn check:diff",
     "ci:test": "yarn test:unit --ci --silent --detectOpenHandles --forceExit --collectCoverage",
     "format": "prettier --config .prettierrc --write 'src/**/*.{ts,js,md}'",
     "jest": "node --max_old_space_size=4096 ./node_modules/.bin/jest",
