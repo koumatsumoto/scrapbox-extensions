@@ -1,6 +1,7 @@
+import { customCSSClassName } from '../../constants';
 import { isEmptyDoubleDimensionalArray } from '../../util/common';
 import { ScrapboxDomManipulator } from '../../util/scrapbox-dom';
-import { Block, Container, InvalidBlock, ManipulatableElement, Meta, Page } from './types';
+import { Block, Container, InvalidBlock, Line, Meta, Page } from './classes';
 
 const cssClass = {
   title: 'us-structure-title',
@@ -12,11 +13,11 @@ const cssClass = {
 
 export const createBlock = (lines: Element[]) => {
   let meta: Meta | undefined;
-  let symbol: ManipulatableElement | undefined;
-  const text: ManipulatableElement[] = [];
+  let symbol: Line | undefined;
+  const text: Line[] = [];
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
+    const line = new Line(lines[i]);
 
     // tags line
     if (i === 0) {
@@ -38,14 +39,17 @@ export const getPage = () => {
   }
 
   // first section includes title
-  const title = sections[0].shift()!;
+  const title = new Line(sections[0].shift()!);
   const blocks: Block[] = [];
   sections.forEach((lines) => blocks.push(createBlock(lines)));
 
   const container = new Container(blocks);
-  const page = new Page(title, container);
 
-  return page;
+  return new Page(title, container);
 };
 
-export const enableLineStructualization = () => {};
+export const enableLineStructualization = () => {
+  const page = getPage();
+
+  console.log('[extensions] page', page);
+};

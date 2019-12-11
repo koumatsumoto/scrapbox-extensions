@@ -1,1 +1,1 @@
-export { ScrapboxDomManipulator } from './scrapbox-dom-manipulator';
+export * from './scrapbox-dom-manipulator';
