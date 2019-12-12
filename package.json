@@ -10,7 +10,7 @@
     "check:build:tsc": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.spec.json --noEmit",
     "check:diff": "git diff --exit-code --name-only ./src",
     "ci": "yarn ci:build:bundle && yarn ci:lint && yarn ci:test",
-    "ci:check:build": "yarn check:build:tsc && build:bundle",
+    "ci:check:build": "yarn check:build:tsc && yarn build:bundle",
     "ci:check:lint": "yarn format && yarn check:diff",
     "ci:test": "yarn test:unit --ci --silent --detectOpenHandles --forceExit --collectCoverage",
     "format": "prettier --config .prettierrc --write 'src/**/*.{ts,js,md}'",
