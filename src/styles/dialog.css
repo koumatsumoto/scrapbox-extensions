@@ -45,20 +45,29 @@
   background-color: #ffffff;
   border: 2px solid #c7c7c7;
   color: #a7a7a7;
-  border-radius: 64px;
+  border-radius: 16px;
   white-space: nowrap;
-  margin: 12px 0 0 0;
+  margin: 0 0 12px 0;
+  line-height: 32px;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   transition: all 0.2s;
-  padding: 4px 12px;
+  padding: 0 12px 0 24px;
   cursor: pointer;
+  position: relative;
+  text-align: left;
+  font-size: 14px;
+  vertical-align: middle;
 }
 
-#dialog-for-user-script label:not(:first-of-type) {
-  margin-left: 8px;
+#dialog-for-user-script label {
+  margin-right: 8px;
+}
+
+#dialog-for-user-script label:last-of-type {
+  margin-right: 0;
 }
 
 #dialog-for-user-script label::before {
@@ -73,7 +82,12 @@
   margin: 0 0.6em 0 0;
   padding: 0;
   content: '\f067';
-  transition: transform 0.2s ease-in-out;
+  transition: transform 0.12s ease-in-out;
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translate(0, -50%);
+  opacity: 0.72;
 }
 
 #dialog-for-user-script input[type='checkbox'] {
@@ -88,7 +102,7 @@
 
 #dialog-for-user-script input[type='checkbox']:checked + label::before {
   content: '\f00c';
-  transform: rotate(-360deg);
+  transform: translate(0, -50%) rotate(-360deg);
 }
 
 #dialog-for-user-script button {
