@@ -16,8 +16,7 @@ const makeCheckboxesHTML = (values: string[]) =>
 
 const menuHTML = `<menu><button value="cancel">Cancel</button><button value="default">Copy</button></menu>`;
 
-const makeFormHTML = (checkboxesHTML: string, menuHTML: string) =>
-  `<form method="dialog"><div>${checkboxesHTML}</div><menu>${menuHTML}</menu></form>`;
+const makeFormHTML = (checkboxesHTML: string, menuHTML: string) => `<form method="dialog"><div>${checkboxesHTML}</div>${menuHTML}</form>`;
 
 export const makeDialogInnerHTML = (checkboxValues: string[]) => makeFormHTML(makeCheckboxesHTML(checkboxValues), menuHTML);
 

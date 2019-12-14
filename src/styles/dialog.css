@@ -2,14 +2,103 @@
   border: none;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   border-radius: 2px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 13px;
   max-height: 80vh;
   min-height: 40vh;
+  overflow: hidden;
+  padding: 0;
   width: 80vw;
 }
 
+/* used as layout container */
 #dialog-for-user-script form {
   border: none;
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+  min-height: 40vh;
+  overflow: scroll;
+  padding: 8px;
+  width: 80vw;
+}
+
+/* input checkbox layout */
+#dialog-for-user-script form > div {
+  flex: 1 1 auto;
+}
+
+/* buttons layout */
+#dialog-for-user-script form > menu {
+  flex: 0 1 auto;
+  display: flex;
+  align-items: center;
 }
 
 #dialog-for-user-script label {
+  font: inherit;
+}
+
+#dialog-for-user-script label {
+  display: inline-block;
+  background-color: #ffffff;
+  border: 2px solid #c7c7c7;
+  color: #a7a7a7;
+  border-radius: 64px;
+  white-space: nowrap;
+  margin: 12px 8px 0 0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.2s;
+  padding: 4px 12px;
+  cursor: pointer;
+}
+
+#dialog-for-user-script label::before {
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  font-family: 'FontAwesome';
+  font-weight: 900;
+  font-size: 12px;
+  margin: 0 0.6em 0 0;
+  padding: 0;
+  content: '\f067';
+  transition: transform 0.2s ease-in-out;
+}
+
+#dialog-for-user-script input[type='checkbox'] {
+  display: none;
+}
+
+#dialog-for-user-script input[type='checkbox']:checked + label {
+  background-color: #fb8c00;
+  border-color: #fb8c00;
+  color: #ffffff;
+}
+
+#dialog-for-user-script input[type='checkbox']:checked + label::before {
+  content: '\f00c';
+  transform: rotate(-360deg);
+}
+
+#dialog-for-user-script button {
+  display: inline-block;
+  margin: 0;
+  padding: 12px;
+  overflow: hidden;
+  outline: none;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  background-color: #ffffff;
+  color: #a7a7a7;
+}
+
+#dialog-for-user-script button[value='default'] {
+  background-color: #fb8c00;
+  color: #ffffff;
 }
