@@ -5,7 +5,7 @@ import { getDateOrTimeText } from './get-date-or-time-text';
 
 const addButton = () => {
   window.scrapbox.PageMenu.addItem({
-    title: 'my-test-button',
+    title: 'Copy Tag Text',
     onClick: async () => {
       try {
         const result = await openDialog({ tagOptions });
@@ -20,6 +20,6 @@ const addButton = () => {
   });
 };
 
-export const insertBlockUi = () => {
+export const copyTagText = () => {
   addButton();
 };
