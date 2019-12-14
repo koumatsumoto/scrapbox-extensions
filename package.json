@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build:bundle": "rollup -c",
-    "check:build:tsc": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.spec.json --noEmit",
+    "check:build:tsc": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.json --noEmit",
     "check:diff": "git diff --exit-code --name-only ./src",
     "deploy": "yarn build:bundle && yarn ts-node deploy/main.ts",
     "ci:check": "yarn ci:check:build && yarn ci:check:test && yarn ci:check:lint",
