@@ -1,4 +1,4 @@
-import { removeElement } from '../../util/common';
+import { getElementOrFail, removeElement } from '../../util/common';
 
 // use for mutex
 const dialogId = 'dialog-for-user-script';
@@ -22,6 +22,31 @@ export const makeDialogInnerHTML = (checkboxValues: string[]) => makeFormHTML(ma
 
 const isDialogExist = () => document.querySelector(`#${dialogId}`);
 
+type CustomDialogResult<T> = { ok: false } | { ok: true; data: T };
+
+const waitForDialogClose = (dialog: HTMLDialogElement): Promise<CustomDialogResult<string[]>> => {
+  return new Promise((resolve, reject) => {
+    try {
+      const cancelButton = getElementOrFail<HTMLFormElement>('button[value=cancel]', dialog);
+      const submitButton = getElementOrFail<HTMLFormElement>('button[value=default]', dialog);
+
+      const handleCancel = () => {
+        resolve({ ok: false });
+        dialog.close();
+      };
+      const handleSubmit = () => {
+        resolve({ ok: true, data: retrieveFormValues(dialog) });
+        dialog.close();
+      };
+
+      cancelButton.addEventListener('click', handleCancel, { once: true });
+      submitButton.addEventListener('click', handleSubmit, { once: true });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 export const appendDialogToDOMOrFail = (checkboxValues: string[]) => {
   if (isDialogExist()) {
     throw new Error('dialog already exists');
@@ -36,35 +61,19 @@ export const appendDialogToDOMOrFail = (checkboxValues: string[]) => {
 };
 
 export const retrieveFormValues = (dialog: HTMLDialogElement) => {
-  const form = dialog.querySelector<HTMLFormElement>('form');
-  if (!form) {
-    throw new Error('Unexpected Error, form element must be the dialog created by user script');
-  }
+  const form = getElementOrFail<HTMLFormElement>('form', dialog);
   const formData = new FormData(form);
-
   const checked = formData.getAll(inputName) as string[];
 
   return checked.filter((str) => 0 < str.length);
 };
 
-export const openDialog = async (param: { tagOptions: string[] }) =>
-  new Promise<string[]>((resolve, reject) => {
-    try {
-      const dialog = appendDialogToDOMOrFail(param.tagOptions);
-      const resultHandler = () => {
-        dialog.removeEventListener('close', resultHandler);
-        try {
-          removeElement(dialog);
-          const tags = retrieveFormValues(dialog);
-          resolve(tags);
-        } catch (e) {
-          reject(e);
-        }
-      };
+export const openDialog = async (param: { tagOptions: string[] }) => {
+  const dialog = appendDialogToDOMOrFail(param.tagOptions);
+  dialog.showModal();
 
-      dialog.addEventListener('close', resultHandler);
-      dialog.showModal();
-    } catch (e) {
-      reject(e);
-    }
-  });
+  const result = await waitForDialogClose(dialog);
+  removeElement(dialog);
+
+  return result;
+};

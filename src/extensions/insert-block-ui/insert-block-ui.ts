@@ -8,10 +8,11 @@ const addButton = () => {
     title: 'my-test-button',
     onClick: async () => {
       try {
-        const selectedTexts = await openDialog({ tagOptions });
-        const tagText = [getDateOrTimeText(), ...selectedTexts].map(makeTag).join(' ');
-
-        await navigator.clipboard.writeText(tagText);
+        const result = await openDialog({ tagOptions });
+        if (result.ok) {
+          const text = [getDateOrTimeText(), ...result.data].map(makeTag).join(' ');
+          await navigator.clipboard.writeText(text);
+        }
       } catch (e) {
         alert(e);
       }

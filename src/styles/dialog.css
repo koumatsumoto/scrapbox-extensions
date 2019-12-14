@@ -19,7 +19,7 @@
   max-height: 80vh;
   min-height: 40vh;
   overflow: scroll;
-  padding: 8px;
+  padding: 24px 8px 8px 24px;
   width: 80vw;
 }
 
@@ -30,9 +30,10 @@
 
 /* buttons layout */
 #dialog-for-user-script form > menu {
-  flex: 0 1 auto;
-  display: flex;
   align-items: center;
+  display: flex;
+  flex: 0 1 auto;
+  justify-content: flex-end;
 }
 
 #dialog-for-user-script label {
@@ -46,7 +47,7 @@
   color: #a7a7a7;
   border-radius: 64px;
   white-space: nowrap;
-  margin: 12px 8px 0 0;
+  margin: 12px 0 0 0;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
@@ -54,6 +55,10 @@
   transition: all 0.2s;
   padding: 4px 12px;
   cursor: pointer;
+}
+
+#dialog-for-user-script label:not(:first-of-type) {
+  margin-left: 8px;
 }
 
 #dialog-for-user-script label::before {
@@ -87,13 +92,38 @@
 }
 
 #dialog-for-user-script button {
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+    0 1px 5px 0 rgba(0, 0, 0, 0.12);
+  box-sizing: border-box;
+  position: relative;
+  user-select: none;
+  cursor: pointer;
+  outline: 0;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
   display: inline-block;
+  white-space: nowrap;
+  text-decoration: none;
+  vertical-align: baseline;
+  text-align: center;
   margin: 0;
-  padding: 12px;
-  overflow: hidden;
+  min-width: 64px;
+  line-height: 36px;
+  padding: 0 16px;
+  border-radius: 4px;
+  overflow: visible;
+  transform: translate3d(0, 0, 0);
   outline: none;
-  border-radius: 2px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+#dialog-for-user-script button:not(:first-of-type) {
+  margin-left: 8px;
+}
+
+#dialog-for-user-script button[value='cancel'] {
   background-color: #ffffff;
   color: #a7a7a7;
 }
