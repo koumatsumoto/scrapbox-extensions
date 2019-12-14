@@ -80,18 +80,13 @@ export const testBrowserCanPaste = async (config?: Config) => {
   await input.click();
   await setClipboardValue(page, clipboardValue);
 
-  // paste by execCommand
-  // await tryInputAction(page, () => page.evaluate(() => document.execCommand('paste', false)));
   // paste by Ctrl+v
   await tryInputAction(page, () => Promise.all([input.press('Control'), input.press('v')]));
 
-  await input.type('aa');
-  await page.waitFor(3000);
-
+  // assert value is pasted
   const v = await page.$eval(inputElementSelector, (e) => (e as HTMLInputElement).value);
   assert.equal(v, clipboardValue);
 
-  await page.waitFor(3000);
   await browser.close();
 };
 
