@@ -1,5 +1,4 @@
 import * as assert from 'assert';
-import { Config } from './config';
 import {
   findOrFail,
   getConfiguredBrowser,
@@ -9,7 +8,7 @@ import {
   tryInputAction,
 } from './util';
 
-export const testBrowserCanPaste = async (config?: Config) => {
+export const testBrowserClipboardPermission = async () => {
   const url = 'https://www.google.co.jp';
   const inputElementSelector = 'input[type=text]';
   const clipboardValue = 'value for clipboard!';

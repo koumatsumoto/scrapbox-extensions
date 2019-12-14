@@ -22,7 +22,7 @@ jobs:
 
       - run: yarn ci:check:build
       - run: yarn ci:check:lint
-      - run: yarn ci:test
+      - run: yarn ci:check:test
 
   deploy:
     docker:

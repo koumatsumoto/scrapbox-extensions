@@ -1,8 +1,7 @@
-import { config } from './config';
-import { testBrowserCanPaste, updateScrapboxUserScript } from './test-browser-clipboard-permission';
+import { testBrowserClipboardPermission } from './test-browser-clipboard-permission';
 
 (async () => {
-  await testBrowserCanPaste(config);
+  await testBrowserClipboardPermission();
 })()
   .then(() => {
     console.log('deploy completed');
