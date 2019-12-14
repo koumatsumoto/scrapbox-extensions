@@ -45,7 +45,4 @@ workflows:
   ci-cd:
     jobs:
       - build-and-test
-      - deploy:
-        filters:
-          branches:
-            only: master
+      - deploy
