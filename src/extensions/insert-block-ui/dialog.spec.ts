@@ -1,4 +1,4 @@
-import { setupBodyForTest } from '../../test-helpers';
+import { checkHTML, setupBodyForTest } from '../../test-helpers';
 import { getElements } from '../../util/common';
 import { appendDialogToDOMOrFail, makeDialogInnerHTML, openDialog, retrieveFormValues } from './dialog';
 
@@ -8,10 +8,9 @@ describe('dialogs', () => {
   });
 
   describe('makeDialogInnerHTML', () => {
-    it('should make dialog inner html', () => {
-      expect(makeDialogInnerHTML(['tag1', 'tag2'])).toBe(
-        '<form method="dialog"><div><label>tag1<input type="checkbox" name="checkedTags" value="tag1"></label><label>tag2<input type="checkbox" name="checkedTags" value="tag2"></label></div><menu><menu><button value="cancel">Cancel</button><button value="default">Copy</button></menu></menu></form>',
-      );
+    it('should make valid html', () => {
+      const html = makeDialogInnerHTML(['tag1', 'tag2']);
+      expect(checkHTML(html)).toBeTruthy();
     });
   });
 

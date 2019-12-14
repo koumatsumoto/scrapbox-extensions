@@ -1,11 +1,18 @@
-// use for mutex
 import { removeElement } from '../../util/common';
 
+// use for mutex
 const dialogId = 'dialog-for-user-script';
-const inputName = 'checkedTags';
+const inputName = 'tags';
 
+let labelId = 0;
 const makeCheckboxesHTML = (values: string[]) =>
-  values.map((v) => `<label>${v}<input type="checkbox" name="${inputName}" value="${v}"></label>`).join('');
+  values
+    .map((v) => {
+      const id = `usd-${labelId++}`;
+
+      return `<input id="${id}" type="checkbox" name="${inputName}" value="${v}"><label for="${id}">${v}</label>`;
+    })
+    .join('');
 
 const menuHTML = `<menu><button value="cancel">Cancel</button><button value="default">Copy</button></menu>`;
 

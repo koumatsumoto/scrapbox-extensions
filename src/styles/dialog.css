@@ -1,0 +1,15 @@
+#dialog-for-user-script {
+  border: none;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  border-radius: 2px;
+  max-height: 80vh;
+  min-height: 40vh;
+  width: 80vw;
+}
+
+#dialog-for-user-script form {
+  border: none;
+}
+
+#dialog-for-user-script label {
+}
