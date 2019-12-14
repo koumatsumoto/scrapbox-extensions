@@ -1,10 +1,11 @@
 import * as puppeteer from 'puppeteer';
 import { config } from './config';
+import { loadBundleJs } from './load-bundle-js';
 import { getWholePageText } from './user-page-template';
 import { findOrFail, getConfiguredPage, getFullPermissionBrowserContext, setClipboardValue } from './util';
 
 export const updateScrapboxUserScript = async () => {
-  const clipboardValue = getWholePageText('my-script');
+  const clipboardValue = getWholePageText(await loadBundleJs());
   const textareaSelector = '#text-input';
 
   const browser = await puppeteer.launch();

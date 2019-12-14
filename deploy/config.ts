@@ -1,6 +1,6 @@
 import { userPageTemplate } from './user-page-template';
 
-export const origin = 'https://scrapbox.io';
+const origin = 'https://scrapbox.io';
 const project = 'km-study-records';
 const user = 'kou';
 const token = 's%3AJCDs1A5gs-jJqeOP3RPjqEWi3dvbYrfE.Z7GkuuesS%2FgsuAfP9eXgKPn8FO32i6XUYJg4byRnIPE';
