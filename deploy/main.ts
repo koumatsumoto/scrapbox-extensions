@@ -1,7 +1,12 @@
-import { updateScrapboxUserScript } from './update-scrapbox-user-script';
+import { config } from './config';
+import { loadBundleJs } from './load-bundle-js';
+import { getUserPageText } from './templates';
+import { updateScrapboxPage } from './update-scrapbox-page';
 
 (async () => {
-  await updateScrapboxUserScript();
+  const userScriptPageText = getUserPageText(await loadBundleJs());
+
+  await updateScrapboxPage({ url: config.userPageUrl, text: userScriptPageText });
 })()
   .then(() => {
     console.log('deploy completed');
