@@ -45,10 +45,10 @@ workflows:
   ci-cd:
     jobs:
       - build-and-test
-      - hold:
+      - approve:
         type: approval
         requires:
           - build-and-test
       - deploy:
         requires:
-          - build
+          - approve
