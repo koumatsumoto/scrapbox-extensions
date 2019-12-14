@@ -1,7 +1,7 @@
-import { testBrowserClipboardPermission } from './test-browser-clipboard-permission';
+import { updateScrapboxUserScript } from './update-scrapbox-user-script';
 
 (async () => {
-  await testBrowserClipboardPermission();
+  await updateScrapboxUserScript();
 })()
   .then(() => {
     console.log('deploy completed');
