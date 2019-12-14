@@ -2,7 +2,7 @@ const addButton = () => {
   window.scrapbox.PageMenu.addItem({
     title: 'my-test-button',
     onClick: () => {
-      alert('hello');
+      navigator.clipboard.readText().then((v) => alert(v));
     },
   });
 };
