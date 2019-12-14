@@ -45,6 +45,4 @@ workflows:
   ci-cd:
     jobs:
       - build-and-test
-      - deploy:
-        requires:
-          - build-and-test
+      - deploy
