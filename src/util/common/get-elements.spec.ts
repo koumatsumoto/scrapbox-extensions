@@ -16,7 +16,7 @@ describe('getElements', () => {
     setupBodyForTest();
   });
 
-  it('should retrieve elements from DOM', () => {
+  it('should retrieve elements from parent element', () => {
     expect(getElements('body').length).toBe(1);
     expect(getElements('not-found').length).toBe(0);
   });

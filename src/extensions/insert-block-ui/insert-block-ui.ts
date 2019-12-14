@@ -1,14 +1,14 @@
-import { ScrapboxDomManipulator } from '../../util/scrapbox-dom';
+import { tagOptions } from './config';
+import { openDialog } from './dialog';
 
 const addButton = () => {
   window.scrapbox.PageMenu.addItem({
     title: 'my-test-button',
     onClick: async () => {
       try {
-        const text = 'be copied';
-        await navigator.clipboard.writeText(text);
-        const copied = await navigator.clipboard.readText();
-        ScrapboxDomManipulator.pasteToEditor();
+        const selectedTags = await openDialog({ tagOptions });
+
+        await navigator.clipboard.writeText('');
       } catch (e) {
         alert(e);
       }
