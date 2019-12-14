@@ -7,6 +7,6 @@ const addButton = () => {
   });
 };
 
-export const insertNewBlock = () => {
+export const insertBlockUi = () => {
   addButton();
 };

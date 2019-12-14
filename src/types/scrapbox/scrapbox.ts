@@ -19,9 +19,3 @@ export type Scrapbox = {
     removeAllFormats: () => void;
   };
 };
-
-declare global {
-  interface Window {
-    scrapbox: Scrapbox;
-  }
-}
