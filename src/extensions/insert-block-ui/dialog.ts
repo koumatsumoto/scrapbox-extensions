@@ -42,7 +42,7 @@ export const retrieveFormValues = (dialog: HTMLDialogElement) => {
 };
 
 export const openDialog = async (param: { tagOptions: string[] }) =>
-  new Promise((resolve, reject) => {
+  new Promise<string[]>((resolve, reject) => {
     try {
       const dialog = appendDialogToDOMOrFail(param.tagOptions);
       const resultHandler = () => {
