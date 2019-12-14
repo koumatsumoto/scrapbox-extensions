@@ -1,4 +1,4 @@
-import { getFormattedDateString, getFormattedTimeString, getTimeString, getTodayString } from './datetime-operations';
+import { getFormattedDateString, getFormattedTimeString, getTimeText, getDateText } from './datetime-operations';
 
 describe('datetime-operations', () => {
   describe('getFormattedDateString', () => {
@@ -8,9 +8,9 @@ describe('datetime-operations', () => {
     });
   });
 
-  describe('getTodayString', () => {
+  describe('getDateText', () => {
     it('should get string', () => {
-      expect(getTodayString()).toHaveLength(10);
+      expect(getDateText()).toHaveLength(10);
     });
   });
 
@@ -21,9 +21,9 @@ describe('datetime-operations', () => {
     });
   });
 
-  describe('getTimeString', () => {
+  describe('getTimeText', () => {
     it('should get string', () => {
-      expect(getTimeString()).toHaveLength(5);
+      expect(getTimeText()).toHaveLength(5);
     });
   });
 });

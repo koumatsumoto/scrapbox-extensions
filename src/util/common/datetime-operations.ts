@@ -11,5 +11,5 @@ export const getFormattedTimeString = (date: Date) => {
   return `${hoursStr}:${minutesStr}`;
 };
 
-export const getTodayString = () => getFormattedDateString(new Date());
-export const getTimeString = () => getFormattedTimeString(new Date());
+export const getDateText = () => getFormattedDateString(new Date());
+export const getTimeText = () => getFormattedTimeString(new Date());
