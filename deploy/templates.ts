@@ -10,4 +10,4 @@ code:style.css
  `;
 
 export const getUserPageText = (script: string) => `${userPageTemplate}${script}`;
-export const getSettingsPageText = (script: string) => `${settingsPageTemplate}${script}`;
+export const getSettingsPageText = (css: string) => `${settingsPageTemplate}${css}`;
