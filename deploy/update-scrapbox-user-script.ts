@@ -1,99 +1,10 @@
-import * as assert from 'assert';
-import { Browser, BrowserContext } from 'puppeteer';
 import * as puppeteer from 'puppeteer';
-import { config, Config } from './config';
+import { Config } from './config';
 import { getWholePageText } from './user-page-template';
+import { debugClipboard, setClipboardValue } from './util';
 
 const chromeUserAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.79 Safari/537.36';
 const newText = getWholePageText('script');
-
-const getFullPermissionBrowserContext = async (browser: Browser, origin: string) => {
-  const context = browser.defaultBrowserContext();
-  await context.overridePermissions(origin, [
-    'geolocation',
-    'midi',
-    'midi-sysex',
-    'notifications',
-    'camera',
-    'microphone',
-    'background-sync',
-    'ambient-light-sensor',
-    'accelerometer',
-    'gyroscope',
-    'magnetometer',
-    'accessibility-events',
-    'clipboard-read',
-    'clipboard-write',
-    'payment-handler',
-  ]);
-
-  return context;
-};
-
-const getConfiguredPage = async (context: BrowserContext) => {
-  const page = await context.newPage();
-  await page.setViewport({
-    width: config.browserWindowWidth,
-    height: config.browserWindowHeight,
-    deviceScaleFactor: 1,
-  });
-  await page.setUserAgent(config.browserUserAgent);
-  await page.setCookie(config.cookieToAuth);
-
-  return page;
-};
-
-const setClipboardValue = (page: puppeteer.Page, value: string) => page.evaluate((text) => navigator.clipboard.writeText(text), value);
-
-const findOrFail = async (page: puppeteer.Page, selector: string) => {
-  const element = await page.$(selector);
-  if (!element) {
-    throw new Error(`"${selector}" not found, check latest dom and element in scrapbox.io`);
-  }
-
-  return element;
-};
-
-const tryInputAction = async (page: puppeteer.Page, action: () => Promise<any>) => {
-  await page.waitFor(1000);
-  await action();
-  await page.waitFor(1000);
-};
-
-const getConfiguredBrowser = () =>
-  puppeteer.launch({ headless: false, args: [`--window-size=${config.browserWindowWidth},${config.browserWindowHeight}`] });
-
-export const testBrowserCanPaste = async (config?: Config) => {
-  const url = 'https://www.google.co.jp';
-  const inputElementSelector = 'input[type=text]';
-  const clipboardValue = 'value for clipboard!';
-  const browser = await getConfiguredBrowser();
-  const context = await getFullPermissionBrowserContext(browser, url);
-  const page = await getConfiguredPage(context);
-
-  await page.goto(url);
-  await page.waitFor(3000);
-
-  const input = await findOrFail(page, inputElementSelector);
-
-  // setup clipboard
-  await input.click();
-  await setClipboardValue(page, clipboardValue);
-
-  // paste by Ctrl+v
-  await tryInputAction(page, () => Promise.all([input.press('Control'), input.press('v')]));
-
-  // assert value is pasted
-  const v = await page.$eval(inputElementSelector, (e) => (e as HTMLInputElement).value);
-  assert.equal(v, clipboardValue);
-
-  await browser.close();
-};
-
-const debugClipboard = (page: puppeteer.Page) =>
-  page.evaluate(() => {
-    navigator.clipboard.readText().then((v) => alert(v));
-  });
 
 export const updateScrapboxUserScript = async (config: Config) => {
   const width = 800;
