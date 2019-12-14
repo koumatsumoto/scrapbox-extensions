@@ -1,5 +1,5 @@
 import { ValueOf } from '../../types';
-import { scrapboxCustomFormat } from './format';
+import { scrapboxCustomFormat } from './datetime-operations';
 
 export const customPageType = {
   // page whose title is date, e.g. '2019/12/14'

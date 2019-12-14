@@ -1,5 +1,4 @@
-import { getTimeText, getDateText } from '../../util/common';
-import { getScrapboxPageType } from '../../util/scrapbox';
+import { getDateText, getScrapboxPageType, getTimeText } from '../../util/scrapbox';
 
 export const getDateOrTimeText = () => {
   const type = getScrapboxPageType();

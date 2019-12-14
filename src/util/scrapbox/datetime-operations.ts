@@ -1,3 +1,8 @@
+export const scrapboxCustomFormat = {
+  date: /^\d{4}\/\d{2}\/\d{2}$/,
+  time: /^\d{2}:\d{2}/,
+};
+
 // only for values from date getter function, e.g. date.getMonth(), date.getDate()
 const zerofill = (num: number) => (`${num}`.length < 2 ? `0${num}` : `${num}`);
 

@@ -1,4 +1,4 @@
-import { getFormattedDateString, getFormattedTimeString, getTimeText, getDateText } from './datetime-operations';
+import { getFormattedDateString, getFormattedTimeString, getTimeText, getDateText, scrapboxCustomFormat } from './datetime-operations';
 
 describe('datetime-operations', () => {
   describe('getFormattedDateString', () => {
@@ -10,7 +10,7 @@ describe('datetime-operations', () => {
 
   describe('getDateText', () => {
     it('should get string', () => {
-      expect(getDateText()).toHaveLength(10);
+      expect(getDateText()).toMatch(scrapboxCustomFormat.date);
     });
   });
 
@@ -23,7 +23,7 @@ describe('datetime-operations', () => {
 
   describe('getTimeText', () => {
     it('should get string', () => {
-      expect(getTimeText()).toHaveLength(5);
+      expect(getTimeText()).toMatch(scrapboxCustomFormat.time);
     });
   });
 });
