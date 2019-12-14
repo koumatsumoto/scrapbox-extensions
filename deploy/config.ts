@@ -1,23 +1,23 @@
+import { getEnv } from './environments';
 import { userPageTemplate } from './user-page-template';
 
-const origin = 'https://scrapbox.io';
-const project = 'km-study-records';
-const user = 'kou';
-const token = 's%3AJCDs1A5gs-jJqeOP3RPjqEWi3dvbYrfE.Z7GkuuesS%2FgsuAfP9eXgKPn8FO32i6XUYJg4byRnIPE';
+const domain = 'scrapbox.io';
+const origin = `https://${domain}`;
+const env = getEnv();
 
 export const config = {
   browserWindowWidth: 800,
   browserWindowHeight: 600,
   browserUserAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.79 Safari/537.36',
-  userPageUrl: `${origin}/${project}/${user}`,
+  userPageUrl: `${origin}/${env.project}/${env.user}`,
   origin,
   cookieToAuth: {
     /** The cookie name. */
     name: 'connect.sid',
     /** The cookie value. */
-    value: token,
+    value: env.token,
     /** The cookie domain. */
-    domain: 'scrapbox.io',
+    domain,
     /** The cookie path. */
     path: '/',
     /** The cookie http only flag. */
@@ -28,8 +28,5 @@ export const config = {
     secure: true,
   },
   userPageTemplate,
-  // selectorToUserScriptText: '.app .page .lines .line .code-body .hljs-keyword span',
-  selectorToUserScriptText: '.app .page .lines .line .text > span',
+  selectorToTextarea: '#text-input',
 } as const;
-
-export type Config = typeof config;

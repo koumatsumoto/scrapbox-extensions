@@ -6,7 +6,7 @@ import { findOrFail, getConfiguredPage, getFullPermissionBrowserContext, setClip
 
 export const updateScrapboxUserScript = async () => {
   const clipboardValue = getWholePageText(await loadBundleJs());
-  const textareaSelector = '#text-input';
+  const textareaSelector = config.selectorToTextarea;
 
   const browser = await puppeteer.launch();
   const context = await getFullPermissionBrowserContext(browser, config.origin);
