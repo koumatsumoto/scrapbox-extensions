@@ -15,7 +15,10 @@ export class ScrapboxDomManipulator {
   static pasteToEditor() {
     const textarea = this.getTextInput();
     textarea.click();
-    textarea.dispatchEvent(new ClipboardEvent('paste'));
+    const success = document.execCommand('paste');
+    if (!success) {
+      alert('failed to paste');
+    }
   }
 
   static getLine() {
