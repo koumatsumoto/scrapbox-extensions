@@ -1,3 +1,5 @@
+import { ScrapboxDomManipulator } from '../../util/scrapbox-dom';
+
 const addButton = () => {
   window.scrapbox.PageMenu.addItem({
     title: 'my-test-button',
@@ -6,7 +8,7 @@ const addButton = () => {
         const text = 'be copied';
         await navigator.clipboard.writeText(text);
         const copied = await navigator.clipboard.readText();
-        alert(copied);
+        ScrapboxDomManipulator.pasteToEditor();
       } catch (e) {
         alert(e);
       }
