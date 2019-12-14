@@ -15,13 +15,7 @@ export class ScrapboxDomManipulator {
   static pasteToEditor() {
     const textarea = this.getTextInput();
     textarea.click();
-    textarea.dispatchEvent(
-      new KeyboardEvent('keypress', {
-        key: 'v',
-        code: 'KeyV',
-        ctrlKey: true,
-      }),
-    );
+    textarea.dispatchEvent(new ClipboardEvent('paste'));
   }
 
   static getLine() {
