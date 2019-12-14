@@ -5,7 +5,6 @@ code:script.js
  `;
 
 const settingsPageTemplate = `settings
-
 code:style.css
  `;
 
