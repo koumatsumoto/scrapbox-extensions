@@ -81,7 +81,7 @@ export const testBrowserCanPaste = async (config?: Config) => {
   await setClipboardValue(page, clipboardValue);
 
   // paste by execCommand
-  await tryInputAction(page, () => page.evaluate(() => document.execCommand('paste', false)));
+  // await tryInputAction(page, () => page.evaluate(() => document.execCommand('paste', false)));
   // paste by Ctrl+v
   await tryInputAction(page, () => Promise.all([input.press('Control'), input.press('v')]));
 
