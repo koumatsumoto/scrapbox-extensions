@@ -16,7 +16,7 @@ export type Scrapbox = {
     | 'project-settings-advanced-page'
     | 'project-settings-billing-page'
     | 'settings-profile-page'
-    | 'settings-extensions-page'
+    | 'settings-scripts-page'
     | 'settings-delete-account-page';
   Page: ScrapboxPage;
   PageMenu: {

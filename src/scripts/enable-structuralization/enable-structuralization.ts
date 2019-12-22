@@ -51,5 +51,5 @@ export const getPage = () => {
 export const enableLineStructualization = () => {
   const page = getPage();
 
-  console.log('[extensions] page', page);
+  console.log('[scripts] page', page);
 };
