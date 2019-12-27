@@ -34,3 +34,7 @@ export type Scrapbox = {
     removeAllFormats: () => void;
   };
 };
+
+export type WindowWithScrapbox = Window & {
+  scrapbox: Scrapbox;
+};
