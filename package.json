@@ -21,7 +21,7 @@
     "lint:scss": "stylelint 'src/styles/**/*.scss'",
     "jest": "node --max_old_space_size=4096 ./node_modules/.bin/jest",
     "test:unit": "yarn jest -c jest.config.js",
-    "ts-node": "node --max-old-space-size=8000 $(npm bin)/ts-node"
+    "ts-node": "node --max-old-space-size=8000 $(npm bin)/ts-node --project tsconfig.json"
   },
   "engines": {
     "node": ">= 13.0.0",
