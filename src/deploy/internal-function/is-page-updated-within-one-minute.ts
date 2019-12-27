@@ -7,5 +7,5 @@ export const isPageUpdatedWithinOneMinute = async (page: puppeteer.Page) => {
   const lastUpdatedTime = await getLastUpdatedDate(page);
   const oneMinuteAgo = addMinutes(new Date(), -1);
 
-  return isAfter(oneMinuteAgo, lastUpdatedTime);
+  return isAfter(lastUpdatedTime, oneMinuteAgo);
 };
