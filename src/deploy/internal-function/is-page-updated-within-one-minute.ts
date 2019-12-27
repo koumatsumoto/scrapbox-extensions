@@ -1,5 +1,5 @@
 import * as puppeteer from 'puppeteer';
-import { getLastUpdatedTime } from './get-last-update-time';
+import { getLastUpdatedTime } from './get-last-updated-time';
 import addMinutes from 'date-fns/addMinutes';
 import isAfter from 'date-fns/isAfter';
 
