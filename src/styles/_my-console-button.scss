@@ -1,8 +1,9 @@
 $button-size: 64px;
-$initial-position: 32px;
+$initial-position: 24px;
 $background: #ff7043;
 $shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 $color: white;
+$z-index: 10001;
 
 my-icon {
   display: inline-block;
@@ -12,6 +13,7 @@ my-console-button {
   position: fixed;
   right: $initial-position;
   bottom: $initial-position;
+  z-index: $z-index;
   display: inline-flex;
   width: $button-size;
   height: $button-size;
