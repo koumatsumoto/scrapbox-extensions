@@ -7,6 +7,6 @@ export const getLastUpdatedDate = async (page: puppeteer.Page) =>
 
     console.log('[deploy]', new Date(lastUpdatedSeconds * 1000), new Date());
 
-    // time in scrapbox is seconds, and Date requires milli seconds
+    // time in scrapbox is seconds, and Date requires milli secondsa
     return new Date(lastUpdatedSeconds * 1000);
   });
