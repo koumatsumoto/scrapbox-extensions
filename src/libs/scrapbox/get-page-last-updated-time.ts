@@ -1,7 +1,7 @@
-import { getScrapbox } from './get-scrapbox';
+import { Scrapbox } from '../../types/scrapbox';
 
 export const getPageLastUpdatedTime = () => {
-  const scrapbox = getScrapbox();
+  const scrapbox = (window as any).scrapbox as Scrapbox;
 
   if (scrapbox.Layout !== 'page') {
     throw new Error('Layout type is not page');
