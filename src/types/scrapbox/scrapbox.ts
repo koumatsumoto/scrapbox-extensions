@@ -35,6 +35,9 @@ export type Scrapbox = {
   };
 };
 
-export type WindowWithScrapbox = Window & {
-  scrapbox: Scrapbox;
-};
+// assuming, window.scrapbox exists when use type Scrapbox
+declare global {
+  interface Window {
+    scrapbox: Scrapbox;
+  }
+}

@@ -1,3 +1,3 @@
-import { WindowWithScrapbox } from '../../types/scrapbox';
+import '../../types/scrapbox';
 
-export const getScrapbox = () => (window as WindowWithScrapbox).scrapbox;
+export const getScrapbox = () => window.scrapbox;
