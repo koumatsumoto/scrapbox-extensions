@@ -7,5 +7,9 @@ export default {
     file: 'dist/bundle.js',
     format: 'esm',
   },
+  watch: {
+    chokidar: true,
+    exclude: ['node_modules/**'],
+  },
   plugins: [typescript()],
 };
