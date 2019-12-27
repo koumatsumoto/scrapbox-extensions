@@ -49,6 +49,7 @@
     "uglifycss": "^0.0.29"
   },
   "dependencies": {
+    "date-fns": "^2.8.1",
     "stylelint-config-recess-order": "^2.0.3"
   }
 }

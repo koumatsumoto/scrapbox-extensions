@@ -1,6 +1,7 @@
 import * as puppeteer from 'puppeteer';
 import { config } from './config';
 import { findOrFail, getConfiguredPage, getFullPermissionBrowserContext, setClipboardValue } from './util';
+import { isPageUpdatedWithinOneMinute } from './internal-function';
 
 export const updateScrapboxPage = async (param: { url: string; text: string }) => {
   const clipboardValue = param.text;
@@ -13,6 +14,11 @@ export const updateScrapboxPage = async (param: { url: string; text: string }) =
   // wait for react bootstrapped
   await page.goto(param.url);
   await page.waitFor(10000);
+
+  // don't deploy if last update time is too much new
+  if (await isPageUpdatedWithinOneMinute(page)) {
+    throw new Error('page is updated within one minute');
+  }
 
   const textareaElement = await findOrFail(page, textareaSelector);
 
