@@ -6,7 +6,7 @@ export const useDebugBoard = () => {
   const motion$ = getDeviceMotionStream();
   const debugBoard = componentManager.getInstance(MyDebugBoard);
 
-  motion$.subscribe((e) => {
+  motion$.subscribe((e: DeviceMotionEvent) => {
     debugBoard.updateText(JSON.stringify(e));
   });
 };

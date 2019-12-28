@@ -6,4 +6,5 @@ export * from './is-empty';
 export * from './load-scripts';
 export * from './run-on-document-ready';
 export * from './register-element-management';
+export * from './rxjs';
 export * from './util';

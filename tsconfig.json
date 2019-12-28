@@ -5,7 +5,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "strict": true,
-    "types": ["node", "jest"],
+    "types": ["node", "jest", "rxjs"],
     "typeRoots": ["./node_modules/@types"],
     "rootDir": "./",
     "outDir": "dist",
