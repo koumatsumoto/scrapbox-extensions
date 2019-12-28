@@ -7,7 +7,10 @@ import * as operatorsType from 'rxjs/operators';
 export type RxJS = {
   Subject: typeof RxType.Subject;
   operators: {
+    debounceTime: typeof operatorsType.debounceTime;
     filter: typeof operatorsType.filter;
+    map: typeof operatorsType.map;
+    scan: typeof operatorsType.scan;
   };
 };
 
