@@ -1,7 +1,7 @@
 const html = require('./my-debug-board.component.html');
 
 export class MyDebugBoard extends HTMLElement {
-  static elementName = 'my-debug-board';
+  static readonly elementName = 'my-debug-board';
   private displayElement: HTMLDivElement | null = null;
 
   constructor() {

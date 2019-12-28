@@ -10,4 +10,8 @@ my-debug-board {
   min-height: 200px;
   overflow: auto;
   box-shadow: $shadow;
+
+  * {
+    background: white;
+  }
 }
