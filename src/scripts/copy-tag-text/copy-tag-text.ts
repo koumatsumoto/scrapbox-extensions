@@ -23,10 +23,10 @@ const addButton = () => {
   });
 };
 
+/**
+ * TODO: not implemented
+ */
 export const enableConsoleButton = () => {
-  const elem = new MyConsoleButton();
-  document.body.appendChild(elem);
-
   // old code
   addButton();
 };
