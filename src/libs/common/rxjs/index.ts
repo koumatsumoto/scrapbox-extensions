@@ -1,13 +1,13 @@
 /**
  * window.rxjs is loaded by external script
  **/
-import * as Rx from 'rxjs';
-import * as operators from 'rxjs/operators';
+import * as RxType from 'rxjs';
+import * as operatorsType from 'rxjs/operators';
 
 export type RxJS = {
-  Subject: typeof Rx.Subject;
+  Subject: typeof RxType.Subject;
   operators: {
-    filter: typeof operators.filter;
+    filter: typeof operatorsType.filter;
   };
 };
 
@@ -17,4 +17,6 @@ declare global {
   }
 }
 
-export const Subject = window.rxjs.Subject;
+// lazy load
+export const getRx = () => window.rxjs as RxJS;
+export * from './import-rxjs';

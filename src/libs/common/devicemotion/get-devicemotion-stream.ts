@@ -1,4 +1,4 @@
-import { Subject } from '../rxjs';
+import { getRx } from '../rxjs';
 
 // Use singleton for performance
 let subject: any;
@@ -7,6 +7,7 @@ export const getDeviceMotionStream = () => {
     return subject.asObservable();
   }
 
+  const Subject = getRx().Subject;
   subject = new Subject<DeviceMotionEvent>();
 
   window.addEventListener('devicemotion', (e: DeviceMotionEvent) => {
