@@ -1,12 +1,8 @@
-import { defineCustomElements, MyConsoleButton, MyDebugBoard } from '../../components';
+import { MyConsoleButton, MyDebugBoard } from '../../components';
+import { Constructor } from '../../types';
 
-const manageTargetComponents = {
-  [MyConsoleButton.elementName]: MyConsoleButton,
-  [MyDebugBoard.elementName]: MyDebugBoard,
-} as const;
-
-type ManageTargetComponentsKeys = keyof typeof manageTargetComponents;
-type ManageTargetComponents = MyConsoleButton | MyDebugBoard;
+type ManagedComponents = MyConsoleButton | MyDebugBoard;
+type ComponentConstructor = Constructor<ManagedComponents>;
 
 /**
  * Manage custom elements
@@ -15,17 +11,11 @@ type ManageTargetComponents = MyConsoleButton | MyDebugBoard;
  * - manage instance as singleton
  */
 export class ComponentManager {
-  private readonly components = new Map<ManageTargetComponentsKeys, ManageTargetComponents>();
+  private readonly components = new Map<ComponentConstructor, ManagedComponents>();
   private setupCompleted = false;
 
-  constructor() {
-    // define and construct custom elements
-    defineCustomElements();
-
-    const debugBoard = new MyDebugBoard();
-    const consoleButton = new MyConsoleButton();
-    this.components.set(MyConsoleButton.elementName, consoleButton);
-    this.components.set(MyDebugBoard.elementName, debugBoard);
+  getInstance<T extends ManagedComponents>(key: Constructor<T>): T {
+    return this.components.get(key) as T;
   }
 
   /**
@@ -36,6 +26,13 @@ export class ComponentManager {
       return;
     }
 
+    // instantiate components and hold its reference
+    const consoleButton = new MyConsoleButton();
+    this.components.set(MyConsoleButton, consoleButton);
+    const debugBoard = new MyDebugBoard();
+    this.components.set(MyDebugBoard, debugBoard);
+
+    // append to dom
     for (let c of this.components.values()) {
       document.body.appendChild(c);
     }
