@@ -4,7 +4,7 @@
 import * as Rx from 'rxjs';
 import * as operators from 'rxjs/operators';
 
-export type RxType = {
+export type RxJS = {
   Subject: typeof Rx.Subject;
   operators: {
     filter: typeof operators.filter;
@@ -13,7 +13,7 @@ export type RxType = {
 
 declare global {
   interface Window {
-    rxjs: RxType;
+    rxjs: RxJS;
   }
 }
 
