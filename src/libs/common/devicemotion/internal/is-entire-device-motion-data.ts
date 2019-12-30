@@ -1,4 +1,4 @@
-import { DeviceMotionData, EntireDeviceMotionData } from './types';
+import { DeviceMotionData, EntireDeviceMotionData } from '../types';
 
 export const isEntireDeviceMotionData = (e: DeviceMotionData): e is EntireDeviceMotionData => {
   const a = e.acceleration;

@@ -1,4 +1,4 @@
-import { EntireDeviceMotionData } from './types';
+import { EntireDeviceMotionData } from '../types';
 
 export type Precision = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 const toInteger = (v: number, precision: Precision = 4) => {

@@ -1,5 +1,5 @@
 import { calculateAverage } from './calculate-average';
-import { createTestingDeviceMotionChange as v } from './test-helpers';
+import { createTestingDeviceMotionChange as v } from '../test-helpers';
 
 describe('calculateAverage', () => {
   it('should calculate well', () => {

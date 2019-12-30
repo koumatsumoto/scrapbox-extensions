@@ -1,4 +1,4 @@
-import { createTestingDeviceMotionData } from './test-helpers';
+import { createTestingDeviceMotionData } from '../test-helpers';
 import { isEntireDeviceMotionData } from './is-entire-device-motion-data';
 
 describe('isEntireDeviceMotionEvent', () => {

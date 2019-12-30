@@ -1,6 +1,6 @@
 import { componentManager } from '../component-manager';
 import { MyDebugBoard } from '../../components';
-import { getDeviceMotionWithChangeStream } from '../../libs/common/devicemotion/get-devicemotion-stream';
+import { getDeviceMotionWithChangeStream } from '../../libs/common';
 
 export const useDebugBoard = () => {
   const debugBoard = componentManager.getInstance(MyDebugBoard);

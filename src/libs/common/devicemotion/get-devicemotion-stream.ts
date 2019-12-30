@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs';
 import { getRx } from '../rxjs';
-import { isEntireDeviceMotionData } from './is-entire-device-motion-data';
-import { Precision, simplifyValue } from './simplify-value';
+import { isEntireDeviceMotionData } from './internal/is-entire-device-motion-data';
+import { Precision, simplifyValue } from './internal/simplify-value';
 import { EntireDeviceMotionDataWithChange, EntireDeviceMotionData, DeviceMotionData } from './types';
-import { getChangePerMillisecond } from './get-change';
-import { calculateAverage } from './calculate-average';
+import { getChangePerMillisecond } from './internal/get-change';
+import { calculateAverage } from './internal/calculate-average';
 
 export const getDeviceMotionStream = () => {
   const Subject = getRx().Subject;

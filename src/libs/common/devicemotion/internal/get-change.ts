@@ -1,5 +1,5 @@
-import { DeviceMotionChange, EntireDeviceMotionData } from './types';
-import { toInt } from '../arithmetic';
+import { DeviceMotionChange, EntireDeviceMotionData } from '../types';
+import { toInt } from '../../arithmetic';
 
 export const getChange = (prev: EntireDeviceMotionData, curr: EntireDeviceMotionData): DeviceMotionChange => ({
   acceleration: {
