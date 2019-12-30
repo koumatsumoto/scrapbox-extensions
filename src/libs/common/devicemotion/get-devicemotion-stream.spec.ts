@@ -15,21 +15,40 @@ describe('getDeviceMotionChangeStream', () => {
 
     getDeviceMotionChangeStream(subject.asObservable()).subscribe((data) => {
       expect(data).toEqual({
-        acceleration: {
-          x: 10000,
-          y: 10000,
-          z: 10000,
+        change: {
+          acceleration: {
+            x: 20000,
+            y: 20000,
+            z: 20000,
+          },
+          accelerationIncludingGravity: {
+            x: 20000,
+            y: 20000,
+            z: 20000,
+          },
+          rotationRate: {
+            alpha: 20000,
+            beta: 20000,
+            gamma: 20000,
+          },
         },
-        accelerationIncludingGravity: {
-          x: 10000,
-          y: 10000,
-          z: 10000,
-        },
-        interval: 1,
-        rotationRate: {
-          alpha: 10000,
-          beta: 10000,
-          gamma: 10000,
+        data: {
+          acceleration: {
+            x: 30000,
+            y: 30000,
+            z: 30000,
+          },
+          accelerationIncludingGravity: {
+            x: 30000,
+            y: 30000,
+            z: 30000,
+          },
+          interval: 3,
+          rotationRate: {
+            alpha: 30000,
+            beta: 30000,
+            gamma: 30000,
+          },
         },
       });
       done();
@@ -52,6 +71,24 @@ describe('getDeviceMotionChangeStream', () => {
         gamma: 1,
       },
       interval: 1,
+    } as DeviceMotionEvent);
+    subject.next({
+      acceleration: {
+        x: 3,
+        y: 3,
+        z: 3,
+      },
+      accelerationIncludingGravity: {
+        x: 3,
+        y: 3,
+        z: 3,
+      },
+      rotationRate: {
+        alpha: 3,
+        beta: 3,
+        gamma: 3,
+      },
+      interval: 3,
     } as DeviceMotionEvent);
   });
 });

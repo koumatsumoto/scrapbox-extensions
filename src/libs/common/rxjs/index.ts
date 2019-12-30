@@ -11,6 +11,7 @@ export type RxJS = {
     filter: typeof operatorsType.filter;
     map: typeof operatorsType.map;
     scan: typeof operatorsType.scan;
+    skip: typeof operatorsType.skip;
   };
 };
 
