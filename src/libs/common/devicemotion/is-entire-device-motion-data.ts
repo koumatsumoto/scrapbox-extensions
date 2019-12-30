@@ -1,6 +1,6 @@
-import { EntireDeviceMotionEvent } from './types';
+import { DeviceMotionData, EntireDeviceMotionData } from './types';
 
-export const isEntireDeviceMotionEvent = (e: DeviceMotionEvent): e is EntireDeviceMotionEvent => {
+export const isEntireDeviceMotionData = (e: DeviceMotionData): e is EntireDeviceMotionData => {
   const a = e.acceleration;
   if (a === null || a.x === null || a.y === null || a.z === null) {
     return false;

@@ -1,10 +1,10 @@
-import { DeviceMotionData } from './types';
+import { DeviceMotionChange, DeviceMotionData, EntireDeviceMotionData } from './types';
 import { DeepPartial } from '../../../types';
 
 /**
  * For Testing
  */
-export const createTestingDeviceMotionEvent = (param: DeepPartial<DeviceMotionData> = {}): DeviceMotionEvent => {
+export const createTestingDeviceMotionData = (param: DeepPartial<DeviceMotionData> = {}): DeviceMotionData => {
   return {
     acceleration: {
       ...{
@@ -31,5 +31,23 @@ export const createTestingDeviceMotionEvent = (param: DeepPartial<DeviceMotionDa
       ...param.rotationRate,
     },
     interval: 100,
-  } as DeviceMotionEvent;
+  };
 };
+
+export const createTestingDeviceMotionChange = (v: number): DeviceMotionChange => ({
+  acceleration: {
+    x: v,
+    y: v,
+    z: v,
+  },
+  accelerationIncludingGravity: {
+    x: v,
+    y: v,
+    z: v,
+  },
+  rotationRate: {
+    alpha: v,
+    beta: v,
+    gamma: v,
+  },
+});

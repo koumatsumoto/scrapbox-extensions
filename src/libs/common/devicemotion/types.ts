@@ -36,12 +36,6 @@ export type EntireDeviceMotionData = {
   };
 };
 
-export interface EntireDeviceMotionEvent extends DeviceMotionEvent {
-  acceleration: EntireDeviceMotionData['acceleration'];
-  accelerationIncludingGravity: EntireDeviceMotionData['accelerationIncludingGravity'];
-  rotationRate: EntireDeviceMotionData['rotationRate'];
-}
-
 export type DeviceMotionChange = {
   acceleration: EntireDeviceMotionData['acceleration'];
   accelerationIncludingGravity: EntireDeviceMotionData['accelerationIncludingGravity'];

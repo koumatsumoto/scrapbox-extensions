@@ -8,6 +8,7 @@ export type RxJS = {
   Subject: typeof RxType.Subject;
   operators: {
     debounceTime: typeof operatorsType.debounceTime;
+    bufferCount: typeof operatorsType.bufferCount;
     filter: typeof operatorsType.filter;
     map: typeof operatorsType.map;
     scan: typeof operatorsType.scan;

@@ -23,21 +23,21 @@ describe('simplifyValue', () => {
       }),
     ).toEqual({
       acceleration: {
-        x: 0,
-        y: 1,
-        z: 10,
+        x: 1000,
+        y: 10000,
+        z: 100000,
       },
       accelerationIncludingGravity: {
-        x: 100,
-        y: 1000,
+        x: 1000000,
+        y: 10000000,
         z: 0,
       },
-      rotationRate: {
-        alpha: 10000,
-        beta: 100000,
-        gamma: 1000000,
-      },
       interval: 0,
+      rotationRate: {
+        alpha: 100000000,
+        beta: 1000000000,
+        gamma: 10000000000,
+      },
     });
   });
 });
