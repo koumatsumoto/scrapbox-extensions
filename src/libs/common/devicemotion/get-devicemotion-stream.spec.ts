@@ -14,12 +14,14 @@ describe('getDeviceMotionStream', () => {
 describe('getDeviceMotionChangeStream', () => {
   it('should emit calculated value', (done: Function) => {
     const precision = 8;
+    const scale = 10000;
     const interval = 10;
     const $ = new Subject<DeviceMotionData>();
 
-    getDeviceMotionWithChangeStream(precision, $.asObservable()).subscribe((data) => {
+    getDeviceMotionWithChangeStream({ precision, scale }, $.asObservable()).subscribe((data) => {
       const average = 5 / interval;
-      expect(data).toEqual(createTestingDeviceMotionChange(average * 10 ** precision));
+      const equalized = average / scale;
+      expect(data).toEqual(createTestingDeviceMotionChange(equalized * 10 ** precision));
       done();
     });
 

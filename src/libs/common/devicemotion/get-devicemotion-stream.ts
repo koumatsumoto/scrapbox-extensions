@@ -5,6 +5,7 @@ import { Precision, simplifyValue } from './internal/simplify-value';
 import { EntireDeviceMotionDataWithChange, EntireDeviceMotionData, DeviceMotionData } from './types';
 import { getChangePerMillisecond } from './internal/get-change';
 import { calculateAverage } from './internal/calculate-average';
+import { equalize, Scale } from './internal/equalize';
 
 export const getDeviceMotionStream = () => {
   const Subject = getRx().Subject;
@@ -22,14 +23,17 @@ export const getDeviceMotionStream = () => {
  * @param source - for testing
  */
 export const getDeviceMotionWithChangeStream = (
-  precision: Precision = 8,
+  option: {
+    precision: Precision;
+    scale: Scale;
+  } = { precision: 8, scale: 10000 },
   source: Observable<DeviceMotionData> = getDeviceMotionStream(),
 ) => {
   const { bufferCount, filter, map, scan, skip } = getRx().operators;
 
   return source.pipe(
     filter(isEntireDeviceMotionData),
-    map((e) => simplifyValue(e, precision)),
+    map((e) => simplifyValue(e, option.precision)),
     scan<EntireDeviceMotionData, EntireDeviceMotionDataWithChange, null>((state, val) => {
       if (state === null) {
         // should be skipped, change is wrong
@@ -48,7 +52,9 @@ export const getDeviceMotionWithChangeStream = (
     // TODO: consider parameterize
     bufferCount(10),
     map((changes: EntireDeviceMotionDataWithChange[]) => {
-      return calculateAverage(changes.map((c) => c.change));
+      const avg = calculateAverage(changes.map((c) => c.change));
+
+      return equalize(avg, option.scale);
     }),
   );
 };
