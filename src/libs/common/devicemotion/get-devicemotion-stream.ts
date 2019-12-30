@@ -1,18 +1,42 @@
+import { Observable } from 'rxjs';
 import { getRx } from '../rxjs';
+import { isEntireDeviceMotionEvent } from './is-entire-device-motion-event';
+import { simplifyValue } from './simplify-value';
+import { EntireDeviceMotionDataWithChange, EntireDeviceMotionData } from './types';
 
-// Use singleton for performance
-let subject: any;
 export const getDeviceMotionStream = () => {
-  if (subject) {
-    return subject.asObservable();
-  }
-
   const Subject = getRx().Subject;
-  subject = new Subject<DeviceMotionEvent>();
+  const subject = new Subject<DeviceMotionEvent>();
 
   window.addEventListener('devicemotion', (e: DeviceMotionEvent) => {
-    subject!.next(e);
+    subject.next(e);
   });
 
   return subject.asObservable();
+};
+
+/**
+ *
+ * @param source - for testing
+ */
+export const getDeviceMotionChangeStream = (source: Observable<DeviceMotionEvent> = getDeviceMotionStream()) => {
+  const { filter, map, scan } = getRx().operators;
+
+  return source.pipe(
+    filter(isEntireDeviceMotionEvent),
+    map((e) => simplifyValue(e)),
+    scan<EntireDeviceMotionData, EntireDeviceMotionDataWithChange, null>((state, val) => {
+      if (state === null) {
+        return {
+          data: val,
+          change: val,
+        };
+      } else {
+        return {
+          data: val,
+          change: val,
+        };
+      }
+    }, null),
+  );
 };
