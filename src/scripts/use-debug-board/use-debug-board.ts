@@ -28,7 +28,7 @@ type MotionData = {
   };
 };
 
-type ScanedData = {
+type ScannedData = {
   raw: MotionData;
   diff: {
     x: number;
@@ -69,7 +69,7 @@ export const useDebugBoard = () => {
     .pipe(
       filter(hasValue),
       map(formatEvent),
-      scan((state: ScanedData, val: MotionData) => ({
+      scan((state: ScannedData, val: MotionData) => ({
         raw: val,
         diff: {
           x: val.acceleration.x - state.raw.acceleration.x,
@@ -81,7 +81,7 @@ export const useDebugBoard = () => {
         },
       })),
     )
-    .subscribe((data: ScanedData) => {
+    .subscribe((data: ScannedData) => {
       debugBoard.updateText(JSON.stringify(data, null, 2));
     });
 };
