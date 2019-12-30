@@ -1,6 +1,6 @@
 import { componentManager } from '../component-manager';
 import { MyDebugBoard } from '../../components';
-import { getDeviceMotionWithChangeStream } from '../../libs/common';
+import { getDeviceMotionWithChangeStream, toInt } from '../../libs/common';
 
 export const useDebugBoard = () => {
   const debugBoard = componentManager.getInstance(MyDebugBoard);
@@ -11,7 +11,11 @@ export const useDebugBoard = () => {
       JSON.stringify(
         {
           acceleration: data.acceleration,
-          rotationRate: data.rotationRate,
+          rotationRate: {
+            alpha: toInt(data.rotationRate.alpha / 100),
+            beta: toInt(data.rotationRate.beta / 100),
+            gamma: toInt(data.rotationRate.gamma / 100),
+          },
         },
         null,
         2,
