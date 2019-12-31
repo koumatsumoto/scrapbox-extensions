@@ -6,7 +6,14 @@ export const useDebugBoard = () => {
   const debugBoard = componentManager.getInstance(MyDebugBoard);
   const $ = getOrientationAndMotionStream();
 
-  $.subscribe((data) => {
-    debugBoard.updateText(JSON.stringify(data, null, 2));
+  let orientationAndMotion: any = {};
+  $.subscribe((d) => {
+    orientationAndMotion = d;
   });
+
+  const loop = () => {
+    debugBoard.updateText(JSON.stringify(orientationAndMotion, null, 2));
+    window.requestAnimationFrame(loop);
+  };
+  loop();
 };
