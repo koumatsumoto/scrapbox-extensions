@@ -36,13 +36,19 @@ export const getOrientationAndMotionStream = (
       }
 
       const orientation = orientations[orientations.length - 1]!;
-      const motion = summarizeMotions(motions)!;
+      const interval = motions[0].interval; // interval never change in same device
+      const summary = summarizeMotions(motions)!;
       orientations = [];
       motions = [];
 
       subscriber.next({
         orientation,
-        motion,
+        motion: {
+          interval,
+          acceleration: summary.acceleration,
+          accelerationIncludingGravity: summary.accelerationIncludingGravity,
+          rotationRate: summary.rotationRate,
+        },
       });
     }, option.interval);
 
