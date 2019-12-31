@@ -45,3 +45,22 @@ export const toInteger = (precision: Precision = 8) => (source: Observable<Devic
 
   return source.pipe(map((v) => toInt(v, precision)));
 };
+
+export const toDebug = () => (source: Observable<DeviceMotionWithChange>) => {
+  const { map } = getRx().operators;
+
+  return source.pipe(
+    map((v) => ({
+      acceleration: {
+        x: [v.data.acceleration.x, v.change.acceleration.x],
+        y: [v.data.acceleration.y, v.change.acceleration.y],
+        z: [v.data.acceleration.z, v.change.acceleration.z],
+      },
+      rotationRate: {
+        alpha: [v.data.rotationRate.alpha, v.change.rotationRate.alpha],
+        beta: [v.data.rotationRate.beta, v.change.rotationRate.beta],
+        gamma: [v.data.rotationRate.gamma, v.change.rotationRate.gamma],
+      },
+    })),
+  );
+};

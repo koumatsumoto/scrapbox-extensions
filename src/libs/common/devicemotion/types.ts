@@ -53,5 +53,20 @@ export type DeviceMotionWithChange = {
   change: DeviceMotionValue;
 };
 
+export type ValueAndChange = [number, number]; // [value, change from previous]
+export type DeviceMotionForDebug = {
+  acceleration: {
+    // value, change
+    readonly x: ValueAndChange;
+    readonly y: ValueAndChange;
+    readonly z: ValueAndChange;
+  };
+  rotationRate: {
+    readonly alpha: ValueAndChange;
+    readonly beta: ValueAndChange;
+    readonly gamma: ValueAndChange;
+  };
+};
+
 // Allowed precision in this library
 export type Precision = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
