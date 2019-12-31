@@ -1,13 +1,12 @@
-import { DeviceMotion } from '../../types';
+import { DeviceMotionValue } from '../../types';
 
-export const calculateMotionAverage = (changes: DeviceMotion[]): DeviceMotion | null => {
+export const calculateMotionAverage = (changes: DeviceMotionValue[]): DeviceMotionValue | null => {
   if (changes.length < 1) {
     return null;
   }
 
   const count = changes.length;
   const summary = changes.reduce((acc, val) => ({
-    interval: acc.interval + val.interval,
     acceleration: {
       x: acc.acceleration.x + val.acceleration.x,
       y: acc.acceleration.y + val.acceleration.y,
@@ -26,7 +25,6 @@ export const calculateMotionAverage = (changes: DeviceMotion[]): DeviceMotion | 
   }));
 
   return {
-    interval: summary.interval / count,
     acceleration: {
       x: summary.acceleration.x / count,
       y: summary.acceleration.y / count,

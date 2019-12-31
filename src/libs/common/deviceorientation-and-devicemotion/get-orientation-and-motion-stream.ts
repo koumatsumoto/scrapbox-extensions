@@ -29,7 +29,7 @@ export const getOrientationAndMotionStream = (
     let orientations: DeviceOrientation[] = [];
     let motions: DeviceMotion[] = [];
     let previousOrientation: DeviceOrientation | undefined;
-    let previousMotion: DeviceMotion | undefined;
+    let previousMotionAverage: DeviceMotionValue | undefined;
 
     orientation$.subscribe((v) => orientations.push(v));
     motion$.subscribe((v) => motions.push(v));
@@ -49,20 +49,26 @@ export const getOrientationAndMotionStream = (
       orientations = [];
 
       // use average for motion
-      const motion = calculateMotionAverage(motions)!;
-      let motionChange: DeviceMotionValue | undefined;
-      if (previousMotion) {
-        motionChange = calculateMotionChange(motion, previousMotion);
+      const motionAverage = calculateMotionAverage(motions)!;
+      const motionInterval = motions[0].interval; // interval don't change
+      let motionAverageChange: DeviceMotionValue | undefined;
+      if (previousMotionAverage) {
+        motionAverageChange = calculateMotionChange(motionAverage, previousMotionAverage);
       }
-      previousMotion = motion;
+      previousMotionAverage = motionAverage;
       motions = [];
 
-      if (orientationChange && motionChange) {
+      if (orientationChange && motionAverageChange) {
         subscriber.next({
-          orientation: currentOrientation,
-          orientationChange,
-          motion,
-          motionChange,
+          orientation: {
+            current: currentOrientation,
+            change: orientationChange,
+          },
+          motion: {
+            interval: motionInterval,
+            average: motionAverage,
+            averageChange: motionAverageChange,
+          },
         });
       }
     }, option.interval);

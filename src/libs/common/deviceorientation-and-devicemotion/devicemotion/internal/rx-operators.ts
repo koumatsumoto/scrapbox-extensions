@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { DeviceMotion, DeviceMotionAsTuple, DeviceMotionWithChange, PartialDeviceMotion, Precision } from '../../types';
+import { DeviceMotion, DeviceMotionAsTuple, DeviceMotionValue, DeviceMotionWithChange, PartialDeviceMotion, Precision } from '../../types';
 import { calculateMotionChange, makeTuple } from './make-change';
 import { getRx } from '../../../rxjs';
 import { calculateMotionAverage } from './calculate-average';
@@ -33,12 +33,12 @@ export const withChange = () => (source: Observable<DeviceMotion>) => {
 /**
  * @param denominator - default value is 4, used as buffer count
  */
-export const toAverage = (denominator: number = 4) => (source: Observable<DeviceMotion>) => {
+export const toAverage = (denominator: number = 4) => (source: Observable<DeviceMotionValue>) => {
   const { bufferCount, map } = getRx().operators;
 
   return source.pipe(
     bufferCount(denominator),
-    map((changes: DeviceMotion[]) => calculateMotionAverage(changes)),
+    map((items: DeviceMotionValue[]) => calculateMotionAverage(items)),
   );
 };
 

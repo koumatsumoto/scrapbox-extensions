@@ -20,7 +20,6 @@ describe('calculateMotionChange', () => {
             beta: 0,
             gamma: 0,
           },
-          interval: 0,
         },
         {
           acceleration: {
@@ -38,7 +37,6 @@ describe('calculateMotionChange', () => {
             beta: 10,
             gamma: 100,
           },
-          interval: 0,
         },
       ),
     ).toEqual({
