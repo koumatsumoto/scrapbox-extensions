@@ -2,6 +2,7 @@ import { DeviceMotionAsTuple, DeviceMotionValue, ValueAndChange } from '../types
 import { toInt } from '../../arithmetic';
 
 // Assuming devicemotion values are calculated as integer
+// @deprecated
 export type Threshold = 10 | 100 | 1000 | 10000 | 100000 | 1000000;
 
 // @deprecated - old impl
@@ -24,12 +25,16 @@ export const deprecatedNormalizeByThreshold = (val: DeviceMotionValue, t: Thresh
 });
 
 const defaultThreshold = {
-  acceleration: 10000,
-  accelerationIncludingGravity: 10000,
-  rotationRate: 10000,
+  acceleration: 100000000,
+  accelerationIncludingGravity: 100000000,
+  rotationRate: 1000000000,
 } as const;
 
-export type ThresholdOption = typeof defaultThreshold;
+export type ThresholdOption = {
+  acceleration: number;
+  accelerationIncludingGravity: number;
+  rotationRate: number;
+};
 
 const calc = (v: [number, number], threshold: number) => [toInt(v[0] / threshold), toInt(v[1] / threshold)] as ValueAndChange;
 export const normalize = (v: DeviceMotionAsTuple, t: ThresholdOption = defaultThreshold): DeviceMotionAsTuple => ({

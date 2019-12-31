@@ -5,7 +5,7 @@ import { toInt } from './internal/to-int';
 import { DeviceMotionWithChange, DeviceMotion, PartialDeviceMotion, Precision } from './types';
 import { getChangePerMillisecond } from './internal/make-change';
 import { calculateAverageAsInt } from './internal/calculate-average';
-import { deprecatedNormalizeByThreshold, Threshold } from './internal/normalize';
+import { deprecatedNormalizeByThreshold, Threshold, ThresholdOption } from './internal/normalize';
 import { asTuple, normalizeByThreshold, toAverage, toDebug, toInteger, withChange } from './internal/rx-operators';
 
 export const getPartialDeviceMotionStream = () => {
@@ -69,7 +69,7 @@ export const getNewDeviceMotionWithChangeStream = (
   option: {
     averageDenominator?: number;
     precision?: Precision;
-    scale?: Threshold;
+    threshold?: ThresholdOption;
   } = {},
   // for testing
   source: Observable<DeviceMotion> = getEntireDeviceMotionStream(),
@@ -79,7 +79,7 @@ export const getNewDeviceMotionWithChangeStream = (
     toInteger(option.precision),
     withChange(),
     asTuple(),
-    normalizeByThreshold(),
+    normalizeByThreshold(option.threshold),
     toDebug(),
   );
 };
