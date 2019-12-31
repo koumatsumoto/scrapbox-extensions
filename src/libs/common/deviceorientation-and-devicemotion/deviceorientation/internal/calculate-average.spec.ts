@@ -1,4 +1,4 @@
-import { calculateAverageAsInt } from './calculate-average';
+import { calculateAverageAsInt } from './calculate-change';
 import { createTestingDeviceMotionValue as v } from '../../test-helpers';
 
 describe('calculateAverageAsInt', () => {

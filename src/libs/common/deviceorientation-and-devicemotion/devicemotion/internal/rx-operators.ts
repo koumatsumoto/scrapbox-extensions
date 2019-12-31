@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { DeviceMotion, DeviceMotionAsTuple, DeviceMotionWithChange, PartialDeviceMotion, Precision } from '../../types';
 import { calculateMotionChange, makeTuple } from './make-change';
 import { getRx } from '../../../rxjs';
-import { calculateAverage } from './calculate-average';
+import { calculateMotionAverage } from './calculate-average';
 import { toInt } from './to-int';
 import { normalize, ThresholdOption } from './normalize';
 import { isEntireDeviceMotion } from './is-entire-device-motion';
@@ -38,7 +38,7 @@ export const toAverage = (denominator: number = 4) => (source: Observable<Device
 
   return source.pipe(
     bufferCount(denominator),
-    map((changes: DeviceMotion[]) => calculateAverage(changes)),
+    map((changes: DeviceMotion[]) => calculateMotionAverage(changes)),
   );
 };
 

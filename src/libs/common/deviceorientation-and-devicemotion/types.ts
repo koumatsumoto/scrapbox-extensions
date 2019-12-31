@@ -92,6 +92,12 @@ export type DeviceOrientation = {
   readonly gamma: number;
 };
 
+export type DeviceOrientationValue = {
+  readonly alpha: number;
+  readonly beta: number;
+  readonly gamma: number;
+};
+
 export type OrientationAndMotion = {
   orientation: DeviceOrientation;
   acceleration: DeviceMotionAsTuple['acceleration'];
