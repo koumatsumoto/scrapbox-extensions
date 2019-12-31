@@ -1,7 +1,7 @@
 import { getDeviceMotionStream } from './devicemotion';
 import { getDeviceOrientationStream } from './deviceorientation/get-device-orientation-stream';
 import { Observable } from 'rxjs';
-import { DeviceMotion, DeviceOrientation } from './types';
+import { DeviceMotion, DeviceOrientation, OrientationAndMotionSummary } from './types';
 import { getRx } from '../rxjs';
 import { summarizeMotions } from './devicemotion/internal/summarize';
 
@@ -23,7 +23,7 @@ export const getOrientationAndMotionStream = (
 ) => {
   const { Observable } = getRx();
 
-  return new Observable((subscriber) => {
+  return new Observable<OrientationAndMotionSummary>((subscriber) => {
     let orientations: DeviceOrientation[] = [];
     let motions: DeviceMotion[] = [];
 

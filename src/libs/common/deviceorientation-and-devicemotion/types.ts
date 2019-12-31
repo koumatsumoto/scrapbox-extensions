@@ -129,3 +129,13 @@ export type MotionSummary = {
     readonly gamma: SummaryValue;
   };
 };
+
+export type OrientationAndMotionSummary = {
+  orientation: DeviceOrientation;
+  motion: {
+    interval: DeviceMotion['interval'];
+    acceleration: MotionSummary['acceleration'];
+    accelerationIncludingGravity: MotionSummary['accelerationIncludingGravity'];
+    rotationRate: MotionSummary['rotationRate'];
+  };
+};
