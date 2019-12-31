@@ -4,7 +4,7 @@ import { isEntireDeviceMotionData } from './internal/is-entire-device-motion-dat
 import { Precision, toInteger } from './internal/to-integer';
 import { EntireDeviceMotionDataWithChange, EntireDeviceMotionData, DeviceMotionData } from './types';
 import { getChangePerMillisecond } from './internal/get-change';
-import { calculateAverage } from './internal/calculate-average';
+import { calculateAverageAsInt } from './internal/calculate-average';
 import { equalizeByThreshold, Threshold } from './internal/equalize-by.threshold';
 
 export const getDeviceMotionStream = () => {
@@ -51,7 +51,7 @@ export const getDeviceMotionWithChangeStream = (
     // TODO: consider parameterize
     bufferCount(10),
     map((changes: EntireDeviceMotionDataWithChange[]) => {
-      const avg = calculateAverage(changes.map((c) => c.change));
+      const avg = calculateAverageAsInt(changes.map((c) => c.change));
 
       return equalizeByThreshold(avg, scale);
     }),

@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
-import { EntireDeviceMotionData } from '../types';
-import { createTestingDeviceMotionDataWithInterval } from '../test-helpers';
-import { makeChange } from './rx-operators';
+import { DeviceMotionChange, EntireDeviceMotionData } from '../types';
+import { createTestingDeviceMotionChange, createTestingDeviceMotionDataWithInterval } from '../test-helpers';
+import { makeChange, toAverage } from './rx-operators';
 
 describe('rx-operators', () => {
   describe('makeChange', () => {
@@ -38,6 +38,23 @@ describe('rx-operators', () => {
           },
           data: nextValue,
         });
+        done();
+      });
+    });
+  });
+
+  describe('toAverage', () => {
+    it('should make expected data', (done: Function) => {
+      const $ = new Subject<DeviceMotionChange>();
+      const v = createTestingDeviceMotionChange;
+
+      setTimeout(() => {
+        $.next(v(10));
+        $.next(v(30)); // average is 20
+      });
+
+      $.pipe(toAverage(2)).subscribe((data) => {
+        expect(data).toEqual(v(20));
         done();
       });
     });
