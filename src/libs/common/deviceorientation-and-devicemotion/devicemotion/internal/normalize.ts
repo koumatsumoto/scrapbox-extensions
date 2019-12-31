@@ -4,7 +4,7 @@ import { roundToInt } from '../../../arithmetic';
 const defaultThreshold = {
   acceleration: 10 ** 6,
   accelerationIncludingGravity: 10 ** 6,
-  rotationRate: 10 ** 6,
+  rotationRate: 10 ** 7,
 } as const;
 
 export type ThresholdOption = {
