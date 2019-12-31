@@ -1,12 +1,12 @@
 import { componentManager } from '../component-manager';
 import { MyDebugBoard } from '../../components';
-import { getOrientationAndMotionStream } from '../../libs/common/deviceorientation-and-devicemotion';
+import { getOrientationAndMotionSummary } from '../../libs/common/deviceorientation-and-devicemotion';
 
 export const useDebugBoard = () => {
   const debugBoard = componentManager.getInstance(MyDebugBoard);
 
   let data: any | undefined;
-  getOrientationAndMotionStream().subscribe((d) => (data = d));
+  getOrientationAndMotionSummary().subscribe((d) => (data = d));
 
   const loop = () => {
     if (data) {
