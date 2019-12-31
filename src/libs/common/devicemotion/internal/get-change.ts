@@ -21,6 +21,13 @@ export const getChange = (prev: EntireDeviceMotionData, curr: EntireDeviceMotion
 
 const calc = (a: number, b: number, c: number) => toInt((a - b) / c);
 
+/**
+ * Wrong implementation
+ *
+ * should not divide with interval, values are already calculated as per unit
+ *
+ * @deprecated
+ */
 export const getChangePerMillisecond = (prev: EntireDeviceMotionData, curr: EntireDeviceMotionData): DeviceMotionChange => ({
   acceleration: {
     x: calc(curr.acceleration.x, prev.acceleration.x, curr.interval),

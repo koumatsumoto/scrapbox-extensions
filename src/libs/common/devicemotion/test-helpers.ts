@@ -51,3 +51,10 @@ export const createTestingDeviceMotionChange = (v: number): DeviceMotionChange =
     gamma: v,
   },
 });
+
+export const createTestingDeviceMotionDataWithInterval = (v: number, interval: number): EntireDeviceMotionData => {
+  return {
+    ...createTestingDeviceMotionChange(v),
+    interval,
+  };
+};

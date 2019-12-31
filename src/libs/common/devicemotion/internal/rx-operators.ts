@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { EntireDeviceMotionData, EntireDeviceMotionDataWithChange } from '../types';
-import { getChangePerMillisecond } from './get-change';
+import { getChange } from './get-change';
 import { getRx } from '../../rxjs';
 
 export const makeChange = () => (source: Observable<EntireDeviceMotionData>) => {
@@ -17,7 +17,7 @@ export const makeChange = () => (source: Observable<EntireDeviceMotionData>) => 
       } else {
         return {
           data: val,
-          change: getChangePerMillisecond(state.data, val),
+          change: getChange(state.data, val),
         };
       }
     }, null),
