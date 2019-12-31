@@ -29,7 +29,7 @@ export const getOrientationAndMotionStream = (
     const registerInterval = (motionInterval: number) => {
       // time to process accumulated event data
       // process 5 motion events at once (temporary implementation)
-      const processInterval = motionInterval * 5 + 1;
+      const processInterval = motionInterval * 4 + 1;
 
       setIntervalId = window.setInterval(() => {
         if (orientations.length < 1 || motions.length < 1) {
