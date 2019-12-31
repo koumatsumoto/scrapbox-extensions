@@ -56,7 +56,7 @@ export const makeChange = (curr: DeviceMotion, diff: DeviceMotion): DeviceMotion
     beta: [curr.rotationRate.beta, diff.rotationRate.beta],
     gamma: [curr.rotationRate.gamma, diff.rotationRate.gamma],
   },
-})
+});
 
 /**
  * @deprecated - wrong implementation, should not divide with interval, values are already calculated as per unit

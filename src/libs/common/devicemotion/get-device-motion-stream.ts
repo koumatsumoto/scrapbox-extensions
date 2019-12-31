@@ -5,8 +5,8 @@ import { toInt } from './internal/to-int';
 import { DeviceMotionWithChange, DeviceMotion, PartialDeviceMotion, Precision } from './types';
 import { getChangePerMillisecond } from './internal/make-change';
 import { calculateAverageAsInt } from './internal/calculate-average';
-import { equalizeByThreshold, Threshold } from './internal/equalize-by.threshold';
-import { asTuple, toAverage, toDebug, toInteger, withChange } from './internal/rx-operators';
+import { deprecatedNormalizeByThreshold, Threshold } from './internal/normalize';
+import { asTuple, normalizeByThreshold, toAverage, toDebug, toInteger, withChange } from './internal/rx-operators';
 
 export const getPartialDeviceMotionStream = () => {
   const Subject = getRx().Subject;
@@ -60,7 +60,7 @@ export const getDeviceMotionWithChangeStream = (
     map((changes: DeviceMotionWithChange[]) => {
       const avg = calculateAverageAsInt(changes.map((c) => c.change));
 
-      return equalizeByThreshold(avg, scale);
+      return deprecatedNormalizeByThreshold(avg, scale);
     }),
   );
 };
@@ -74,5 +74,12 @@ export const getNewDeviceMotionWithChangeStream = (
   // for testing
   source: Observable<DeviceMotion> = getEntireDeviceMotionStream(),
 ) => {
-  return source.pipe(toAverage(option.averageDenominator), toInteger(option.precision), withChange(), asTuple(), toDebug());
+  return source.pipe(
+    toAverage(option.averageDenominator),
+    toInteger(option.precision),
+    withChange(),
+    asTuple(),
+    normalizeByThreshold(),
+    toDebug(),
+  );
 };

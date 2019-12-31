@@ -4,6 +4,7 @@ import { diff, makeTuple } from './make-change';
 import { getRx } from '../../rxjs';
 import { calculateAverage } from './calculate-average';
 import { toInt } from './to-int';
+import { normalize, ThresholdOption } from './normalize';
 
 // TODO: use pairwise
 export const withChange = () => (source: Observable<DeviceMotion>) => {
@@ -50,6 +51,12 @@ export const asTuple = () => (source: Observable<DeviceMotionWithChange>) => {
   const { map } = getRx().operators;
 
   return source.pipe(map(makeTuple));
+};
+
+export const normalizeByThreshold = (threshold?: ThresholdOption) => (source: Observable<DeviceMotionAsTuple>) => {
+  const { map } = getRx().operators;
+
+  return source.pipe(map((v) => normalize(v, threshold)));
 };
 
 export const toDebug = () => (source: Observable<DeviceMotionAsTuple>) => {
