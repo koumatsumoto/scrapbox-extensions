@@ -1,14 +1,12 @@
 import { getDeviceMotionStream } from './devicemotion';
 import { getDeviceOrientationStream } from './deviceorientation/get-device-orientation-stream';
 import { Observable } from 'rxjs';
-import { DeviceMotion, DeviceMotionValue, DeviceOrientation, DeviceOrientationValue } from './types';
+import { DeviceMotion, DeviceOrientation } from './types';
 import { getRx } from '../rxjs';
-import { calculateMotionAverage } from './devicemotion/internal/calculate-average';
-import { calculateMotionChange } from './devicemotion/internal/make-change';
-import { calculateOrientationChange } from './deviceorientation/internal/calculate-change';
+import { summarizeMotions } from './devicemotion/internal/summarize';
 
 const defaultOption = {
-  interval: 80,
+  interval: 100,
 };
 
 /**
@@ -28,8 +26,6 @@ export const getOrientationAndMotionStream = (
   return new Observable((subscriber) => {
     let orientations: DeviceOrientation[] = [];
     let motions: DeviceMotion[] = [];
-    let previousOrientation: DeviceOrientation | undefined;
-    let previousMotionAverage: DeviceMotionValue | undefined;
 
     orientation$.subscribe((v) => orientations.push(v));
     motion$.subscribe((v) => motions.push(v));
@@ -39,38 +35,15 @@ export const getOrientationAndMotionStream = (
         return;
       }
 
-      // use last for orientation (current state is needed)
-      const currentOrientation = orientations[orientations.length - 1]!;
-      let orientationChange: DeviceOrientationValue | undefined;
-      if (previousOrientation) {
-        orientationChange = calculateOrientationChange(currentOrientation, previousOrientation);
-      }
-      previousOrientation = currentOrientation;
+      const orientation = orientations[orientations.length - 1]!;
+      const motion = summarizeMotions(motions)!;
       orientations = [];
-
-      // use average for motion
-      const motionAverage = calculateMotionAverage(motions)!;
-      const motionInterval = motions[0].interval; // interval don't change
-      let motionAverageChange: DeviceMotionValue | undefined;
-      if (previousMotionAverage) {
-        motionAverageChange = calculateMotionChange(motionAverage, previousMotionAverage);
-      }
-      previousMotionAverage = motionAverage;
       motions = [];
 
-      if (orientationChange && motionAverageChange) {
-        subscriber.next({
-          orientation: {
-            current: currentOrientation,
-            change: orientationChange,
-          },
-          motion: {
-            interval: motionInterval,
-            average: motionAverage,
-            averageChange: motionAverageChange,
-          },
-        });
-      }
+      subscriber.next({
+        orientation,
+        motion,
+      });
     }, option.interval);
   });
 };

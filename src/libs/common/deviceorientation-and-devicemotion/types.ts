@@ -104,3 +104,28 @@ export type OrientationAndMotion = {
   accelerationIncludingGravity: DeviceMotionAsTuple['accelerationIncludingGravity'];
   rotationRate: DeviceMotionAsTuple['rotationRate'];
 };
+
+// TODO: add mid
+export type SummaryValue = {
+  readonly max: number;
+  readonly min: number;
+  readonly avg: number;
+};
+
+export type MotionSummary = {
+  readonly acceleration: {
+    readonly x: SummaryValue;
+    readonly y: SummaryValue;
+    readonly z: SummaryValue;
+  };
+  readonly accelerationIncludingGravity: {
+    readonly x: SummaryValue;
+    readonly y: SummaryValue;
+    readonly z: SummaryValue;
+  };
+  readonly rotationRate: {
+    readonly alpha: SummaryValue;
+    readonly beta: SummaryValue;
+    readonly gamma: SummaryValue;
+  };
+};
