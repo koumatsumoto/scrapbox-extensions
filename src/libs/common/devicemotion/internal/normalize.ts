@@ -25,9 +25,9 @@ export const deprecatedNormalizeByThreshold = (val: DeviceMotionValue, t: Thresh
 });
 
 const defaultThreshold = {
-  acceleration: 100000000,
-  accelerationIncludingGravity: 100000000,
-  rotationRate: 1000000000,
+  acceleration: 10000000,
+  accelerationIncludingGravity: 10000000,
+  rotationRate: 100000000,
 } as const;
 
 export type ThresholdOption = {
