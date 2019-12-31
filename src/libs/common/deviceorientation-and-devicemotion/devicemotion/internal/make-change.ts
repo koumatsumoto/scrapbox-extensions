@@ -1,5 +1,5 @@
-import { DeviceMotionValue, DeviceMotion, DeviceMotionWithChange, DeviceMotionAsTuple } from '../types';
-import { toInt } from '../../arithmetic';
+import { DeviceMotionValue, DeviceMotion, DeviceMotionWithChange, DeviceMotionAsTuple } from '../../types';
+import { toInt } from '../../../arithmetic';
 
 export const diff = (prev: DeviceMotion, curr: DeviceMotion): DeviceMotionValue => ({
   acceleration: {

@@ -1,5 +1,5 @@
-import { DeviceMotion, DeviceMotionValue } from '../types';
-import { toInt } from '../../arithmetic';
+import { DeviceMotion, DeviceMotionValue } from '../../types';
+import { toInt } from '../../../arithmetic';
 
 export const calculateAverage = (changes: DeviceMotion[]): DeviceMotion => {
   const count = changes.length;

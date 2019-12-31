@@ -1,5 +1,5 @@
-import { DeviceMotionAsTuple, ValueAndChange } from '../types';
-import { toInt } from '../../arithmetic';
+import { DeviceMotionAsTuple, ValueAndChange } from '../../types';
+import { toInt } from '../../../arithmetic';
 
 const defaultThreshold = {
   acceleration: 10000000,
