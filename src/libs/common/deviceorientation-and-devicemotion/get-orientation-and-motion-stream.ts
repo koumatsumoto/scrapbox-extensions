@@ -2,7 +2,7 @@ import { getDeviceMotionStream } from './devicemotion';
 import { getDeviceOrientationStream } from './deviceorientation/get-device-orientation-stream';
 import { Observable, Subscription } from 'rxjs';
 import { DeviceMotion, DeviceOrientation, OrientationAndMotionSummary, Precision } from './types';
-import { getRx } from '../rxjs';
+import { asSet, getRx } from '../rxjs';
 import { summarizeMotions } from './devicemotion/internal/summarize';
 import { fixValue } from './fix-value';
 import { forDebug } from './for-debug';
@@ -76,22 +76,14 @@ export const getOrientationAndMotionStream = (
   });
 };
 
-export const getOrientationAndMotionSummary = (
-  option: {
-    precision: Precision;
-  } = {
-    precision: 0,
-  },
-) => {
-  return getOrientationAndMotionStream().pipe(fixValue(option.precision), toManipulation());
+export const getOrientationAndMotionSummary = () => {
+  return getOrientationAndMotionStream().pipe(fixValue(), toManipulation());
 };
 
-export const getOrientationAndMotionDebugString = (
-  option: {
-    precision: Precision;
-  } = {
-    precision: 0,
-  },
-) => {
-  return getOrientationAndMotionStream().pipe(fixValue(option.precision), forDebug());
+export const getDeviceOrientationManipulationSetStream = () => {
+  return getOrientationAndMotionStream().pipe(fixValue(), toManipulation(), asSet(5));
+};
+
+export const getOrientationAndMotionDebugString = () => {
+  return getOrientationAndMotionStream().pipe(fixValue(), forDebug());
 };
