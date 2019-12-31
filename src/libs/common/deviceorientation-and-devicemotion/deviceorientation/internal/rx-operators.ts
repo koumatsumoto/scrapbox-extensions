@@ -22,8 +22,5 @@ export const extract = () => (source: Observable<PartialDeviceOrientation>) => {
 export const filterAndExtract = () => (source: Observable<PartialDeviceOrientation>) => {
   const { filter } = getRx().operators;
 
-  return source.pipe(
-    extract(),
-    filter(isEntireDeviceOrientation),
-  );
-}
+  return source.pipe(extract(), filter(isEntireDeviceOrientation));
+};
