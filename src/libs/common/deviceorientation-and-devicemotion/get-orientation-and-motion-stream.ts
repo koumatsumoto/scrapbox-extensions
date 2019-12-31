@@ -6,7 +6,7 @@ import { getRx } from '../rxjs';
 import { summarizeMotions } from './devicemotion/internal/summarize';
 
 const defaultOption = {
-  interval: 100,
+  interval: 200,
 };
 
 /**
@@ -30,7 +30,7 @@ export const getOrientationAndMotionStream = (
     orientation$.subscribe((v) => orientations.push(v));
     motion$.subscribe((v) => motions.push(v));
 
-    setInterval(() => {
+    const id = setInterval(() => {
       if (orientations.length < 1 || motions.length < 1) {
         return;
       }
@@ -45,5 +45,7 @@ export const getOrientationAndMotionStream = (
         motion,
       });
     }, option.interval);
+
+    return () => clearInterval(id);
   });
 };

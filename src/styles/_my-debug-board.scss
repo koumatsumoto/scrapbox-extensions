@@ -21,7 +21,8 @@ my-debug-board {
   z-index: $base-z-index;
   display: flex;
   padding: 8px;
-  overflow: hidden;
+  // for close button
+  overflow: visible;
   background: white;
   box-shadow: $shadow;
 
