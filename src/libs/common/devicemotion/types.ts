@@ -48,12 +48,31 @@ export type DeviceMotionValue = {
   rotationRate: DeviceMotion['rotationRate'];
 };
 
+// TODO: consider unify to DeviceMotionAsTuple
 export type DeviceMotionWithChange = {
   data: DeviceMotion;
   change: DeviceMotionValue;
 };
 
 export type ValueAndChange = [number, number]; // [value, change from previous]
+export type DeviceMotionAsTuple = {
+  acceleration: {
+    readonly x: ValueAndChange;
+    readonly y: ValueAndChange;
+    readonly z: ValueAndChange;
+  };
+  accelerationIncludingGravity: {
+    readonly x: ValueAndChange;
+    readonly y: ValueAndChange;
+    readonly z: ValueAndChange;
+  };
+  rotationRate: {
+    readonly alpha: ValueAndChange;
+    readonly beta: ValueAndChange;
+    readonly gamma: ValueAndChange;
+  };
+};
+
 export type DeviceMotionForDebug = {
   acceleration: {
     // value, change

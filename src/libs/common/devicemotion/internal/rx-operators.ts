@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
-import { DeviceMotion, DeviceMotionWithChange, Precision } from '../types';
-import { diff } from './get-change';
+import { DeviceMotion, DeviceMotionAsTuple, DeviceMotionWithChange, Precision } from '../types';
+import { diff, makeTuple } from './make-change';
 import { getRx } from '../../rxjs';
 import { calculateAverage } from './calculate-average';
 import { toInt } from './to-int';
@@ -46,21 +46,19 @@ export const toInteger = (precision: Precision = 8) => (source: Observable<Devic
   return source.pipe(map((v) => toInt(v, precision)));
 };
 
-export const toDebug = () => (source: Observable<DeviceMotionWithChange>) => {
+export const asTuple = () => (source: Observable<DeviceMotionWithChange>) => {
+  const { map } = getRx().operators;
+
+  return source.pipe(map(makeTuple));
+};
+
+export const toDebug = () => (source: Observable<DeviceMotionAsTuple>) => {
   const { map } = getRx().operators;
 
   return source.pipe(
     map((v) => ({
-      acceleration: {
-        x: [v.data.acceleration.x, v.change.acceleration.x],
-        y: [v.data.acceleration.y, v.change.acceleration.y],
-        z: [v.data.acceleration.z, v.change.acceleration.z],
-      },
-      rotationRate: {
-        alpha: [v.data.rotationRate.alpha, v.change.rotationRate.alpha],
-        beta: [v.data.rotationRate.beta, v.change.rotationRate.beta],
-        gamma: [v.data.rotationRate.gamma, v.change.rotationRate.gamma],
-      },
+      acceleration: v.acceleration,
+      rotationRate: v.rotationRate,
     })),
   );
 };

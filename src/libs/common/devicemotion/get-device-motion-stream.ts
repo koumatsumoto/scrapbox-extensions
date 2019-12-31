@@ -3,10 +3,10 @@ import { getRx } from '../rxjs';
 import { isEntireDeviceMotion } from './internal/is-entire-device-motion';
 import { toInt } from './internal/to-int';
 import { DeviceMotionWithChange, DeviceMotion, PartialDeviceMotion, Precision } from './types';
-import { getChangePerMillisecond } from './internal/get-change';
+import { getChangePerMillisecond } from './internal/make-change';
 import { calculateAverageAsInt } from './internal/calculate-average';
 import { equalizeByThreshold, Threshold } from './internal/equalize-by.threshold';
-import { toAverage, toDebug, toInteger, withChange } from './internal/rx-operators';
+import { asTuple, toAverage, toDebug, toInteger, withChange } from './internal/rx-operators';
 
 export const getPartialDeviceMotionStream = () => {
   const Subject = getRx().Subject;
@@ -74,5 +74,5 @@ export const getNewDeviceMotionWithChangeStream = (
   // for testing
   source: Observable<DeviceMotion> = getEntireDeviceMotionStream(),
 ) => {
-  return source.pipe(toAverage(option.averageDenominator), toInteger(option.precision), withChange(), toDebug());
+  return source.pipe(toAverage(option.averageDenominator), toInteger(option.precision), withChange(), asTuple(), toDebug());
 };
