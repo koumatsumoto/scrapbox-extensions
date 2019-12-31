@@ -4,12 +4,9 @@ import { getOrientationAndMotionStream } from '../../libs/common/deviceorientati
 
 export const useDebugBoard = () => {
   const debugBoard = componentManager.getInstance(MyDebugBoard);
-  const $ = getOrientationAndMotionStream();
 
   let orientationAndMotion: any = {};
-  $.subscribe((d) => {
-    orientationAndMotion = d;
-  });
+  getOrientationAndMotionStream().subscribe((d) => (orientationAndMotion = d));
 
   const loop = () => {
     debugBoard.updateText(JSON.stringify(orientationAndMotion, null, 2));
