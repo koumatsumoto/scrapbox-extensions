@@ -5,7 +5,7 @@ import { getOrientationAndMotionSummary } from '../../libs/common/deviceorientat
 export const useDebugBoard = () => {
   const debugBoard = componentManager.getInstance(MyDebugBoard);
 
-  let data: object | undefined;
+  let data: any | undefined;
   getOrientationAndMotionSummary().subscribe((d) => (data = d));
 
   const loop = () => {
