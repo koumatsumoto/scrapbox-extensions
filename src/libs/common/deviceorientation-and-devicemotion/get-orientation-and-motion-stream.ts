@@ -76,7 +76,7 @@ export const getOrientationAndMotionStream = (
   });
 };
 
-export const getOrientationAndMotionSummary = () => {
+export const getOrientationAndMotionSingleManipulation = () => {
   return getOrientationAndMotionStream().pipe(fixValue(), toManipulation());
 };
 
