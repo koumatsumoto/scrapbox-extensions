@@ -1,7 +1,7 @@
-import { DeviceMotionChange, EntireDeviceMotionData } from '../types';
+import { DeviceMotionValue, DeviceMotion } from '../types';
 import { toInt } from '../../arithmetic';
 
-export const getChange = (prev: EntireDeviceMotionData, curr: EntireDeviceMotionData): DeviceMotionChange => ({
+export const getChange = (prev: DeviceMotion, curr: DeviceMotion): DeviceMotionValue => ({
   acceleration: {
     x: curr.acceleration.x - prev.acceleration.x,
     y: curr.acceleration.y - prev.acceleration.y,
@@ -28,7 +28,7 @@ const calc = (a: number, b: number, c: number) => toInt((a - b) / c);
  *
  * @deprecated
  */
-export const getChangePerMillisecond = (prev: EntireDeviceMotionData, curr: EntireDeviceMotionData): DeviceMotionChange => ({
+export const getChangePerMillisecond = (prev: DeviceMotion, curr: DeviceMotion): DeviceMotionValue => ({
   acceleration: {
     x: calc(curr.acceleration.x, prev.acceleration.x, curr.interval),
     y: calc(curr.acceleration.y, prev.acceleration.y, curr.interval),

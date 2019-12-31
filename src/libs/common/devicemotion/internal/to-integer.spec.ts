@@ -1,6 +1,6 @@
 import { toInteger } from './to-integer';
 
-describe('simplifyValue', () => {
+describe('toInteger', () => {
   it('should calculate values as expected', () => {
     expect(
       toInteger({

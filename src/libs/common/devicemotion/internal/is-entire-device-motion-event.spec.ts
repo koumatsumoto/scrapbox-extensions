@@ -1,10 +1,10 @@
-import { createTestingDeviceMotionData } from '../test-helpers';
+import { createTestingPartialDeviceMotion } from '../test-helpers';
 import { isEntireDeviceMotionData } from './is-entire-device-motion-data';
 
 describe('isEntireDeviceMotionEvent', () => {
   it('should cond', () => {
     const i = isEntireDeviceMotionData;
-    const c = createTestingDeviceMotionData;
+    const c = createTestingPartialDeviceMotion;
     expect(i(c())).toBeTruthy();
     expect(i(c({ acceleration: { x: null } }))).toBeFalsy();
     expect(i(c({ acceleration: { y: null } }))).toBeFalsy();

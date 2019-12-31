@@ -1,4 +1,4 @@
-import { EntireDeviceMotionData } from '../types';
+import { DeviceMotion } from '../types';
 
 export type Precision = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
@@ -6,7 +6,7 @@ const toInt = (v: number, exponentiation: number) => {
   return Number.parseInt((v * exponentiation).toFixed(0));
 };
 
-export const toInteger = (data: EntireDeviceMotionData, precision: Precision = 8): EntireDeviceMotionData => {
+export const toInteger = (data: DeviceMotion, precision: Precision = 8): DeviceMotion => {
   const e = 10 ** precision;
 
   return {

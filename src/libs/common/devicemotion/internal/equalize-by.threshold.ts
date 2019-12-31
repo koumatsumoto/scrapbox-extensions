@@ -1,10 +1,10 @@
-import { DeviceMotionChange } from '../types';
+import { DeviceMotionValue } from '../types';
 import { toInt } from '../../arithmetic';
 
 // Assuming devicemotion values are changed to integer
 export type Threshold = 10 | 100 | 1000 | 10000 | 100000 | 1000000;
 
-export const equalizeByThreshold = (val: DeviceMotionChange, scale: Threshold) => ({
+export const equalizeByThreshold = (val: DeviceMotionValue, scale: Threshold) => ({
   acceleration: {
     x: toInt(val.acceleration.x / scale),
     y: toInt(val.acceleration.y / scale),

@@ -1,4 +1,7 @@
-export type DeviceMotionData = {
+/**
+ * Used in partially supported device
+ */
+export type PartialDeviceMotion = {
   readonly interval: number;
   readonly acceleration: {
     readonly x: number | null;
@@ -17,7 +20,10 @@ export type DeviceMotionData = {
   };
 };
 
-export type EntireDeviceMotionData = {
+/**
+ * Used in full-supported device
+ */
+export type DeviceMotion = {
   readonly interval: number;
   readonly acceleration: {
     readonly x: number;
@@ -36,13 +42,13 @@ export type EntireDeviceMotionData = {
   };
 };
 
-export type DeviceMotionChange = {
-  acceleration: EntireDeviceMotionData['acceleration'];
-  accelerationIncludingGravity: EntireDeviceMotionData['accelerationIncludingGravity'];
-  rotationRate: EntireDeviceMotionData['rotationRate'];
+export type DeviceMotionValue = {
+  acceleration: DeviceMotion['acceleration'];
+  accelerationIncludingGravity: DeviceMotion['accelerationIncludingGravity'];
+  rotationRate: DeviceMotion['rotationRate'];
 };
 
-export type EntireDeviceMotionDataWithChange = {
-  data: EntireDeviceMotionData;
-  change: DeviceMotionChange;
+export type DeviceMotionWithChange = {
+  data: DeviceMotion;
+  change: DeviceMotionValue;
 };
