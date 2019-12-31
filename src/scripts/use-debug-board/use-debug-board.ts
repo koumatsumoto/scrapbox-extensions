@@ -17,7 +17,7 @@ export const useDebugBoard = () => {
   getOrientationAndMotionDebugString().subscribe((d) => (debugText = d));
 
   const loop = () => {
-    if (d1 && debugText) {
+    if (d1 && d2 && debugText) {
       debugBoard.setText(JSON.stringify(d1, null, 2), 'left-top');
       debugBoard.setText(JSON.stringify(d2, null, 2), 'left-bot');
       debugBoard.setText(debugText, 'right-top');
