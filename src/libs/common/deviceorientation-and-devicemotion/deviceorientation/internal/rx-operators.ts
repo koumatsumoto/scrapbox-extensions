@@ -1,7 +1,8 @@
 import { Observable } from 'rxjs';
 import { getRx } from '../../../rxjs';
-import { PartialDeviceOrientation } from '../../types';
+import { DeviceOrientation, PartialDeviceOrientation } from '../../types';
 import { isEntireDeviceOrientation } from './is-entire-device-orientation';
+import { roundToInt } from '../../../arithmetic';
 
 /**
  * strip unnecessary properties
@@ -19,8 +20,21 @@ export const extract = () => (source: Observable<PartialDeviceOrientation>) => {
   );
 };
 
-export const filterAndExtract = () => (source: Observable<PartialDeviceOrientation>) => {
+export const onlyEntire = () => (source: Observable<PartialDeviceOrientation>) => {
   const { filter } = getRx().operators;
 
-  return source.pipe(extract(), filter(isEntireDeviceOrientation));
+  return source.pipe(filter(isEntireDeviceOrientation));
+};
+
+export const roundDecimal = () => (source: Observable<DeviceOrientation>) => {
+  const { map } = getRx().operators;
+
+  return source.pipe(
+    map((v) => ({
+      absolute: v.absolute,
+      alpha: roundToInt(v.alpha),
+      beta: roundToInt(v.beta),
+      gamma: roundToInt(v.gamma),
+    })),
+  );
 };

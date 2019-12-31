@@ -1,6 +1,7 @@
 import { Subject } from 'rxjs';
-import { extract, filterAndExtract } from './rx-operators';
+import { extract, onlyEntire, roundDecimal } from './rx-operators';
 import { createTestingPartialDeviceOrientation } from '../../test-helpers';
+import { DeviceOrientation } from '../../types';
 
 describe('rx-operators', () => {
   describe('extract', () => {
@@ -22,7 +23,7 @@ describe('rx-operators', () => {
     });
   });
 
-  describe('filterAndExtract', () => {
+  describe('onlyEntire', () => {
     it('should make expected data', (done: Function) => {
       const $ = new Subject<DeviceOrientationEvent>();
       const ignored = createTestingPartialDeviceOrientation({ alpha: null }) as DeviceOrientationEvent;
@@ -33,8 +34,33 @@ describe('rx-operators', () => {
         $.next(passed);
       });
 
-      $.pipe(filterAndExtract()).subscribe((data) => {
+      $.pipe(onlyEntire()).subscribe((data) => {
         expect(data).toEqual(passed);
+        done();
+      });
+    });
+  });
+
+  describe('roundDecimal', () => {
+    it('should make expected data', (done: Function) => {
+      const $ = new Subject<DeviceOrientation>();
+
+      setTimeout(() => {
+        $.next({
+          absolute: true,
+          alpha: 0.999,
+          beta: 1.0,
+          gamma: 1.001,
+        });
+      });
+
+      $.pipe(roundDecimal()).subscribe((data) => {
+        expect(data).toEqual({
+          absolute: true,
+          alpha: 1,
+          beta: 1,
+          gamma: 1,
+        });
         done();
       });
     });
