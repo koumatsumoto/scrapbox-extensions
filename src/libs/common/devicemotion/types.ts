@@ -1,4 +1,5 @@
 export type DeviceMotionData = {
+  readonly interval: number;
   readonly acceleration: {
     readonly x: number | null;
     readonly y: number | null;
@@ -9,7 +10,6 @@ export type DeviceMotionData = {
     readonly y: number | null;
     readonly z: number | null;
   };
-  readonly interval: number;
   readonly rotationRate: {
     readonly alpha: number | null;
     readonly beta: number | null;
@@ -18,6 +18,7 @@ export type DeviceMotionData = {
 };
 
 export type EntireDeviceMotionData = {
+  readonly interval: number;
   readonly acceleration: {
     readonly x: number;
     readonly y: number;
@@ -28,7 +29,6 @@ export type EntireDeviceMotionData = {
     readonly y: number;
     readonly z: number;
   };
-  readonly interval: number;
   readonly rotationRate: {
     readonly alpha: number;
     readonly beta: number;

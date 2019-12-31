@@ -1,11 +1,11 @@
 import { Observable } from 'rxjs';
 import { getRx } from '../rxjs';
 import { isEntireDeviceMotionData } from './internal/is-entire-device-motion-data';
-import { Precision, simplifyValue } from './internal/simplify-value';
+import { Precision, toInteger } from './internal/to-integer';
 import { EntireDeviceMotionDataWithChange, EntireDeviceMotionData, DeviceMotionData } from './types';
 import { getChangePerMillisecond } from './internal/get-change';
 import { calculateAverage } from './internal/calculate-average';
-import { equalize, Scale } from './internal/equalize';
+import { equalizeByThreshold, Threshold } from './internal/equalize-by.threshold';
 
 export const getDeviceMotionStream = () => {
   const Subject = getRx().Subject;
@@ -21,7 +21,7 @@ export const getDeviceMotionStream = () => {
 export const getDeviceMotionWithChangeStream = (
   option: {
     precision?: Precision;
-    scale?: Scale;
+    scale?: Threshold;
   } = {},
   // for testing
   source: Observable<DeviceMotionData> = getDeviceMotionStream(),
@@ -32,7 +32,7 @@ export const getDeviceMotionWithChangeStream = (
 
   return source.pipe(
     filter(isEntireDeviceMotionData),
-    map((e) => simplifyValue(e, precision)),
+    map((e) => toInteger(e, precision)),
     scan<EntireDeviceMotionData, EntireDeviceMotionDataWithChange, null>((state, val) => {
       if (state === null) {
         // should be skipped, change is wrong
@@ -53,7 +53,7 @@ export const getDeviceMotionWithChangeStream = (
     map((changes: EntireDeviceMotionDataWithChange[]) => {
       const avg = calculateAverage(changes.map((c) => c.change));
 
-      return equalize(avg, scale);
+      return equalizeByThreshold(avg, scale);
     }),
   );
 };

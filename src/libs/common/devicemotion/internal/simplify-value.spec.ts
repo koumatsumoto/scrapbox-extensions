@@ -1,9 +1,9 @@
-import { simplifyValue } from './simplify-value';
+import { toInteger } from './to-integer';
 
 describe('simplifyValue', () => {
   it('should calculate values as expected', () => {
     expect(
-      simplifyValue({
+      toInteger({
         acceleration: {
           x: 0.00001,
           y: 0.0001,
