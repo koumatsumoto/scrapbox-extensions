@@ -3,9 +3,9 @@ import { getDeviceOrientationStream } from './deviceorientation/get-device-orien
 import { getRx } from '../rxjs';
 
 export const getOrientationAndMotionStream = () => {
-  const { combineLatest } = getRx();
+  const { withLatestFrom } = getRx().operators;
   const orientation$ = getDeviceOrientationStream();
   const motion$ = getDeviceMotionStream();
 
-  return combineLatest(orientation$, motion$);
+  return orientation$.pipe(withLatestFrom(motion$));
 };
