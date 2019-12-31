@@ -14,11 +14,14 @@ my-debug-board {
   max-width: 80vw;
   min-height: 200px;
   max-height: 60vh;
+  padding: 8px;
   background: white;
   box-shadow: $shadow;
 
   div {
     overflow: auto;
+    // material blue-grey 600
+    color: #546e7a;
     white-space: pre;
     background: white;
   }
