@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { DeviceMotion, DeviceOrientation, OrientationAndMotionSummary, Precision } from './types';
 import { getRx } from '../rxjs';
 import { summarizeMotions } from './devicemotion/internal/summarize';
-import { fixValue } from './rx-operators';
+import { fixValue } from './fix-value';
+import { forDebug } from './for-debug';
 
 const defaultOption = {
   interval: 200,
@@ -66,5 +67,5 @@ export const getOrientationAndMotionSummary = (
     precision: 0,
   },
 ) => {
-  return getOrientationAndMotionStream(option).pipe(fixValue(option.precision));
+  return getOrientationAndMotionStream(option).pipe(fixValue(option.precision), forDebug());
 };
