@@ -8,16 +8,12 @@ import { fixValue } from './fix-value';
 import { forDebug } from './for-debug';
 import { toManipulation } from './make-manipulation';
 
-// use if needed
-const defaultOption = {};
-
 /**
  * @param options
  * @param orientation$ - for testing
  * @param motion$ - for testing
  */
 export const getOrientationAndMotionStream = (
-  option: {} = defaultOption,
   orientation$: Observable<DeviceOrientation> = getDeviceOrientationStream(),
   motion$: Observable<DeviceMotion> = getDeviceMotionStream(),
 ) => {
@@ -82,24 +78,20 @@ export const getOrientationAndMotionStream = (
 
 export const getOrientationAndMotionSummary = (
   option: {
-    interval: number;
     precision: Precision;
   } = {
-    interval: 200,
     precision: 0,
   },
 ) => {
-  return getOrientationAndMotionStream(option).pipe(fixValue(option.precision), toManipulation());
+  return getOrientationAndMotionStream().pipe(fixValue(option.precision), toManipulation());
 };
 
 export const getOrientationAndMotionDebugString = (
   option: {
-    interval: number;
     precision: Precision;
   } = {
-    interval: 200,
     precision: 0,
   },
 ) => {
-  return getOrientationAndMotionStream(option).pipe(fixValue(option.precision), forDebug());
+  return getOrientationAndMotionStream().pipe(fixValue(option.precision), forDebug());
 };
