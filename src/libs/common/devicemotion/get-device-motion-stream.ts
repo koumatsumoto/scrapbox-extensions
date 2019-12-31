@@ -1,11 +1,12 @@
 import { Observable } from 'rxjs';
 import { getRx } from '../rxjs';
-import { isEntireDeviceMotionData } from './internal/is-entire-device-motion-data';
+import { isEntireDeviceMotion } from './internal/is-entire-device-motion';
 import { Precision, toInteger } from './internal/to-integer';
 import { DeviceMotionWithChange, DeviceMotion, PartialDeviceMotion } from './types';
 import { getChangePerMillisecond } from './internal/get-change';
 import { calculateAverageAsInt } from './internal/calculate-average';
 import { equalizeByThreshold, Threshold } from './internal/equalize-by.threshold';
+import { toAverage, withChange } from './internal/rx-operators';
 
 export const getPartialDeviceMotionStream = () => {
   const Subject = getRx().Subject;
@@ -31,7 +32,7 @@ export const getDeviceMotionWithChangeStream = (
   const { bufferCount, filter, map, scan, skip } = getRx().operators;
 
   return source.pipe(
-    filter(isEntireDeviceMotionData),
+    filter(isEntireDeviceMotion),
     map((e) => toInteger(e, precision)),
     scan<DeviceMotion, DeviceMotionWithChange, null>((state, val) => {
       if (state === null) {
@@ -66,9 +67,7 @@ export const getNewDeviceMotionWithChangeStream = (
   // for testing
   source: Observable<PartialDeviceMotion> = getPartialDeviceMotionStream(),
 ) => {
-  const precision = option.precision || 8;
-  const scale = option.scale || 10000;
   const { bufferCount, filter, map, scan, skip } = getRx().operators;
 
-  return source.pipe(filter(isEntireDeviceMotionData), bufferCount(4));
+  return source.pipe(filter(isEntireDeviceMotion), toAverage(4), withChange());
 };

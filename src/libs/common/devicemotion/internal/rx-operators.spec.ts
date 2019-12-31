@@ -1,10 +1,10 @@
 import { Subject } from 'rxjs';
-import { DeviceMotionValue, DeviceMotion } from '../types';
-import { createTestingDeviceMotionValue, createTestingDeviceMotion } from '../test-helpers';
-import { makeChange, toAverage } from './rx-operators';
+import { DeviceMotion } from '../types';
+import { createTestingDeviceMotion } from '../test-helpers';
+import { withChange, toAverage } from './rx-operators';
 
 describe('rx-operators', () => {
-  describe('makeChange', () => {
+  describe('withChange', () => {
     it('should make expected data', (done: Function) => {
       const $ = new Subject<DeviceMotion>();
       const interval = 10;
@@ -17,7 +17,7 @@ describe('rx-operators', () => {
         $.next(nextValue); // change +20
       });
 
-      $.pipe(makeChange()).subscribe((data) => {
+      $.pipe(withChange()).subscribe((data) => {
         expect(data).toEqual({
           change: {
             acceleration: {
@@ -45,8 +45,9 @@ describe('rx-operators', () => {
 
   describe('toAverage', () => {
     it('should make expected data', (done: Function) => {
-      const $ = new Subject<DeviceMotionValue>();
-      const v = createTestingDeviceMotionValue;
+      const $ = new Subject<DeviceMotion>();
+      const interval = 10;
+      const v = (value: number) => createTestingDeviceMotion(value, interval);
 
       setTimeout(() => {
         $.next(v(10));

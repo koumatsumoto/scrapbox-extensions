@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs';
-import { DeviceMotionValue, DeviceMotion, DeviceMotionWithChange } from '../types';
-import { getChange } from './get-change';
+import { DeviceMotion, DeviceMotionWithChange } from '../types';
+import { diff } from './get-change';
 import { getRx } from '../../rxjs';
 import { calculateAverage } from './calculate-average';
 
-export const makeChange = () => (source: Observable<DeviceMotion>) => {
+export const withChange = () => (source: Observable<DeviceMotion>) => {
   const { scan, skip } = getRx().operators;
 
   return source.pipe(
@@ -18,7 +18,7 @@ export const makeChange = () => (source: Observable<DeviceMotion>) => {
       } else {
         return {
           data: val,
-          change: getChange(state.data, val),
+          change: diff(state.data, val),
         };
       }
     }, null),
@@ -26,11 +26,11 @@ export const makeChange = () => (source: Observable<DeviceMotion>) => {
   ) as Observable<DeviceMotionWithChange>;
 };
 
-export const toAverage = (countToAverage: number) => (source: Observable<DeviceMotionValue>) => {
+export const toAverage = (countToAverage: number) => (source: Observable<DeviceMotion>) => {
   const { bufferCount, map } = getRx().operators;
 
   return source.pipe(
     bufferCount(countToAverage),
-    map((changes: DeviceMotionValue[]) => calculateAverage(changes)),
+    map((changes: DeviceMotion[]) => calculateAverage(changes)),
   );
 };

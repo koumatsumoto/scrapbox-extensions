@@ -1,7 +1,7 @@
 import { DeviceMotionValue, DeviceMotion } from '../types';
 import { toInt } from '../../arithmetic';
 
-export const getChange = (prev: DeviceMotion, curr: DeviceMotion): DeviceMotionValue => ({
+export const diff = (prev: DeviceMotion, curr: DeviceMotion): DeviceMotionValue => ({
   acceleration: {
     x: curr.acceleration.x - prev.acceleration.x,
     y: curr.acceleration.y - prev.acceleration.y,
@@ -22,11 +22,7 @@ export const getChange = (prev: DeviceMotion, curr: DeviceMotion): DeviceMotionV
 const calc = (a: number, b: number, c: number) => toInt((a - b) / c);
 
 /**
- * Wrong implementation
- *
- * should not divide with interval, values are already calculated as per unit
- *
- * @deprecated
+ * @deprecated - wrong implementation, should not divide with interval, values are already calculated as per unit
  */
 export const getChangePerMillisecond = (prev: DeviceMotion, curr: DeviceMotion): DeviceMotionValue => ({
   acceleration: {

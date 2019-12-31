@@ -1,9 +1,10 @@
-import { DeviceMotionValue } from '../types';
+import { DeviceMotion, DeviceMotionValue } from '../types';
 import { toInt } from '../../arithmetic';
 
-export const calculateAverage = (changes: DeviceMotionValue[]): DeviceMotionValue => {
+export const calculateAverage = (changes: DeviceMotion[]): DeviceMotion => {
   const count = changes.length;
   const summary = changes.reduce((acc, val) => ({
+    interval: acc.interval + val.interval,
     acceleration: {
       x: acc.acceleration.x + val.acceleration.x,
       y: acc.acceleration.y + val.acceleration.y,
@@ -22,6 +23,7 @@ export const calculateAverage = (changes: DeviceMotionValue[]): DeviceMotionValu
   }));
 
   return {
+    interval: summary.interval / count,
     acceleration: {
       x: summary.acceleration.x / count,
       y: summary.acceleration.y / count,
