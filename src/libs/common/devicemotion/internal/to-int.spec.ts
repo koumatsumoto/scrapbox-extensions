@@ -1,9 +1,9 @@
-import { toInteger } from './to-integer';
+import { toInt } from './to-int';
 
-describe('toInteger', () => {
+describe('toInt', () => {
   it('should calculate values as expected', () => {
     expect(
-      toInteger({
+      toInt({
         acceleration: {
           x: 0.00001,
           y: 0.0001,

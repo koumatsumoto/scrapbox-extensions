@@ -1,9 +1,11 @@
 import { Observable } from 'rxjs';
-import { DeviceMotion, DeviceMotionWithChange } from '../types';
+import { DeviceMotion, DeviceMotionWithChange, Precision } from '../types';
 import { diff } from './get-change';
 import { getRx } from '../../rxjs';
 import { calculateAverage } from './calculate-average';
+import { toInt } from './to-int';
 
+// TODO: use pairwise
 export const withChange = () => (source: Observable<DeviceMotion>) => {
   const { scan, skip } = getRx().operators;
 
@@ -26,11 +28,20 @@ export const withChange = () => (source: Observable<DeviceMotion>) => {
   ) as Observable<DeviceMotionWithChange>;
 };
 
-export const toAverage = (countToAverage: number) => (source: Observable<DeviceMotion>) => {
+/**
+ * @param denominator - default value is 4, used as buffer count
+ */
+export const toAverage = (denominator: number = 4) => (source: Observable<DeviceMotion>) => {
   const { bufferCount, map } = getRx().operators;
 
   return source.pipe(
-    bufferCount(countToAverage),
+    bufferCount(denominator),
     map((changes: DeviceMotion[]) => calculateAverage(changes)),
   );
+};
+
+export const toInteger = (precision: Precision = 8) => (source: Observable<DeviceMotion>) => {
+  const { map } = getRx().operators;
+
+  return source.pipe(map((v) => toInt(v, precision)));
 };
