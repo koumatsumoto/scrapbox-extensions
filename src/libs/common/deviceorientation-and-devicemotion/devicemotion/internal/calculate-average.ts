@@ -1,7 +1,11 @@
 import { DeviceMotion, DeviceMotionValue } from '../../types';
 import { floorToInt } from '../../../arithmetic';
 
-export const calculateAverage = (changes: DeviceMotion[]): DeviceMotion => {
+export const calculateAverage = (changes: DeviceMotion[]): DeviceMotion | null => {
+  if (changes.length < 1) {
+    return null;
+  }
+
   const count = changes.length;
   const summary = changes.reduce((acc, val) => ({
     interval: acc.interval + val.interval,
