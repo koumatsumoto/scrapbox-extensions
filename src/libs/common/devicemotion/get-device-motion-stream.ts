@@ -22,7 +22,7 @@ export const getEntireDeviceMotionStream = () => {
   return getPartialDeviceMotionStream().pipe(filter(isEntireDeviceMotion)) as Observable<DeviceMotion>;
 };
 
-export const getNewDeviceMotionWithChangeStream = (
+export const getDeviceMotionDataStream = (
   option: {
     averageDenominator?: number;
     precision?: Precision;

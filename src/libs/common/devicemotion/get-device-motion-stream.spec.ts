@@ -1,4 +1,4 @@
-import { getNewDeviceMotionWithChangeStream, getPartialDeviceMotionStream } from './get-device-motion-stream';
+import { getDeviceMotionDataStream, getPartialDeviceMotionStream } from './get-device-motion-stream';
 import { Subject } from 'rxjs';
 import { DeviceMotion } from './types';
 import { createTestingDeviceMotionValue, doNextTick } from './test-helpers';
@@ -11,7 +11,7 @@ describe('getPartialDeviceMotionStream', () => {
   });
 });
 
-describe('getNewDeviceMotionWithChangeStream', () => {
+describe('getDeviceMotionDataStream', () => {
   it('should emit expected value', (done: Function) => {
     const $ = new Subject<DeviceMotion>();
 
@@ -26,7 +26,7 @@ describe('getNewDeviceMotionWithChangeStream', () => {
       $.next(v(50)); // average 30
     });
 
-    getNewDeviceMotionWithChangeStream(
+    getDeviceMotionDataStream(
       {
         averageDenominator: 2,
         precision: 0,
@@ -34,7 +34,7 @@ describe('getNewDeviceMotionWithChangeStream', () => {
       $.asObservable(),
     ).subscribe((data) => {
       // debug purpose
-      // expect(data).toEqual({});
+      expect(data).toBeTruthy();
       done();
     });
   });
