@@ -1,7 +1,7 @@
 import { getRx } from '../../rxjs';
 import { DeviceOrientation, PartialDeviceOrientation } from '../types';
 import { Observable } from 'rxjs';
-import { isEntireDeviceOrientation } from './internal/is-entire-device-orientation';
+import { filterAndExtract } from './internal/rx-operators';
 
 export const getPartialDeviceOrientationStream = () => {
   const Subject = getRx().Subject;
@@ -15,7 +15,5 @@ export const getPartialDeviceOrientationStream = () => {
 };
 
 export const getDeviceOrientationStream = () => {
-  const { filter } = getRx().operators;
-
-  return getPartialDeviceOrientationStream().pipe(filter(isEntireDeviceOrientation)) as Observable<DeviceOrientation>;
+  return getPartialDeviceOrientationStream().pipe(filterAndExtract()) as Observable<DeviceOrientation>;
 };
