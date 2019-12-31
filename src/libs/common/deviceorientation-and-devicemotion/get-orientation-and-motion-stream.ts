@@ -6,6 +6,7 @@ import { getRx } from '../rxjs';
 import { summarizeMotions } from './devicemotion/internal/summarize';
 import { fixValue } from './fix-value';
 import { forDebug } from './for-debug';
+import { toManipulation } from './make-manipulation';
 
 const defaultOption = {
   interval: 200,
@@ -59,6 +60,18 @@ export const getOrientationAndMotionStream = (
 };
 
 export const getOrientationAndMotionSummary = (
+  option: {
+    interval: number;
+    precision: Precision;
+  } = {
+    interval: 200,
+    precision: 0,
+  },
+) => {
+  return getOrientationAndMotionStream(option).pipe(fixValue(option.precision), toManipulation());
+};
+
+export const getOrientationAndMotionDebugString = (
   option: {
     interval: number;
     precision: Precision;
