@@ -5,12 +5,12 @@ import { getOrientationAndMotionSummary } from '../../libs/common/deviceorientat
 export const useDebugBoard = () => {
   const debugBoard = componentManager.getInstance(MyDebugBoard);
 
-  let data: any | undefined;
+  let data: any;
   getOrientationAndMotionSummary().subscribe((d) => (data = d));
 
   const loop = () => {
     if (data) {
-      debugBoard.updateText(JSON.stringify(data, null, 2));
+      debugBoard.updateText(data);
     }
     window.requestAnimationFrame(loop);
   };
