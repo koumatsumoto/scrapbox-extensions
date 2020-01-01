@@ -21,5 +21,10 @@ module.exports = {
     project: './tsconfig.json',
   },
   plugins: ['@typescript-eslint'],
-  rules: {},
+  rules: {
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    // for webpack html-loader
+    '@typescript-eslint/no-var-requires': 'off',
+  },
 };
