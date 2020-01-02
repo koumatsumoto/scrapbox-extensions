@@ -98,7 +98,7 @@ export const aggregate = (values: number[]): AggregationWithType => {
   aggregation.avg = aggregation.sum / values.length;
 
   // should set by calibration
-  const base = 4;
+  const base = 8;
 
   aggregation.avg = roundToInt(aggregation.avg / base);
   aggregation.sum = roundToInt(aggregation.sum / base);
