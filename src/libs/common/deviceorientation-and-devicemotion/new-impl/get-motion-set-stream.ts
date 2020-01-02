@@ -37,8 +37,6 @@ export const getAggregationStream2 = () => {
       return {
         o: v.orientation,
         t: v.type,
-        f: v.first,
-        l: v.last,
       };
     }),
     asSet(10),
