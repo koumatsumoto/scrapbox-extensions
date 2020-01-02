@@ -1,10 +1,10 @@
 import { componentManager } from '../component-manager';
 import { MyDebugBoard } from '../../components';
 import {
-  getDeviceOrientationManipulationSetStream,
   getOrientationAndMotionDebugString,
   getOrientationAndMotionSingleManipulation,
 } from '../../libs/common/deviceorientation-and-devicemotion';
+import { getAggregationStream } from '../../libs/common/deviceorientation-and-devicemotion/new-impl/get-motion-set-stream';
 
 export const useDebugBoard = () => {
   const debugBoard = componentManager.getInstance(MyDebugBoard);
@@ -13,7 +13,7 @@ export const useDebugBoard = () => {
   let d2: unknown;
   let debugText = '';
   getOrientationAndMotionSingleManipulation().subscribe((d) => (d1 = d));
-  getDeviceOrientationManipulationSetStream().subscribe((d) => (d2 = d));
+  getAggregationStream().subscribe((d) => (d2 = d));
   getOrientationAndMotionDebugString().subscribe((d) => (debugText = d));
 
   const loop = () => {
