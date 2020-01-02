@@ -148,7 +148,7 @@ export const getCommandHistoryStream = () => {
 };
 
 export const getLastCommandStream = () => {
-  const { filter } = getRx().operators;
+  const { filter, pairwise } = getRx().operators;
 
   return getMotionCommandStream().pipe(
     filter((c) => {
@@ -158,5 +158,6 @@ export const getLastCommandStream = () => {
         return true;
       }
     }),
+    pairwise(),
   );
 };
