@@ -6,13 +6,12 @@ import { getRx, withHistory } from '../../rxjs';
 import { aggregate, toType } from './aggregate';
 import { toCommand } from './to-command';
 
-export const getMotionCommandStream = (
+export const getMotionAggregationsStream = (
   orientation$: Observable<DeviceOrientation> = getDeviceOrientationStream(),
   motion$: Observable<DeviceMotion> = getDeviceMotionStream(),
 ) => {
   const { bufferCount, map, withLatestFrom } = getRx().operators;
   let sid = 0;
-  let sidCommandDetermined = -1;
 
   return motion$.pipe(
     bufferCount(4),
@@ -31,6 +30,14 @@ export const getMotionCommandStream = (
       };
     }),
     withHistory(8),
+  );
+};
+
+export const getMotionCommandStream = () => {
+  const { map } = getRx().operators;
+  let sidCommandDetermined = -1;
+
+  return getMotionAggregationsStream().pipe(
     map((motionSet) => {
       const targets = motionSet.filter((m) => m.sid > sidCommandDetermined);
       if (targets.length < 8) {
