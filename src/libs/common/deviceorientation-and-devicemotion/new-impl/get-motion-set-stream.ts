@@ -55,7 +55,15 @@ export const getCommandHistoryStream = () => {
 export const getLastCommandStream = () => {
   const { filter } = getRx().operators;
 
-  return getMotionCommandStream().pipe(filter((c) => c !== 'nothing'));
+  return getMotionCommandStream().pipe(
+    filter((c) => {
+      if (c === 'nothing' || c === 'waiting') {
+        return false;
+      } else {
+        return true;
+      }
+    }),
+  );
 };
 
 export const getAggregationStreamForDebug = (
