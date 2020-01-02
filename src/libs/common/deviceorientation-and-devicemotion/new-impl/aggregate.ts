@@ -36,8 +36,8 @@ type Threshold = {
 export const defaultThreshold: Threshold = {
   high: 100,
   mid: 60,
-  low: 20,
-  round: 5,
+  low: 25,
+  round: 10,
 };
 
 export type MotionClassification = {
