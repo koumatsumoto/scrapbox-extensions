@@ -32,10 +32,14 @@ export const getMotionCommandStream = (
     }),
     withHistory(8),
     map((motionSet) => {
-      const toHandle = motionSet.filter((m) => m.sid > sidCommandDetermined);
-      const command = toCommand(toHandle.map((m) => m.type));
+      const targets = motionSet.filter((m) => m.sid > sidCommandDetermined);
+      if (targets.length < 8) {
+        return 'waiting';
+      }
+
+      const command = toCommand(targets.map((m) => m.type));
       if (command !== 'nothing') {
-        const lastSid = toHandle[toHandle.length - 1];
+        const lastSid = targets[targets.length - 1];
         sidCommandDetermined = lastSid.sid;
       }
 
