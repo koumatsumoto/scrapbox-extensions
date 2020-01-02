@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { DeviceMotion, DeviceOrientation } from '../types';
 import { getDeviceOrientationStream } from '../deviceorientation/get-device-orientation-stream';
 import { getDeviceMotionStream } from '../devicemotion';
-import { getRx } from '../../rxjs';
+import { asSet, getRx } from '../../rxjs';
 import { aggregate } from './aggregate';
 
 export const getAggregationStream = (
@@ -26,5 +26,21 @@ export const getAggregationStream = (
         ...aggregation,
       };
     }),
+  );
+};
+
+export const getAggregationStream2 = () => {
+  const { map } = getRx().operators;
+
+  return getAggregationStream().pipe(
+    map((v) => {
+      return {
+        o: v.orientation,
+        t: v.type,
+        f: v.first,
+        l: v.last,
+      };
+    }),
+    asSet(10),
   );
 };
