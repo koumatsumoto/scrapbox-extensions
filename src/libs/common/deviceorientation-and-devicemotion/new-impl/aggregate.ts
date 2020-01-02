@@ -24,9 +24,7 @@ export type Aggregation = {
   readonly avg: number;
 };
 
-export type AggregationWithType = Aggregation & { type: string };
-
-const getType = (a: Aggregation) => {
+export const toType = (a: Aggregation) => {
   // tilt to right
   if (a.first < 0) {
     // getting stronger
@@ -36,7 +34,7 @@ const getType = (a: Aggregation) => {
       if (a.last < 0) {
         return 'right weakly';
       } else {
-        return 'switch to left';
+        return 'right to left';
       }
     } else {
       return 'right continuously';
@@ -49,7 +47,7 @@ const getType = (a: Aggregation) => {
       if (a.last > 0) {
         return 'left weakly';
       } else {
-        return 'switch to right';
+        return 'left to right';
       }
     } else {
       return 'left continuously';
@@ -59,7 +57,7 @@ const getType = (a: Aggregation) => {
   }
 };
 
-export const aggregate = (values: number[]): AggregationWithType => {
+export const aggregate = (values: number[]): Aggregation => {
   if (values.length < 2) {
     throw new Error('bad impl');
   }
@@ -107,10 +105,5 @@ export const aggregate = (values: number[]): AggregationWithType => {
   aggregation.first = roundToInt(aggregation.first / base);
   aggregation.last = roundToInt(aggregation.last / base);
 
-  const type = getType(aggregation);
-
-  return {
-    type,
-    ...aggregation,
-  };
+  return aggregation;
 };
