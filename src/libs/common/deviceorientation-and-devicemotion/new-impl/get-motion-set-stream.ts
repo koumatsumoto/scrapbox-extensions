@@ -54,8 +54,8 @@ export const debug3 = () => {
       const di = d.data.direction === 'up' ? 'u' : 'd';
       return `${di}-${d.data.rate}: d.sid`;
     }),
-    withHistory(16),
-    // map((array) => array.reverse()),
+    withHistory(20),
+    map((array) => array.reverse()),
   );
 };
 
