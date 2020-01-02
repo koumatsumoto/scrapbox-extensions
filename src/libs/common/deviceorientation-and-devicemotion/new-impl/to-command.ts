@@ -30,7 +30,7 @@ export const toCommand = (values: MotionClassification[]): Command => {
   // used for double tip
   let remainCount = values.length;
 
-  for (let i = 1; i < values.length && remainCount-- > 0; i++) {
+  for (let i = 1; --remainCount > 0 && i < values.length; i++) {
     const value = values[i];
     const prev = values[i - 1];
 
@@ -58,7 +58,7 @@ export const toCommand = (values: MotionClassification[]): Command => {
         }
 
         tipped = true;
-        remainCount = 3;
+        remainCount = 4;
       }
 
       reset();
@@ -75,7 +75,7 @@ export const toCommand = (values: MotionClassification[]): Command => {
         }
 
         shaken = true;
-        remainCount = 3;
+        remainCount = 4;
       }
 
       reset();
