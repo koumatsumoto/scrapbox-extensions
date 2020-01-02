@@ -5,7 +5,7 @@ import { getDeviceMotionStream } from '../devicemotion';
 import { getRx, withHistory } from '../../rxjs';
 import { roundToInt } from '../../arithmetic';
 import { aggregate, classificate, MotionClassification } from './aggregate';
-import { CommandTypes, toCommand } from './to-command';
+import { Command, CommandTypes, toCommand } from './to-command';
 
 export const get4MotionWithOrientationStream = (
   orientation$: Observable<DeviceOrientation> = getDeviceOrientationStream(),
@@ -79,8 +79,9 @@ export const debug4 = () => {
 };
 
 type CommandData = {
-  command: CommandTypes;
+  action: CommandTypes;
   sid: number;
+  meta?: Command['meta'];
 };
 
 export const getMotionCommandStream = () => {
@@ -100,7 +101,7 @@ export const getMotionCommandStream = () => {
           // unreachable
           if (latest === undefined) {
             return {
-              command: 'waiting',
+              action: 'waiting',
               sid: -1,
             };
           }
@@ -108,7 +109,7 @@ export const getMotionCommandStream = () => {
 
           if (targets.length < minimumRequiredCount) {
             return {
-              command: 'waiting',
+              action: 'waiting',
               sid,
             };
           }
@@ -117,19 +118,18 @@ export const getMotionCommandStream = () => {
           switch (command.action) {
             case 'shake expecting next':
             case 'tip expecting next': {
-              return {
-                command,
-                sid,
-              };
+              break;
             }
             default: {
               commandSubmittedId = sid;
-              return {
-                command,
-                sid,
-              };
+              break;
             }
           }
+
+          return {
+            action: command.action,
+            sid,
+          };
         }),
       )
       .subscribe((value) => {
@@ -143,7 +143,7 @@ export const getCommandHistoryStream = () => {
 
   return getMotionCommandStream().pipe(
     withHistory(32),
-    map((values) => values.map((v) => v.command)),
+    map((values) => values.map((v) => v.action)),
   );
 };
 
@@ -152,7 +152,7 @@ export const getLastCommandStream = () => {
 
   return getMotionCommandStream().pipe(
     filter((c) => {
-      if (c.command === 'nothing' || c.command === 'waiting') {
+      if (c.action === 'nothing' || c.action === 'waiting') {
         return false;
       } else {
         return true;
