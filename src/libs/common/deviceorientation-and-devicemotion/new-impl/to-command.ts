@@ -1,7 +1,7 @@
 // TODO: not implemented
 import { MotionClassification } from './aggregate';
 
-export type Command =
+export type CommandTypes =
   | 'tip'
   | 'double tip'
   | 'shake'
@@ -11,10 +11,29 @@ export type Command =
   | 'tip expecting next'
   | 'shake expecting next';
 
+export type Command = {
+  action: CommandTypes;
+  meta: {
+    length: number;
+    previous?: MotionClassification;
+    firstTip?: MotionClassification;
+    firstShake?: MotionClassification;
+  };
+};
+
 export const toCommand = (values: MotionClassification[]): Command => {
   if (values.length < 2) {
-    return 'nothing';
+    return {
+      action: 'nothing',
+      meta: {
+        length: values.length,
+      },
+    };
   }
+
+  // meta
+  let firstTip: MotionClassification | undefined;
+  let firstShake: MotionClassification | undefined;
 
   let startedMovingQuickly = false;
   let startedMovingSlowly = false;
@@ -32,12 +51,12 @@ export const toCommand = (values: MotionClassification[]): Command => {
 
   for (let i = 1; --remainCount > 0 && i < values.length; i++) {
     const value = values[i];
-    const prev = values[i - 1];
+    const previous = values[i - 1];
 
     /**
      * When prev is steady, handle starting
      */
-    if (prev.steady) {
+    if (previous.steady) {
       if (value.steady) {
         continue;
       }
@@ -54,10 +73,18 @@ export const toCommand = (values: MotionClassification[]): Command => {
     if (value.steady) {
       if (startedMovingQuickly && !throughSlowly && !shaken) {
         if (tipped) {
-          return 'double tip';
+          return {
+            action: 'double tip',
+            meta: {
+              length: values.length,
+              previous,
+              firstTip,
+            },
+          };
         }
 
         tipped = true;
+        firstTip = value;
         remainCount = 4;
       }
 
@@ -68,13 +95,21 @@ export const toCommand = (values: MotionClassification[]): Command => {
     /**
      * When prev is moving and current continue moving
      */
-    if (prev.direction !== value.direction) {
+    if (previous.direction !== value.direction) {
       if (startedMovingQuickly && !throughSlowly && !tipped) {
         if (shaken) {
-          return 'double shake';
+          return {
+            action: 'double shake',
+            meta: {
+              length: values.length,
+              previous,
+              firstShake,
+            },
+          };
         }
 
         shaken = true;
+        firstShake = value;
         remainCount = 4;
       }
 
@@ -96,19 +131,48 @@ export const toCommand = (values: MotionClassification[]): Command => {
 
   if (remainCount) {
     if (tipped) {
-      return 'tip expecting next';
+      return {
+        action: 'tip expecting next',
+        meta: {
+          length: values.length,
+          firstTip,
+        },
+      };
     }
     if (shaken) {
-      return 'shake expecting next';
+      return {
+        action: 'shake expecting next',
+        meta: {
+          length: values.length,
+          firstShake,
+        },
+      };
     }
   } else {
     if (tipped) {
-      return 'tip';
+      return {
+        action: 'tip',
+        meta: {
+          length: values.length,
+          firstTip,
+        },
+      };
     }
     if (shaken) {
-      return 'shake';
+      return {
+        action: 'shake',
+        meta: {
+          length: values.length,
+          firstShake,
+        },
+      };
     }
   }
 
-  return 'nothing';
+  return {
+    action: 'nothing',
+    meta: {
+      length: values.length,
+    },
+  };
 };

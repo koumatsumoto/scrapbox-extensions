@@ -5,7 +5,7 @@ import { getDeviceMotionStream } from '../devicemotion';
 import { getRx, withHistory } from '../../rxjs';
 import { roundToInt } from '../../arithmetic';
 import { aggregate, classificate, MotionClassification } from './aggregate';
-import { Command, toCommand } from './to-command';
+import { CommandTypes, toCommand } from './to-command';
 
 export const get4MotionWithOrientationStream = (
   orientation$: Observable<DeviceOrientation> = getDeviceOrientationStream(),
@@ -79,7 +79,7 @@ export const debug4 = () => {
 };
 
 type CommandData = {
-  command: Command;
+  command: CommandTypes;
   sid: number;
 };
 
@@ -114,18 +114,18 @@ export const getMotionCommandStream = () => {
           }
 
           const command = toCommand(targets.map((m) => m.data));
-          switch (command) {
+          switch (command.action) {
             case 'shake expecting next':
             case 'tip expecting next': {
               return {
-                command: 'double tip',
+                command,
                 sid,
               };
             }
             default: {
               commandSubmittedId = sid;
               return {
-                command: 'nothing',
+                command,
                 sid,
               };
             }
