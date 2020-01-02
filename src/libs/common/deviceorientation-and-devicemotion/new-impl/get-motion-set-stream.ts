@@ -2,11 +2,11 @@ import { Observable } from 'rxjs';
 import { DeviceMotion, DeviceOrientation } from '../types';
 import { getDeviceOrientationStream } from '../deviceorientation/get-device-orientation-stream';
 import { getDeviceMotionStream } from '../devicemotion';
-import { withHistory, getRx } from '../../rxjs';
+import { getRx, withHistory } from '../../rxjs';
 import { aggregate, toType } from './aggregate';
 import { toCommand } from './to-command';
 
-export const getAggregationStream = (
+export const getMotionCommandStream = (
   orientation$: Observable<DeviceOrientation> = getDeviceOrientationStream(),
   motion$: Observable<DeviceMotion> = getDeviceMotionStream(),
 ) => {
@@ -41,8 +41,17 @@ export const getAggregationStream = (
 
       return command;
     }),
-    withHistory(12),
   );
+};
+
+export const getCommandHistoryStream = () => {
+  return getMotionCommandStream().pipe(withHistory(16));
+};
+
+export const getLastCommandStream = () => {
+  const { filter } = getRx().operators;
+
+  return getMotionCommandStream().pipe(filter((c) => c !== 'nothing'));
 };
 
 export const getAggregationStreamForDebug = (
