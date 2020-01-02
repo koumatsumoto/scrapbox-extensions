@@ -49,6 +49,7 @@ export const debug3 = () => {
       };
     }),
     withHistory(10),
+    map((array) => array.reverse()),
   );
 };
 

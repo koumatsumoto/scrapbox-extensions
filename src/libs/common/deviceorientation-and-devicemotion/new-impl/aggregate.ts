@@ -18,7 +18,6 @@ export type Aggregation = {
   readonly keep: number;
   readonly first: number;
   readonly last: number;
-  readonly sum: number;
   readonly max: number;
   readonly min: number;
   readonly avg: number;
@@ -83,12 +82,12 @@ export const aggregate = (values: number[]): Aggregation => {
     keep: 0,
     first,
     last,
-    sum: values[0],
     max: values[0],
     min: values[0],
     avg: values[0],
   };
 
+  let sum = 0;
   for (let i = 1; i < values.length; i++) {
     const p = values[i - 1];
     const v = values[i];
@@ -100,18 +99,17 @@ export const aggregate = (values: number[]): Aggregation => {
       aggregation.keep++;
     }
 
-    aggregation.sum += v;
+    sum += v;
     aggregation.max = Math.max(aggregation.max, v);
     aggregation.min = Math.min(aggregation.min, v);
   }
 
-  aggregation.avg = aggregation.sum / values.length;
+  aggregation.avg = sum / values.length;
 
   // should set by calibration
   const base = 12;
 
   aggregation.avg = roundToInt(aggregation.avg / base);
-  aggregation.sum = roundToInt(aggregation.sum / base);
   aggregation.min = roundToInt(aggregation.min / base);
   aggregation.max = roundToInt(aggregation.max / base);
   aggregation.first = roundToInt(aggregation.first / base);
