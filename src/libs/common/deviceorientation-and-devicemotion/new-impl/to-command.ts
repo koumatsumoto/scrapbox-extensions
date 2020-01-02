@@ -1,7 +1,7 @@
 import { MotionTypes } from './aggregate';
 
 // TODO: not implemented
-export type Command = 'tip' | 'double tip' | 'nothing';
+export type Command = 'tip' | 'double tip' | 'nothing' | 'waiting' | 'checking double tip';
 
 export const toCommand = (motionTypes: MotionTypes[]): Command => {
   if (motionTypes.length < 2) {

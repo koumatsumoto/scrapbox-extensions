@@ -72,6 +72,11 @@ export const debug4 = () => {
   );
 };
 
+type CommandData = {
+  command: Command;
+  sid: number;
+};
+
 export const getMotionCommandStream = () => {
   const { Observable } = getRx();
   const { map } = getRx().operators;
@@ -79,47 +84,73 @@ export const getMotionCommandStream = () => {
   const countToCommandDetermine = 8;
   let waitForDoubleTip = 0; // max 4
 
-  return new Observable<Command | 'waiting' | 'checking double tip'>((subscriber) => {
+  return new Observable<CommandData>((subscriber) => {
     getMotionAggregationsStream()
       .pipe(
         withHistory(countToCommandDetermine),
         map((items) => {
           const targets = items.filter((m) => m.sid > commandDeterminedId);
+          const latest = targets[targets.length - 1];
+          if (latest === undefined) {
+            return {
+              command: 'waiting',
+              sid: -1,
+            };
+          }
+          const sid = latest.sid;
+
           if (targets.length < countToCommandDetermine) {
-            return 'waiting';
+            return {
+              command: 'waiting',
+              sid,
+            };
           }
 
           const command = toCommand(targets.map((m) => m.type));
           if (command === 'nothing') {
-            return 'nothing';
+            return {
+              command: 'nothing',
+              sid,
+            };
           }
 
           if (command === 'double tip') {
-            commandDeterminedId = targets[targets.length - 1].sid;
-            return 'double tip';
+            commandDeterminedId = sid;
+            return {
+              command: 'double tip',
+              sid,
+            };
           }
 
           // when tip, need wait to detect double tip
           if (command === 'tip') {
             if (++waitForDoubleTip < 5) {
-              return 'checking double tip';
+              return {
+                command: 'checking double tip',
+                sid,
+              };
             } else {
-              commandDeterminedId = targets[targets.length - 1].sid;
-              return 'tip';
+              commandDeterminedId = sid;
+              return { command: 'tip', sid };
             }
           }
 
-          return command;
+          return { command, sid };
         }),
       )
       .subscribe((value) => {
-        subscriber.next(value);
+        subscriber.next(value as CommandData);
       });
   });
 };
 
 export const getCommandHistoryStream = () => {
-  return getMotionCommandStream().pipe(withHistory(16));
+  const { map } = getRx().operators;
+
+  return getMotionCommandStream().pipe(
+    withHistory(16),
+    map((values) => values.map((v) => v.command)),
+  );
 };
 
 export const getLastCommandStream = () => {
@@ -127,7 +158,7 @@ export const getLastCommandStream = () => {
 
   return getMotionCommandStream().pipe(
     filter((c) => {
-      if (c === 'nothing' || c === 'waiting') {
+      if (c.command === 'nothing' || c.command === 'waiting') {
         return false;
       } else {
         return true;
