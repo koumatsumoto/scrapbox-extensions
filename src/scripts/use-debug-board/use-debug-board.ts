@@ -6,16 +6,14 @@ import { getAggregationStream } from '../../libs/common/deviceorientation-and-de
 export const useDebugBoard = () => {
   const debugBoard = componentManager.getInstance(MyDebugBoard);
 
-  let d1: unknown;
-  let d2: unknown;
+  let data: unknown;
   let debugText = '';
-  getAggregationStream().subscribe((d) => (d2 = d));
+  getAggregationStream().subscribe((d) => (data = d));
   getOrientationAndMotionDebugString().subscribe((d) => (debugText = d));
 
   const loop = () => {
-    if (d1 && d2 && debugText) {
-      debugBoard.setText(JSON.stringify(d1, null, 2), 'left-top');
-      debugBoard.setText(JSON.stringify(d2, null, 2), 'left-bot');
+    if (data && debugText) {
+      debugBoard.setText(JSON.stringify(data, null, 2), 'left-top');
       debugBoard.setText(debugText, 'right-top');
     }
     window.requestAnimationFrame(loop);
