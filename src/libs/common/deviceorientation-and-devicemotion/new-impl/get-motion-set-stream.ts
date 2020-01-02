@@ -52,7 +52,7 @@ export const debug3 = () => {
     filter((d) => d.data.rate > 0),
     map((d) => {
       const di = d.data.direction === 'up' ? 'u' : 'd';
-      return `${di}-${d.data.rate}: d.sid`;
+      return `${di}-${d.data.rate}: ${d.sid}`;
     }),
     withHistory(20),
     map((array) => array.reverse()),
