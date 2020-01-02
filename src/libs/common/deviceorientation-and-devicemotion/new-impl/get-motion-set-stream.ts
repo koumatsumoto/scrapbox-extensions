@@ -33,9 +33,9 @@ export const getAggregationStream = (
     withHistory(8),
     map((motionSet) => {
       const toHandle = motionSet.filter((m) => m.sid > sidCommandDetermined);
-      const lastSid = toHandle[toHandle.length - 1];
-      const command = toCommand(motionSet.map((m) => m.type));
+      const command = toCommand(toHandle.map((m) => m.type));
       if (command !== 'nothing') {
+        const lastSid = toHandle[toHandle.length - 1];
         sidCommandDetermined = lastSid.sid;
       }
 
