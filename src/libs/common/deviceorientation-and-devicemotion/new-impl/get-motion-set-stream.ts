@@ -4,7 +4,7 @@ import { getDeviceOrientationStream } from '../deviceorientation/get-device-orie
 import { getDeviceMotionStream } from '../devicemotion';
 import { getRx, withHistory } from '../../rxjs';
 import { roundToInt } from '../../arithmetic';
-import { aggregate, toType } from './aggregate';
+import { aggregate, MotionTypes, toType } from './aggregate';
 import { Command, toCommand } from './to-command';
 
 export const get4MotionWithOrientationStream = (
@@ -16,11 +16,17 @@ export const get4MotionWithOrientationStream = (
   return motion$.pipe(bufferCount(4), withLatestFrom(orientation$));
 };
 
+// to check data by same sid
+let singletonToDebug: Observable<{ sid: number; direction: string; type: MotionTypes }>;
 export const getMotionAggregationsStream = () => {
   const { map } = getRx().operators;
   let sid = 0;
 
-  return get4MotionWithOrientationStream().pipe(
+  if (singletonToDebug) {
+    return singletonToDebug;
+  }
+
+  singletonToDebug = get4MotionWithOrientationStream().pipe(
     map(([motions, orientation]) => {
       const gammas = motions.map((m) => m.rotationRate.gamma);
       const aggregation = aggregate(gammas);
@@ -35,6 +41,8 @@ export const getMotionAggregationsStream = () => {
       };
     }),
   );
+
+  return singletonToDebug;
 };
 
 export const debug3 = () => {
@@ -44,11 +52,11 @@ export const debug3 = () => {
     filter((d) => d.type !== 'neutral'),
     map((d) => {
       return {
-        sid: d.sid,
         type: d.type,
+        sid: d.sid,
       };
     }),
-    withHistory(10),
+    withHistory(16),
     map((array) => array.reverse()),
   );
 };
@@ -148,7 +156,7 @@ export const getCommandHistoryStream = () => {
   const { map } = getRx().operators;
 
   return getMotionCommandStream().pipe(
-    withHistory(16),
+    withHistory(32),
     map((values) => values.map((v) => v.command)),
   );
 };

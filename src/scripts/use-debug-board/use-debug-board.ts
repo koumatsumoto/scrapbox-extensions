@@ -10,7 +10,7 @@ import {
 export const useDebugBoard = () => {
   const debugBoard = componentManager.getInstance(MyDebugBoard);
 
-  let data1: string;
+  let data1: unknown;
   let data2: string[];
   let data3: unknown[];
   let data4: unknown;
