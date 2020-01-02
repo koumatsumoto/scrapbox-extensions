@@ -35,6 +35,11 @@ export const getAggregationStreamForDebug = (
   motion$: Observable<DeviceMotion> = getDeviceMotionStream(),
 ) => {
   const { bufferCount, filter, map, withLatestFrom } = getRx().operators;
+  let sid = 0;
+  let minId = 0;
+  window.setInterval(() => {
+    minId = sid;
+  }, 1000 * 10);
 
   return motion$.pipe(
     bufferCount(4),
@@ -52,6 +57,7 @@ export const getAggregationStreamForDebug = (
       };
     }),
     filter((v) => v.type !== 'neutral'),
+    map((o) => ({ ...o, sid: sid++ })),
     asSet(8),
   );
 };
