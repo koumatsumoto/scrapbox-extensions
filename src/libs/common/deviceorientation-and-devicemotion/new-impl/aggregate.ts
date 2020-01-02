@@ -1,7 +1,18 @@
 import { Writeable } from '../../../../types';
+import { roundToInt } from '../../arithmetic';
 
+/**
+ * NOTE:
+ *
+ * - orientation.gamma
+ *   - positive if right
+ *   - negative if left
+ * - rotationRate.gamma
+ *   - positive if tilting to left
+ *   - negative if tilting to right
+ *
+ */
 export type Aggregation = {
-  readonly direction: 'up' | 'down' | 'keep';
   readonly up: number;
   readonly down: number;
   readonly keep: number;
@@ -13,6 +24,10 @@ export type Aggregation = {
   readonly avg: number;
 };
 
+const getType = (aggregation: Aggregation) => {
+  // not implemented
+};
+
 export const aggregate = (values: number[]): Aggregation => {
   if (values.length < 2) {
     throw new Error('bad impl');
@@ -20,17 +35,8 @@ export const aggregate = (values: number[]): Aggregation => {
 
   const first = values[0];
   const last = values[values.length - 1];
-  let direction: Aggregation['direction'];
-  if (first > last) {
-    direction = 'up';
-  } else if (first < last) {
-    direction = 'down';
-  } else {
-    direction = 'keep';
-  }
 
   const aggregation: Writeable<Aggregation> = {
-    direction,
     up: 0,
     down: 0,
     keep: 0,
@@ -58,7 +64,12 @@ export const aggregate = (values: number[]): Aggregation => {
     aggregation.min = Math.min(aggregation.min, v);
   }
 
-  aggregation.avg = aggregation.sum / values.length;
+  aggregation.avg = roundToInt(aggregation.sum / values.length);
+  aggregation.sum = roundToInt(aggregation.sum);
+  aggregation.min = roundToInt(aggregation.min);
+  aggregation.max = roundToInt(aggregation.max);
+  aggregation.first = roundToInt(aggregation.first);
+  aggregation.last = roundToInt(aggregation.last);
 
   return aggregation;
 };
