@@ -51,11 +51,8 @@ export const debug3 = () => {
   return getMotionAggregationsStream().pipe(
     filter((d) => d.data.rate > 0),
     map((d) => {
-      const di = d.data.direction === 'up' ? 'up  ' : d.data.direction;
-      return {
-        data: `${di}-${d.data.rate}`,
-        sid: d.sid,
-      };
+      const di = d.data.direction === 'up' ? 'u' : 'd';
+      return `${di}-${d.data.rate}: d.sid`;
     }),
     withHistory(16),
     // map((array) => array.reverse()),
