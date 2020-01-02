@@ -41,7 +41,7 @@ const getType = (a: Aggregation) => {
     } else {
       return 'keep right';
     }
-  } else {
+  } else if (a.first > 0) {
     // getting stronger
     if (a.first < a.last) {
       return 'tilt to left strongly';
@@ -54,6 +54,8 @@ const getType = (a: Aggregation) => {
     } else {
       return 'keep left';
     }
+  } else {
+    return 'no motion';
   }
 };
 
