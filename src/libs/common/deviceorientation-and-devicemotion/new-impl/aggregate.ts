@@ -31,28 +31,28 @@ const getType = (a: Aggregation) => {
   if (a.first < 0) {
     // getting stronger
     if (a.last < a.first) {
-      return 'tilt to right strongly';
+      return 'right strongly';
     } else if (a.first < a.last) {
       if (a.last < 0) {
-        return 'tilt to right weakly';
+        return 'right weakly';
       } else {
         return 'switch to left';
       }
     } else {
-      return 'keep right';
+      return 'right continuously';
     }
   } else if (a.first > 0) {
     // getting stronger
     if (a.first < a.last) {
-      return 'tilt to left strongly';
+      return 'left strongly';
     } else if (a.first > a.last) {
       if (a.last > 0) {
-        return 'tilt to left weakly';
+        return 'left weakly';
       } else {
         return 'switch to right';
       }
     } else {
-      return 'keep left';
+      return 'left continuously';
     }
   } else {
     return 'no motion';
