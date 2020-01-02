@@ -1,10 +1,10 @@
 import { componentManager } from '../component-manager';
 import { MyDebugBoard } from '../../components';
-import { getOrientationAndMotionDebugString } from '../../libs/common/deviceorientation-and-devicemotion';
 import {
+  debug3,
   getCommandHistoryStream,
+  debug4,
   getLastCommandStream,
-  getMotionAggregationsStream,
 } from '../../libs/common/deviceorientation-and-devicemotion/new-impl/get-motion-set-stream';
 
 export const useDebugBoard = () => {
@@ -12,20 +12,27 @@ export const useDebugBoard = () => {
 
   let data1: string;
   let data2: string[];
-  let data3: unknown;
-  let debugText = '';
+  let data3: unknown[];
+  let data4: unknown;
   getLastCommandStream().subscribe((d) => (data1 = d));
   getCommandHistoryStream().subscribe((d) => (data2 = d));
-  getMotionAggregationsStream().subscribe((d) => (data3 = d));
-  getOrientationAndMotionDebugString().subscribe((d) => (debugText = d));
+  debug3().subscribe((d) => (data3 = d));
+  debug4().subscribe((d) => (data4 = d));
 
   const loop = () => {
-    if (data1 && data2 && data3 && debugText) {
+    if (data1) {
       debugBoard.setText(JSON.stringify(data1, null, 2), 'left-top');
-      debugBoard.setText(JSON.stringify(data2, null, 2), 'left-bot');
-      debugBoard.setText(JSON.stringify(data3, null, 2), 'right-top');
-      debugBoard.setText(debugText, 'right-bot');
     }
+    if (data2) {
+      debugBoard.setText(JSON.stringify(data2, null, 2), 'left-bot');
+    }
+    if (data3) {
+      debugBoard.setText(JSON.stringify(data3, null, 2), 'right-top');
+    }
+    if (data4) {
+      debugBoard.setText(JSON.stringify(data4, null, 2), 'right-bot');
+    }
+
     window.requestAnimationFrame(loop);
   };
   loop();

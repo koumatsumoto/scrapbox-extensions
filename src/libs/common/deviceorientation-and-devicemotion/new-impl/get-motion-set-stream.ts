@@ -6,16 +6,20 @@ import { getRx, withHistory } from '../../rxjs';
 import { aggregate, toType } from './aggregate';
 import { toCommand } from './to-command';
 
-export const getMotionAggregationsStream = (
+export const get4MotionWithOrientationStream = (
   orientation$: Observable<DeviceOrientation> = getDeviceOrientationStream(),
   motion$: Observable<DeviceMotion> = getDeviceMotionStream(),
 ) => {
-  const { bufferCount, map, withLatestFrom } = getRx().operators;
+  const { bufferCount, withLatestFrom } = getRx().operators;
+
+  return motion$.pipe(bufferCount(4), withLatestFrom(orientation$));
+};
+
+export const getMotionAggregationsStream = () => {
+  const { map } = getRx().operators;
   let sid = 0;
 
-  return motion$.pipe(
-    bufferCount(4),
-    withLatestFrom(orientation$),
+  return get4MotionWithOrientationStream().pipe(
     map(([motions, orientation]) => {
       const gammas = motions.map((m) => m.rotationRate.gamma);
       const aggregation = aggregate(gammas);
@@ -29,7 +33,34 @@ export const getMotionAggregationsStream = (
         type,
       };
     }),
-    withHistory(8),
+  );
+};
+
+export const debug3 = () => {
+  const { filter } = getRx().operators;
+
+  return getMotionAggregationsStream().pipe(
+    filter((d) => d.type !== 'neutral'),
+    withHistory(10),
+  );
+};
+
+/**
+ * orientation and motion aggregation raw data for gamma
+ */
+export const debug4 = () => {
+  const { map } = getRx().operators;
+
+  return get4MotionWithOrientationStream().pipe(
+    map(([motions, orientation]) => {
+      const gammas = motions.map((m) => m.rotationRate.gamma);
+      const aggregation = aggregate(gammas);
+
+      return {
+        orientation,
+        aggregation,
+      };
+    }),
   );
 };
 
@@ -38,6 +69,7 @@ export const getMotionCommandStream = () => {
   let sidCommandDetermined = -1;
 
   return getMotionAggregationsStream().pipe(
+    withHistory(8),
     map((motionSet) => {
       const targets = motionSet.filter((m) => m.sid > sidCommandDetermined);
       if (targets.length < 8) {
@@ -70,33 +102,5 @@ export const getLastCommandStream = () => {
         return true;
       }
     }),
-  );
-};
-
-export const getAggregationStreamForDebug = (
-  orientation$: Observable<DeviceOrientation> = getDeviceOrientationStream(),
-  motion$: Observable<DeviceMotion> = getDeviceMotionStream(),
-) => {
-  const { bufferCount, filter, map, withLatestFrom } = getRx().operators;
-  let sid = 0;
-
-  return motion$.pipe(
-    bufferCount(4),
-    withLatestFrom(orientation$),
-    map(([motions, orientation]) => {
-      const gammas = motions.map((m) => m.rotationRate.gamma);
-      const aggregation = aggregate(gammas);
-      const type = toType(aggregation);
-
-      const direction = orientation.gamma > 0 ? 'right' : 'left';
-
-      return {
-        direction,
-        type,
-      };
-    }),
-    filter((v) => v.type !== 'neutral'),
-    map((o) => ({ ...o, sid: sid++ })),
-    withHistory(8),
   );
 };
