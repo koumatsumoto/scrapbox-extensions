@@ -49,7 +49,7 @@ export const debug3 = () => {
   const { filter, map } = getRx().operators;
 
   return getMotionAggregationsStream().pipe(
-    filter((d) => d.data.direction !== 'none'),
+    filter((d) => d.data.rate > 0),
     map((d) => {
       const di = d.data.direction === 'up' ? 'up  ' : d.data.direction;
       return {
