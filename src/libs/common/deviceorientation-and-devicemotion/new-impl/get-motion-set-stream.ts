@@ -79,7 +79,7 @@ export const getMotionCommandStream = () => {
   const countToCommandDetermine = 8;
   let waitForDoubleTip = 0; // max 4
 
-  return new Observable<Command | 'waiting' | 'check double tip'>((subscriber) => {
+  return new Observable<Command | 'waiting' | 'checking double tip'>((subscriber) => {
     getMotionAggregationsStream()
       .pipe(
         withHistory(countToCommandDetermine),
@@ -102,7 +102,7 @@ export const getMotionCommandStream = () => {
           // when tip, need wait to detect double tip
           if (command === 'tip') {
             if (++waitForDoubleTip < 5) {
-              return 'check double tip';
+              return 'checking double tip';
             } else {
               commandDeterminedId = targets[targets.length - 1].sid;
               return 'tip';
