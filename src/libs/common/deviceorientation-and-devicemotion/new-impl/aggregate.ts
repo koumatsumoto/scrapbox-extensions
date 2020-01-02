@@ -93,12 +93,15 @@ export const aggregate = (values: number[]): AggregationWithType => {
     aggregation.min = Math.min(aggregation.min, v);
   }
 
-  aggregation.avg = roundToInt(aggregation.sum / values.length);
-  aggregation.sum = roundToInt(aggregation.sum);
-  aggregation.min = roundToInt(aggregation.min);
-  aggregation.max = roundToInt(aggregation.max);
-  aggregation.first = roundToInt(aggregation.first);
-  aggregation.last = roundToInt(aggregation.last);
+  aggregation.avg = aggregation.sum / values.length;
+
+  const base = 3;
+  aggregation.avg = roundToInt(aggregation.avg / base);
+  aggregation.sum = roundToInt(aggregation.sum / base);
+  aggregation.min = roundToInt(aggregation.min / base);
+  aggregation.max = roundToInt(aggregation.max / base);
+  aggregation.first = roundToInt(aggregation.first / base);
+  aggregation.last = roundToInt(aggregation.last / base);
 
   const type = getType(aggregation);
 
