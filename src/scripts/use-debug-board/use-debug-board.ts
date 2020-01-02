@@ -27,10 +27,10 @@ export const useDebugBoard = () => {
       debugBoard.setText(JSON.stringify(data2, null, 2), 'left-bot');
     }
     if (data3) {
-      debugBoard.setText(JSON.stringify(data3, null, 2), 'right-top');
+      debugBoard.setText(JSON.stringify(data3, null, 2), 'right-bot');
     }
     if (data4) {
-      debugBoard.setText(JSON.stringify(data4, null, 2), 'right-bot');
+      debugBoard.setText(JSON.stringify(data4, null, 2), 'right-top');
     }
 
     window.requestAnimationFrame(loop);

@@ -3,6 +3,7 @@ import { DeviceMotion, DeviceOrientation } from '../types';
 import { getDeviceOrientationStream } from '../deviceorientation/get-device-orientation-stream';
 import { getDeviceMotionStream } from '../devicemotion';
 import { getRx, withHistory } from '../../rxjs';
+import { roundToInt } from '../../arithmetic';
 import { aggregate, toType } from './aggregate';
 import { toCommand } from './to-command';
 
@@ -37,10 +38,16 @@ export const getMotionAggregationsStream = () => {
 };
 
 export const debug3 = () => {
-  const { filter } = getRx().operators;
+  const { filter, map } = getRx().operators;
 
   return getMotionAggregationsStream().pipe(
     filter((d) => d.type !== 'neutral'),
+    map((d) => {
+      return {
+        sid: d.sid,
+        type: d.type,
+      };
+    }),
     withHistory(10),
   );
 };
@@ -57,7 +64,7 @@ export const debug4 = () => {
       const aggregation = aggregate(gammas);
 
       return {
-        orientation,
+        gamma: roundToInt(orientation.gamma),
         aggregation,
       };
     }),
