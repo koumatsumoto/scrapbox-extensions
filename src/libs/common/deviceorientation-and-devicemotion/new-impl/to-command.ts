@@ -1,7 +1,7 @@
 import { MotionTypes } from './aggregate';
 
 // TODO: not implemented
-export type Command = 'tip 1' | 'tip 2' | 'tip gt 2' | 'nothing';
+export type Command = 'tip' | 'double tip' | 'nothing';
 
 export const toCommand = (motionTypes: MotionTypes[]): Command => {
   if (motionTypes.length < 2) {
@@ -68,13 +68,10 @@ export const toCommand = (motionTypes: MotionTypes[]): Command => {
 
   switch (true) {
     case tipCount === 1: {
-      return 'tip 1';
+      return 'tip';
     }
     case tipCount === 2: {
-      return 'tip 2';
-    }
-    case tipCount > 2: {
-      return 'tip gt 2';
+      return 'double tip';
     }
     default: {
       return 'nothing';

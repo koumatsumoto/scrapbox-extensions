@@ -5,7 +5,7 @@ import { getDeviceMotionStream } from '../devicemotion';
 import { getRx, withHistory } from '../../rxjs';
 import { roundToInt } from '../../arithmetic';
 import { aggregate, toType } from './aggregate';
-import { toCommand } from './to-command';
+import { Command, toCommand } from './to-command';
 
 export const get4MotionWithOrientationStream = (
   orientation$: Observable<DeviceOrientation> = getDeviceOrientationStream(),
@@ -73,26 +73,49 @@ export const debug4 = () => {
 };
 
 export const getMotionCommandStream = () => {
+  const { Observable } = getRx();
   const { map } = getRx().operators;
-  let sidCommandDetermined = -1;
+  let commandDeterminedId = -1;
+  const countToCommandDetermine = 8;
+  let waitForDoubleTip = 0; // max 4
 
-  return getMotionAggregationsStream().pipe(
-    withHistory(8),
-    map((motionSet) => {
-      const targets = motionSet.filter((m) => m.sid > sidCommandDetermined);
-      if (targets.length < 8) {
-        return 'waiting';
-      }
+  return new Observable<Command | 'waiting' | 'check double tip'>((subscriber) => {
+    getMotionAggregationsStream()
+      .pipe(
+        withHistory(countToCommandDetermine),
+        map((items) => {
+          const targets = items.filter((m) => m.sid > commandDeterminedId);
+          if (targets.length < countToCommandDetermine) {
+            return 'waiting';
+          }
 
-      const command = toCommand(targets.map((m) => m.type));
-      if (command !== 'nothing') {
-        const lastSid = targets[targets.length - 1];
-        sidCommandDetermined = lastSid.sid;
-      }
+          const command = toCommand(targets.map((m) => m.type));
+          if (command === 'nothing') {
+            return 'nothing';
+          }
 
-      return command;
-    }),
-  );
+          if (command === 'double tip') {
+            commandDeterminedId = targets[targets.length - 1].sid;
+            return 'double tip';
+          }
+
+          // when tip, need wait to detect double tip
+          if (command === 'tip') {
+            if (++waitForDoubleTip < 5) {
+              return 'check double tip';
+            } else {
+              commandDeterminedId = targets[targets.length - 1].sid;
+              return 'tip';
+            }
+          }
+
+          return command;
+        }),
+      )
+      .subscribe((value) => {
+        subscriber.next(value);
+      });
+  });
 };
 
 export const getCommandHistoryStream = () => {
