@@ -35,7 +35,7 @@ type Threshold = {
 // TODO: make generalize for other types like as alpha, beta, x, y, z
 export const defaultThreshold: Threshold = {
   high: 100,
-  mid: 60,
+  mid: 50,
   low: 25,
   round: 10,
 };
@@ -73,7 +73,7 @@ export const classificate = (a: Aggregation, threshold: Threshold = defaultThres
       direction: 'up',
       rate,
       align: align,
-      steady: !align && rate < 1,
+      steady: rate === 0,
     };
   } else if (a.first > a.last) {
     // down
@@ -84,7 +84,7 @@ export const classificate = (a: Aggregation, threshold: Threshold = defaultThres
       direction: 'down',
       rate,
       align,
-      steady: !align && rate < 1,
+      steady: rate === 0,
     };
   } else {
     let rate: MotionClassification['rate'];

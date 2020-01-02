@@ -18,8 +18,12 @@ export const toCommand = (values: MotionClassification[]): Command => {
 
   let startedMovingQuickly = false;
   let startedMovingSlowly = false;
-  let startDirection: MotionClassification['direction'] | null = null;
-  let countAfterFirstMoveUntilSteady = 0;
+  let throughSlowly = false;
+  const reset = () => {
+    startedMovingQuickly = false;
+    startedMovingSlowly = false;
+    throughSlowly = false;
+  };
 
   let tipped = false;
   let shaken = false;
@@ -38,13 +42,9 @@ export const toCommand = (values: MotionClassification[]): Command => {
         continue;
       }
 
-      // start moving
-      countAfterFirstMoveUntilSteady = 1;
-      startDirection = value.direction;
       // check quickly or slowly
-      const quickly = value.rate > 1;
-      startedMovingQuickly = quickly;
-      startedMovingSlowly = !quickly;
+      startedMovingQuickly = value.rate > 1;
+      startedMovingSlowly = !startedMovingQuickly;
       continue;
     }
 
@@ -52,7 +52,7 @@ export const toCommand = (values: MotionClassification[]): Command => {
      * When prev is moving and current stopped
      */
     if (value.steady) {
-      if (startedMovingQuickly && !shaken) {
+      if (startedMovingQuickly && !throughSlowly && !shaken) {
         if (tipped) {
           return 'double tip';
         }
@@ -61,8 +61,7 @@ export const toCommand = (values: MotionClassification[]): Command => {
         remainCount = 3;
       }
 
-      startedMovingQuickly = false;
-      startedMovingSlowly = false;
+      reset();
       continue;
     }
 
@@ -70,7 +69,7 @@ export const toCommand = (values: MotionClassification[]): Command => {
      * When prev is moving and current continue moving
      */
     if (prev.direction !== value.direction) {
-      if (!tipped) {
+      if (startedMovingQuickly && !throughSlowly && !tipped) {
         if (shaken) {
           return 'double shake';
         }
@@ -79,9 +78,14 @@ export const toCommand = (values: MotionClassification[]): Command => {
         remainCount = 3;
       }
 
-      startedMovingQuickly = false;
-      startedMovingSlowly = false;
+      reset();
       continue;
+    }
+
+    if (value.rate > 2) {
+      // continue acceleration
+    } else {
+      throughSlowly = true;
     }
 
     /**
