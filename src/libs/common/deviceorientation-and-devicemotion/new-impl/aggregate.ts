@@ -24,11 +24,40 @@ export type Aggregation = {
   readonly avg: number;
 };
 
-const getType = (aggregation: Aggregation) => {
-  // not implemented
+export type AggregationWithType = Aggregation & { type: string };
+
+const getType = (a: Aggregation) => {
+  // tilt to right
+  if (a.first < 0) {
+    // getting stronger
+    if (a.last < a.first) {
+      return 'tilt to right strongly';
+    } else if (a.first < a.last) {
+      if (a.last < 0) {
+        return 'tilt to right weakly';
+      } else {
+        return 'switch to left';
+      }
+    } else {
+      return 'keep right';
+    }
+  } else {
+    // getting stronger
+    if (a.first < a.last) {
+      return 'tilt to left strongly';
+    } else if (a.first > a.last) {
+      if (a.last > 0) {
+        return 'tilt to left weakly';
+      } else {
+        return 'switch to right';
+      }
+    } else {
+      return 'keep left';
+    }
+  }
 };
 
-export const aggregate = (values: number[]): Aggregation => {
+export const aggregate = (values: number[]): AggregationWithType => {
   if (values.length < 2) {
     throw new Error('bad impl');
   }
@@ -71,5 +100,10 @@ export const aggregate = (values: number[]): Aggregation => {
   aggregation.first = roundToInt(aggregation.first);
   aggregation.last = roundToInt(aggregation.last);
 
-  return aggregation;
+  const type = getType(aggregation);
+
+  return {
+    type,
+    ...aggregation,
+  };
 };

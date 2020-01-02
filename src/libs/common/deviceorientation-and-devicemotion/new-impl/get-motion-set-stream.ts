@@ -21,7 +21,7 @@ export const getAggregationStream = (
       const side = orientation.gamma > 0 ? 'right' : 'left';
 
       return {
-        side,
+        orientation: side,
         // bad performance
         ...aggregation,
       };
