@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { DeviceMotion, DeviceOrientation } from '../types';
 import { getDeviceOrientationStream } from '../deviceorientation/get-device-orientation-stream';
 import { getDeviceMotionStream } from '../devicemotion';
-import { asSet, getRx } from '../../rxjs';
+import { withHistory, getRx } from '../../rxjs';
 import { aggregate, toType } from './aggregate';
 import { toCommand } from './to-command';
 
@@ -30,7 +30,7 @@ export const getAggregationStream = (
         type,
       };
     }),
-    asSet(8),
+    withHistory(8),
     map((motionSet) => {
       const toHandle = motionSet.filter((m) => m.sid > sidCommandDetermined);
       const lastSid = toHandle[toHandle.length - 1];
@@ -41,6 +41,7 @@ export const getAggregationStream = (
 
       return command;
     }),
+    withHistory(12),
   );
 };
 
@@ -68,6 +69,6 @@ export const getAggregationStreamForDebug = (
     }),
     filter((v) => v.type !== 'neutral'),
     map((o) => ({ ...o, sid: sid++ })),
-    asSet(8),
+    withHistory(8),
   );
 };
