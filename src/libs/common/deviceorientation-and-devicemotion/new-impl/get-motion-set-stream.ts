@@ -4,7 +4,7 @@ import { getDeviceOrientationStream } from '../deviceorientation/get-device-orie
 import { getDeviceMotionStream } from '../devicemotion';
 import { getRx, withHistory } from '../../rxjs';
 import { roundToInt } from '../../arithmetic';
-import { aggregate, MotionTypes, toType } from './aggregate';
+import { aggregate, classificate, MotionClassification } from './aggregate';
 import { Command, toCommand } from './to-command';
 
 export const get4MotionWithOrientationStream = (
@@ -17,7 +17,7 @@ export const get4MotionWithOrientationStream = (
 };
 
 // to check data by same sid
-let singletonToDebug: Observable<{ sid: number; direction: string; type: MotionTypes }>;
+let singletonToDebug: Observable<{ sid: number; direction: string; data: MotionClassification }>;
 export const getMotionAggregationsStream = () => {
   const { map } = getRx().operators;
   let sid = 0;
@@ -30,14 +30,14 @@ export const getMotionAggregationsStream = () => {
     map(([motions, orientation]) => {
       const gammas = motions.map((m) => m.rotationRate.gamma);
       const aggregation = aggregate(gammas);
-      const type = toType(aggregation);
+      const data = classificate(aggregation);
 
       const direction = orientation.gamma > 0 ? 'right' : 'left';
 
       return {
         sid: sid++,
         direction,
-        type,
+        data,
       };
     }),
   );
@@ -49,10 +49,10 @@ export const debug3 = () => {
   const { filter, map } = getRx().operators;
 
   return getMotionAggregationsStream().pipe(
-    filter((d) => d.type !== 'neutral'),
+    filter((d) => d.data.direction !== 'none'),
     map((d) => {
       return {
-        type: d.type,
+        data: `${d.data.direction}-${d.data.rate}-${d.data.align}`,
         sid: d.sid,
       };
     }),
@@ -88,17 +88,18 @@ type CommandData = {
 export const getMotionCommandStream = () => {
   const { Observable } = getRx();
   const { map } = getRx().operators;
-  let commandDeterminedId = -1;
-  const countToCommandDetermine = 8;
-  let waitForDoubleTip = 0; // max 4
+  const minimumRequiredCount = 8;
 
   return new Observable<CommandData>((subscriber) => {
+    let commandSubmittedId = -1;
     getMotionAggregationsStream()
       .pipe(
-        withHistory(countToCommandDetermine),
+        withHistory(minimumRequiredCount),
         map((items) => {
-          const targets = items.filter((m) => m.sid > commandDeterminedId);
+          const targets = items.filter((m) => m.sid > commandSubmittedId);
           const latest = targets[targets.length - 1];
+
+          // unreachable
           if (latest === undefined) {
             return {
               command: 'waiting',
@@ -107,43 +108,30 @@ export const getMotionCommandStream = () => {
           }
           const sid = latest.sid;
 
-          if (targets.length < countToCommandDetermine) {
+          if (targets.length < minimumRequiredCount) {
             return {
               command: 'waiting',
               sid,
             };
           }
 
-          const command = toCommand(targets.map((m) => m.type));
-          if (command === 'nothing') {
-            return {
-              command: 'nothing',
-              sid,
-            };
-          }
-
-          if (command === 'double tip') {
-            commandDeterminedId = sid;
-            return {
-              command: 'double tip',
-              sid,
-            };
-          }
-
-          // when tip, need wait to detect double tip
-          if (command === 'tip') {
-            if (++waitForDoubleTip < 5) {
+          const command = toCommand(targets.map((m) => m.data));
+          switch (command) {
+            case 'shake expecting next':
+            case 'tip expecting next': {
               return {
-                command: 'checking double tip',
+                command: 'double tip',
                 sid,
               };
-            } else {
-              commandDeterminedId = sid;
-              return { command: 'tip', sid };
+            }
+            default: {
+              commandSubmittedId = sid;
+              return {
+                command: 'nothing',
+                sid,
+              };
             }
           }
-
-          return { command, sid };
         }),
       )
       .subscribe((value) => {

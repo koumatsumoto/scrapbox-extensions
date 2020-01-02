@@ -1,80 +1,110 @@
-import { MotionTypes } from './aggregate';
-
 // TODO: not implemented
-export type Command = 'tip' | 'double tip' | 'nothing' | 'waiting' | 'checking double tip';
+import { MotionClassification } from './aggregate';
 
-export const toCommand = (motionTypes: MotionTypes[]): Command => {
-  if (motionTypes.length < 2) {
+export type Command =
+  | 'tip'
+  | 'double tip'
+  | 'shake'
+  | 'double shake'
+  | 'nothing'
+  | 'waiting'
+  | 'tip expecting next'
+  | 'shake expecting next';
+
+export const toCommand = (values: MotionClassification[]): Command => {
+  if (values.length < 2) {
     return 'nothing';
   }
 
-  let expectLeftToRight = false;
-  let expectRightToLeft = false;
-  let ignoreCount = 0;
-  const resetMode = () => {
-    expectLeftToRight = false;
-    expectRightToLeft = false;
-    ignoreCount = 0;
-  };
+  let startedMovingQuickly = false;
+  let startedMovingSlowly = false;
+  let startDirection: MotionClassification['direction'] | null = null;
+  let countAfterFirstMoveUntilSteady = 0;
 
-  let tipCount = 0;
+  let tipped = false;
+  let shaken = false;
+  // used for double tip
+  let remainCount = values.length;
 
-  for (let i = 0; i < motionTypes.length; i++) {
-    const type = motionTypes[i];
+  for (let i = 1; i < values.length && remainCount-- > 0; i++) {
+    const value = values[i];
+    const prev = values[i - 1];
 
-    // no mode determined
-    if (!expectLeftToRight && !expectRightToLeft) {
-      if (type === 'left to right') {
-        expectRightToLeft = true;
-      } else if (type === 'right to left') {
-        expectLeftToRight = true;
-      }
-
-      continue;
-    }
-
-    // expect right to left mode
-    if (expectRightToLeft) {
-      ignoreCount++;
-
-      if (ignoreCount > 2) {
-        resetMode();
+    /**
+     * When prev is steady, handle starting
+     */
+    if (prev.steady) {
+      if (value.steady) {
         continue;
       }
 
-      if (type === 'right to left') {
-        tipCount++;
-        resetMode();
-      }
-
+      // start moving
+      countAfterFirstMoveUntilSteady = 1;
+      startDirection = value.direction;
+      // check quickly or slowly
+      const quickly = value.rate > 1;
+      startedMovingQuickly = quickly;
+      startedMovingSlowly = !quickly;
       continue;
     }
 
-    // expect left to right mode
-    if (expectLeftToRight) {
-      ignoreCount++;
+    /**
+     * When prev is moving and current stopped
+     */
+    if (value.steady) {
+      if (startedMovingQuickly && !shaken) {
+        if (tipped) {
+          return 'double tip';
+        }
 
-      if (ignoreCount > 2) {
-        resetMode();
-        continue;
+        tipped = true;
+        remainCount = 3;
       }
 
-      if (type === 'left to right') {
-        tipCount++;
-        resetMode();
-      }
+      startedMovingQuickly = false;
+      startedMovingSlowly = false;
+      continue;
     }
+
+    /**
+     * When prev is moving and current continue moving
+     */
+    if (prev.direction !== value.direction) {
+      if (!tipped) {
+        if (shaken) {
+          return 'double shake';
+        }
+
+        shaken = true;
+        remainCount = 3;
+      }
+
+      startedMovingQuickly = false;
+      startedMovingSlowly = false;
+      continue;
+    }
+
+    /**
+     * When current motion intensify or continue previous
+     */
+    continue;
   }
 
-  switch (true) {
-    case tipCount === 1: {
+  if (remainCount) {
+    if (tipped) {
+      return 'tip expecting next';
+    }
+    if (shaken) {
+      return 'shake expecting next';
+    }
+  } else {
+    if (tipped) {
       return 'tip';
     }
-    case tipCount === 2: {
-      return 'double tip';
-    }
-    default: {
-      return 'nothing';
+    if (shaken) {
+      return 'shake';
     }
   }
+
+  return 'nothing';
 };

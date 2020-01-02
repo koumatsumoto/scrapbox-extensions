@@ -13,9 +13,10 @@ import { roundToInt } from '../../arithmetic';
  *
  */
 export type Aggregation = {
-  readonly up: number;
-  readonly down: number;
-  readonly keep: number;
+  readonly count: number;
+  readonly increase: number;
+  readonly decrease: number;
+  readonly nochange: number;
   readonly first: number;
   readonly last: number;
   readonly max: number;
@@ -23,48 +24,86 @@ export type Aggregation = {
   readonly avg: number;
 };
 
-// TODO: use integer for performance
-export type MotionTypes =
-  | 'neutral'
-  | 'right strongly'
-  | 'right weakly'
-  | 'right to left'
-  | 'right continuously'
-  | 'left strongly'
-  | 'left weakly'
-  | 'left to right'
-  | 'left continuously';
+type Threshold = {
+  high: number;
+  mid: number;
+  low: number;
+  // equalize values if under
+  round: number;
+};
 
-export const toType = (a: Aggregation): MotionTypes => {
-  // tilt to right
-  if (a.first < 0) {
-    // getting stronger
-    if (a.last < a.first) {
-      return 'right strongly';
-    } else if (a.first < a.last) {
-      if (a.last < 0) {
-        return 'right weakly';
-      } else {
-        return 'right to left';
-      }
-    } else {
-      return 'right continuously';
-    }
-  } else if (a.first > 0) {
-    // getting stronger
-    if (a.first < a.last) {
-      return 'left strongly';
-    } else if (a.first > a.last) {
-      if (a.last > 0) {
-        return 'left weakly';
-      } else {
-        return 'left to right';
-      }
-    } else {
-      return 'left continuously';
-    }
+// TODO: make generalize for other types like as alpha, beta, x, y, z
+export const defaultThreshold: Threshold = {
+  high: 100,
+  mid: 60,
+  low: 20,
+  round: 5,
+};
+
+export type MotionClassification = {
+  direction: 'up' | 'down' | 'none';
+  // stopping, slightly, low, mid, high
+  rate: 0 | 1 | 2 | 3 | 4;
+  // all direction of value change is same
+  align: boolean;
+  steady: boolean;
+};
+
+const calcRate = (value: number, threshold: Threshold) => {
+  if (value > threshold.high) {
+    return 4;
+  } else if (value > threshold.mid) {
+    return 3;
+  } else if (value > threshold.low) {
+    return 2;
+  } else if (value > threshold.round) {
+    return 1;
   } else {
-    return 'neutral';
+    return 0;
+  }
+};
+
+export const classificate = (a: Aggregation, threshold: Threshold = defaultThreshold): MotionClassification => {
+  if (a.first < a.last) {
+    // up
+    const rate = calcRate(a.last - a.first, threshold);
+    const align = a.count === a.increase;
+
+    return {
+      direction: 'up',
+      rate,
+      align: align,
+      steady: !align && rate < 1,
+    };
+  } else if (a.first > a.last) {
+    // down
+    const rate = calcRate(a.first - a.last, threshold);
+    const align = a.count === a.decrease;
+
+    return {
+      direction: 'down',
+      rate,
+      align,
+      steady: !align && rate < 1,
+    };
+  } else {
+    let rate: MotionClassification['rate'];
+    if (a.first > 0) {
+      const d1 = a.max - a.first;
+      const d2 = a.min > 0 ? a.first - a.min : Math.abs(a.min - a.first);
+      rate = calcRate(Math.max(d1, d2), threshold);
+    } else {
+      const d1 = a.max < 0 ? Math.abs(a.first + a.max) : a.max - a.first;
+      const d2 = Math.abs(a.min + a.first);
+      rate = calcRate(Math.max(d1, d2), threshold);
+    }
+
+    return {
+      direction: 'none',
+      rate,
+      align: a.first === a.max && a.first === a.min,
+      steady: true,
+    };
   }
 };
 
@@ -77,9 +116,10 @@ export const aggregate = (values: number[]): Aggregation => {
   const last = values[values.length - 1];
 
   const aggregation: Writeable<Aggregation> = {
-    up: 0,
-    down: 0,
-    keep: 0,
+    count: values.length,
+    increase: 0,
+    decrease: 0,
+    nochange: 0,
     first,
     last,
     max: values[0],
@@ -92,11 +132,11 @@ export const aggregate = (values: number[]): Aggregation => {
     const p = values[i - 1];
     const v = values[i];
     if (v > p) {
-      aggregation.up++;
+      aggregation.increase++;
     } else if (v < p) {
-      aggregation.down++;
+      aggregation.decrease++;
     } else {
-      aggregation.keep++;
+      aggregation.nochange++;
     }
 
     sum += v;
@@ -104,16 +144,13 @@ export const aggregate = (values: number[]): Aggregation => {
     aggregation.min = Math.min(aggregation.min, v);
   }
 
-  aggregation.avg = sum / values.length;
+  aggregation.avg = sum / aggregation.count;
 
-  // should set by calibration
-  const base = 12;
-
-  aggregation.avg = roundToInt(aggregation.avg / base);
-  aggregation.min = roundToInt(aggregation.min / base);
-  aggregation.max = roundToInt(aggregation.max / base);
-  aggregation.first = roundToInt(aggregation.first / base);
-  aggregation.last = roundToInt(aggregation.last / base);
+  aggregation.avg = roundToInt(aggregation.avg);
+  aggregation.min = roundToInt(aggregation.min);
+  aggregation.max = roundToInt(aggregation.max);
+  aggregation.first = roundToInt(aggregation.first);
+  aggregation.last = roundToInt(aggregation.last);
 
   return aggregation;
 };
