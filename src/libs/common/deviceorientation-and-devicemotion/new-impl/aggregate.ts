@@ -24,7 +24,19 @@ export type Aggregation = {
   readonly avg: number;
 };
 
-export const toType = (a: Aggregation) => {
+// TODO: use integer for performance
+export type MotionTypes =
+  | 'neutral'
+  | 'right strongly'
+  | 'right weakly'
+  | 'right to left'
+  | 'right continuously'
+  | 'left strongly'
+  | 'left weakly'
+  | 'left to right'
+  | 'left continuously';
+
+export const toType = (a: Aggregation): MotionTypes => {
   // tilt to right
   if (a.first < 0) {
     // getting stronger
@@ -53,7 +65,7 @@ export const toType = (a: Aggregation) => {
       return 'left continuously';
     }
   } else {
-    return 'no motion';
+    return 'neutral';
   }
 };
 

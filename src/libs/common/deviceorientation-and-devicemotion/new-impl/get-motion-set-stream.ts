@@ -29,3 +29,29 @@ export const getAggregationStream = (
     asSet(8),
   );
 };
+
+export const getAggregationStreamForDebug = (
+  orientation$: Observable<DeviceOrientation> = getDeviceOrientationStream(),
+  motion$: Observable<DeviceMotion> = getDeviceMotionStream(),
+) => {
+  const { bufferCount, filter, map, withLatestFrom } = getRx().operators;
+
+  return motion$.pipe(
+    bufferCount(4),
+    withLatestFrom(orientation$),
+    map(([motions, orientation]) => {
+      const gammas = motions.map((m) => m.rotationRate.gamma);
+      const aggregation = aggregate(gammas);
+      const type = toType(aggregation);
+
+      const direction = orientation.gamma > 0 ? 'right' : 'left';
+
+      return {
+        direction,
+        type,
+      };
+    }),
+    filter((v) => v.type !== 'neutral'),
+    asSet(8),
+  );
+};
