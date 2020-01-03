@@ -5,7 +5,8 @@ import { getDeviceMotionStream } from '../devicemotion';
 import { getRx, withHistory } from '../../rxjs';
 import { roundToInt } from '../../arithmetic';
 import { aggregate, classificate, MotionClassification } from './aggregate';
-import { Command, CommandTypes, toCommand } from './to-command';
+import { CommandTypes } from './to-command';
+import { makeTip } from './make-tip-or-shake';
 
 export const get4MotionWithOrientationStream = (
   orientation$: Observable<DeviceOrientation> = getDeviceOrientationStream(),
@@ -79,9 +80,8 @@ export const debug4 = () => {
 };
 
 type CommandData = {
-  action: CommandTypes;
+  command: CommandTypes;
   sid: number;
-  meta?: Command['meta'];
 };
 
 export const getMotionCommandStream = () => {
@@ -114,8 +114,8 @@ export const getMotionCommandStream = () => {
             };
           }
 
-          const command = toCommand(targets.map((m) => m.data));
-          switch (command.action) {
+          const command = makeTip(targets.map((m) => m.data));
+          switch (command) {
             case 'shake expecting next':
             case 'tip expecting next': {
               break;
@@ -127,7 +127,7 @@ export const getMotionCommandStream = () => {
           }
 
           return {
-            action: command.action,
+            command,
             sid,
           };
         }),
@@ -143,7 +143,7 @@ export const getCommandHistoryStream = () => {
 
   return getMotionCommandStream().pipe(
     withHistory(32),
-    map((values) => values.map((v) => v.action)),
+    map((values) => values.map((v) => v.command)),
   );
 };
 
@@ -152,7 +152,7 @@ export const getLastCommandStream = () => {
 
   return getMotionCommandStream().pipe(
     filter((c) => {
-      if (c.action === 'nothing' || c.action === 'waiting') {
+      if (c.command === 'nothing' || c.command === 'waiting') {
         return false;
       } else {
         return true;

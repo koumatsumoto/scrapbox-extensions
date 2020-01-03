@@ -14,114 +14,176 @@ export type CommandTypes =
 export type Command = {
   action: CommandTypes;
   meta: {
-    length: number;
     previous?: MotionClassification;
-    firstTip?: MotionClassification;
-    firstShake?: MotionClassification;
   };
 };
 
-export const toCommand = (values: MotionClassification[]): Command => {
-  if (values.length < 2) {
-    return {
-      action: 'nothing',
-      meta: {
-        length: values.length,
-      },
-    };
+type State = {
+  // 0 -> 2
+  startBySuddenAcceleration: boolean;
+  // 0 -> 1
+  startByGradualAcceleration: boolean;
+  getSuddenAcceleration: number;
+  getGradualAcceleration: number;
+  continueSameAcceleration: number;
+  graduallySlow: boolean;
+  graduallyQuick: boolean;
+  tipped: boolean;
+  shaken: boolean;
+  // used for double tip, shake
+  remainCount: number;
+};
+
+const createState = (): State => ({
+  startBySuddenAcceleration: false,
+  startByGradualAcceleration: false,
+  getSuddenAcceleration: 0,
+  getGradualAcceleration: 0,
+  continueSameAcceleration: 0,
+  graduallySlow: false,
+  graduallyQuick: false,
+  tipped: false,
+  shaken: false,
+  // updated and used for double tip and shake action
+  remainCount: 100,
+});
+
+const resetState = (state: State) => {
+  state.startBySuddenAcceleration = false;
+  state.startByGradualAcceleration = false;
+  state.getSuddenAcceleration = 0;
+  state.getGradualAcceleration = 0;
+  state.continueSameAcceleration = 0;
+  state.graduallySlow = false;
+  state.graduallyQuick = false;
+};
+
+const handleTip = (state: State): Command | null => {
+  if (state.startBySuddenAcceleration && !state.graduallySlow && !state.shaken) {
+    if (state.tipped) {
+      return {
+        action: 'double tip',
+        meta: {},
+      };
+    }
+
+    state.tipped = true;
+    state.remainCount = 4;
   }
 
-  // meta
-  let firstTip: MotionClassification | undefined;
-  let firstShake: MotionClassification | undefined;
+  resetState(state);
 
-  let startedMovingQuickly = false;
-  let startedMovingSlowly = false;
-  let throughSlowly = false;
-  const reset = () => {
-    startedMovingQuickly = false;
-    startedMovingSlowly = false;
-    throughSlowly = false;
-  };
+  return null;
+};
 
-  let tipped = false;
-  let shaken = false;
-  // used for double tip
-  let remainCount = values.length;
+const handleShake = (state: State): Command | null => {
+  if (state.startBySuddenAcceleration && !state.graduallySlow && !state.tipped) {
+    if (state.shaken) {
+      return {
+        action: 'double shake',
+        meta: {},
+      };
+    }
 
-  for (let i = 1; --remainCount > 0 && i < values.length; i++) {
+    state.shaken = true;
+    state.remainCount = 4;
+  }
+
+  resetState(state);
+
+  return null;
+};
+
+export const toCommandNotImplemented = (values: MotionClassification[]): Command => {
+  const state = createState();
+
+  for (let i = 1; --state.remainCount > 0 && i < values.length; i++) {
     const value = values[i];
     const previous = values[i - 1];
 
-    /**
-     * When prev is steady, handle starting
-     */
-    if (previous.steady) {
-      if (value.steady) {
-        continue;
-      }
+    // no motion, continue waiting
+    if (previous.steady && value.steady) {
+      resetState(state);
 
-      // check quickly or slowly
-      startedMovingQuickly = value.rate > 1;
-      startedMovingSlowly = !startedMovingQuickly;
       continue;
+    } else if (previous.steady && !value.steady) {
+      state.startBySuddenAcceleration = value.rate > 2;
+      state.startByGradualAcceleration = !state.startBySuddenAcceleration;
+
+      continue;
+    } else if (!previous.steady && value.steady) {
+      switch (previous.rate) {
+        // sudden acceleration
+        case 4:
+        case 3: {
+          state.getSuddenAcceleration++;
+          const doubletipOrNull = handleTip(state);
+          if (doubletipOrNull) {
+            return doubletipOrNull;
+          }
+          continue;
+        }
+        // gradual acceleration
+        default: {
+          state.getGradualAcceleration++;
+          continue;
+        }
+      }
+    } else {
+      if (previous.direction === value.direction) {
+        switch (previous.rate) {
+          case 4: {
+            if (value.rate === 4) {
+              state.continueSameAcceleration++;
+            } else if (value.rate === 3) {
+              // TODO: work was stopped here
+            }
+            if (value.rate > 2) {
+              state.continueSameAcceleration++;
+            }
+            continue;
+          }
+          case 3: {
+            if (value.rate < 2) {
+              // handle tip
+              const doubletipOrNull = handleTip(state);
+              if (doubletipOrNull) {
+                return doubletipOrNull;
+              }
+            }
+            continue;
+          }
+          case 2: {
+            continue;
+          }
+          case 1: {
+            continue;
+          }
+        }
+      } else {
+        if (previous.direction !== value.direction) {
+          const doubleshakeOrNull = handleShake(state);
+          if (doubleshakeOrNull) {
+            return doubleshakeOrNull;
+          } else {
+            continue;
+          }
+        }
+      }
     }
 
-    /**
-     * When prev is moving and current stopped
-     */
-    if (value.steady) {
-      if (startedMovingQuickly && !throughSlowly && !shaken) {
-        if (tipped) {
-          return {
-            action: 'double tip',
-            meta: {
-              length: values.length,
-              previous,
-              firstTip,
-            },
-          };
-        }
+    // below
+    // !previous.steady && !value.steady
 
-        tipped = true;
-        firstTip = value;
-        remainCount = 4;
-      }
-
-      reset();
-      continue;
+    if (value.rate > 2) {
+      // continue acceleration
+    } else {
+      state.graduallySlow = true;
     }
 
     /**
      * When prev is moving and current continue moving
      */
-    if (previous.direction !== value.direction) {
-      if (startedMovingQuickly && !throughSlowly && !tipped) {
-        if (shaken) {
-          return {
-            action: 'double shake',
-            meta: {
-              length: values.length,
-              previous,
-              firstShake,
-            },
-          };
-        }
-
-        shaken = true;
-        firstShake = value;
-        remainCount = 4;
-      }
-
-      reset();
-      continue;
-    }
-
-    if (value.rate > 2) {
-      // continue acceleration
-    } else {
-      throughSlowly = true;
-    }
 
     /**
      * When current motion intensify or continue previous
@@ -129,50 +191,36 @@ export const toCommand = (values: MotionClassification[]): Command => {
     continue;
   }
 
-  if (remainCount) {
-    if (tipped) {
+  if (state.remainCount > 0) {
+    if (state.tipped) {
       return {
         action: 'tip expecting next',
-        meta: {
-          length: values.length,
-          firstTip,
-        },
+        meta: {},
       };
     }
-    if (shaken) {
+    if (state.shaken) {
       return {
         action: 'shake expecting next',
-        meta: {
-          length: values.length,
-          firstShake,
-        },
+        meta: {},
       };
     }
   } else {
-    if (tipped) {
+    if (state.tipped) {
       return {
         action: 'tip',
-        meta: {
-          length: values.length,
-          firstTip,
-        },
+        meta: {},
       };
     }
-    if (shaken) {
+    if (state.shaken) {
       return {
         action: 'shake',
-        meta: {
-          length: values.length,
-          firstShake,
-        },
+        meta: {},
       };
     }
   }
 
   return {
     action: 'nothing',
-    meta: {
-      length: values.length,
-    },
+    meta: {},
   };
 };

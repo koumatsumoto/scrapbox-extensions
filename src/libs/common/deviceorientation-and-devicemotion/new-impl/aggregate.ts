@@ -29,19 +29,20 @@ type Threshold = {
   mid: number;
   low: number;
   // equalize values if under
+  // TODO: consider rename to steady
   round: number;
 };
 
 // TODO: make generalize for other types like as alpha, beta, x, y, z
 export const defaultThreshold: Threshold = {
   high: 100,
-  mid: 50,
-  low: 25,
+  mid: 42,
+  low: 20,
   round: 10,
 };
 
 export type MotionClassification = {
-  direction: 'up' | 'down' | 'none';
+  direction: 'up' | 'down';
   // stopping, slightly, low, mid, high
   rate: 0 | 1 | 2 | 3 | 4;
   // all direction of value change is same
@@ -87,20 +88,19 @@ export const classificate = (a: Aggregation, threshold: Threshold = defaultThres
       steady: rate === 0,
     };
   } else {
-    let rate: MotionClassification['rate'];
+    let betweenPositive: number;
+    let betweenNegative: number;
     if (a.first > 0) {
-      const d1 = a.max - a.first;
-      const d2 = a.min > 0 ? a.first - a.min : Math.abs(a.min - a.first);
-      rate = calcRate(Math.max(d1, d2), threshold);
+      betweenPositive = a.max - a.first;
+      betweenNegative = a.min > 0 ? a.first - a.min : Math.abs(a.min - a.first);
     } else {
-      const d1 = a.max < 0 ? Math.abs(a.first + a.max) : a.max - a.first;
-      const d2 = Math.abs(a.min + a.first);
-      rate = calcRate(Math.max(d1, d2), threshold);
+      betweenPositive = a.max < 0 ? Math.abs(a.first + a.max) : a.max - a.first;
+      betweenNegative = Math.abs(a.min + a.first);
     }
 
     return {
-      direction: 'none',
-      rate,
+      direction: betweenPositive > betweenNegative ? 'up' : 'down',
+      rate: 0,
       align: a.first === a.max && a.first === a.min,
       steady: true,
     };
