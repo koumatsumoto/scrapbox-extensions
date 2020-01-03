@@ -2,16 +2,6 @@ import { MotionClassification } from './aggregate';
 import { CommandTypes } from './to-command';
 
 type State = {
-  // used for double tip, shake
-  remainCount: number;
-  tip: number;
-  /**
-   * 0: searching tip start signal
-   * 1: checking next value after tip start signal
-   * 2: waiting for next steady to start searching next tip
-   */
-  mode: 0 | 1 | 2;
-  tipPosition: number[];
   tipOnce: boolean;
   doubletipCheckCount: number;
   // prev to curr
@@ -19,13 +9,8 @@ type State = {
 };
 
 const createState = (): State => ({
-  // updated and used for double tip and shake action
-  remainCount: 100,
-  tip: 0,
-  mode: 0,
-  tipPosition: [],
   tipOnce: false,
-  doubletipCheckCount: 2,
+  doubletipCheckCount: 3,
   tipDirection: null,
 });
 

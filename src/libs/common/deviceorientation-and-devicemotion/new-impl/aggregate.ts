@@ -36,7 +36,7 @@ type Threshold = {
 // TODO: make generalize for other types like as alpha, beta, x, y, z
 export const defaultThreshold: Threshold = {
   high: 100,
-  mid: 42,
+  mid: 40,
   low: 20,
   round: 10,
 };
