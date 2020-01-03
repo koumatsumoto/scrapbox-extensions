@@ -6,7 +6,7 @@ import { getRx, withHistory } from '../../rxjs';
 import { roundToInt } from '../../arithmetic';
 import { aggregate, classificate, MotionClassification } from './aggregate';
 import { CommandTypes } from './to-command';
-import { makeTip } from './make-tip-or-shake';
+import { makeTip } from './make-tip';
 
 export const get4MotionWithOrientationStream = (
   orientation$: Observable<DeviceOrientation> = getDeviceOrientationStream(),
@@ -95,21 +95,14 @@ export const getMotionCommandStream = () => {
       .pipe(
         withHistory(minimumRequiredCount),
         map((items) => {
+          // targets at least 1 item
           const targets = items.filter((m) => m.sid > commandSubmittedId);
           const latest = targets[targets.length - 1];
-
-          // unreachable
-          if (latest === undefined) {
-            return {
-              action: 'waiting',
-              sid: -1,
-            };
-          }
           const sid = latest.sid;
 
           if (targets.length < minimumRequiredCount) {
             return {
-              action: 'waiting',
+              command: 'waiting',
               sid,
             };
           }

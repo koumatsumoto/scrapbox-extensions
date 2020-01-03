@@ -46,5 +46,9 @@ export const makeTip = (values: MotionClassification[]): CommandTypes => {
     }
   }
 
-  return state.tipOnce ? 'tip' : 'nothing';
+  if (state.tipOnce) {
+    return state.doubletipCheckCount > 0 ? 'tip expecting next' : 'tip';
+  }
+
+  return 'nothing';
 };
