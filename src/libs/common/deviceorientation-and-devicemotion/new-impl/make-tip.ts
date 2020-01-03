@@ -14,6 +14,8 @@ type State = {
   tipPosition: number[];
   tipOnce: boolean;
   doubletipCheckCount: number;
+  // prev to curr
+  tipDirection: 'up' | 'down' | null;
 };
 
 const createState = (): State => ({
@@ -24,6 +26,7 @@ const createState = (): State => ({
   tipPosition: [],
   tipOnce: false,
   doubletipCheckCount: 2,
+  tipDirection: null,
 });
 
 export const makeTip = (values: MotionClassification[]): CommandTypes => {
@@ -32,16 +35,18 @@ export const makeTip = (values: MotionClassification[]): CommandTypes => {
     const current = values[i];
     const previous = values[i - 1];
 
-    if (current.rate > 2 && (previous.steady || previous.direction !== current.direction)) {
-      if (state.tipOnce) {
+    if (current.rate > 2 && previous.rate < 2) {
+      const direction = current.direction;
+      if (state.tipOnce && state.tipDirection === direction) {
         return 'double tip';
       }
 
       state.tipOnce = true;
+      state.tipDirection = direction;
       continue;
     }
 
-    if (state.tipOnce && --state.doubletipCheckCount > 0) {
+    if (state.tipOnce && --state.doubletipCheckCount < 0) {
       return 'tip';
     }
   }
