@@ -1,4 +1,3 @@
-import { ActionTypes } from '../types';
 import { Movement } from '../movement/classify-movement';
 import { within } from '../../../arithmetic';
 import { simplifyMovements } from './util';
@@ -17,9 +16,6 @@ import { simplifyMovements } from './util';
  * 1 -> 3 -> -2
  * 1 -> 3 -> -1
  * 1 -> 3 -> 0
- * 1 -> -2 -> 1
- * 1 -> -2 -> 2
- * 1 -> -2 -> 3
  * 1 -> -3 -> -1
  * 1 -> -3 -> 0
  * 1 -> -3 -> 1
@@ -50,10 +46,6 @@ export const isTap = (movements: Movement[]): boolean => {
       if (within(third.rate, -3, 0)) {
         return true;
       }
-    } else if (second.rate === -2) {
-      if (within(third.rate, 1, 3)) {
-        return true;
-      }
     } else if (second.rate === -3) {
       if (within(third.rate, -1, 2)) {
         return true;
@@ -62,41 +54,4 @@ export const isTap = (movements: Movement[]): boolean => {
   }
 
   return false;
-};
-
-/**
- * side-tap motion
- *
- * 1. stable
- * 2. sudden acceleration
- * 3. stable
- *
- * @param values
- */
-export const detectTap = (values: Movement[]): ActionTypes | null => {
-  let pointer = 2;
-  let tappedOnce = false;
-
-  const needContinue = true;
-  while (needContinue) {
-    if (values[pointer] === undefined) {
-      break;
-    }
-
-    if (isTap([values[pointer - 2], values[pointer - 1], values[pointer]])) {
-      if (tappedOnce) {
-        return 'double tap';
-      }
-
-      tappedOnce = true;
-      // check double tap
-      pointer += 2;
-    } else {
-      pointer++;
-    }
-
-    continue;
-  }
-
-  return tappedOnce ? 'tap' : null;
 };

@@ -3,7 +3,7 @@ import { CombinedValue } from './combine';
 type Threshold = {
   veryHigh: number;
   high: number;
-  mid: number;
+  tap: number;
   low: number;
   // equalize values if under
   // TODO: consider rename to steady
@@ -14,7 +14,8 @@ type Threshold = {
 export const defaultThreshold: Threshold = {
   veryHigh: 120,
   high: 80,
-  mid: 40,
+  // to detect tap
+  tap: 36,
   low: 20,
   round: 10,
 };
@@ -33,7 +34,7 @@ const calcRate = (value: number, threshold: Threshold) => {
     return 5;
   } else if (value > threshold.high) {
     return 4;
-  } else if (value > threshold.mid) {
+  } else if (value > threshold.tap) {
     return 3;
   } else if (value > threshold.low) {
     return 2;
