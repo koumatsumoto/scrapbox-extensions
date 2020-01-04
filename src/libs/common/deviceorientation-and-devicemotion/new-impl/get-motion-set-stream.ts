@@ -78,20 +78,14 @@ export const getActionStream = () => {
           }
 
           const array: Movement[] = [];
-          for (let i = 1; i < movementCount; i++) {
+          for (let i = 1; array.length <= 5; i++) {
             array.unshift(movements[movements.length - i]);
 
             switch (array.length) {
-              case 5: {
-                const type = checkEnterMotionType(array);
-                if (type && type === 'slow') {
+              case 3: {
+                if (isTap(array)) {
                   return {
-                    type: 'start motion slowly',
-                    sid,
-                  };
-                } else if (type && type === 'quick') {
-                  return {
-                    type: 'start motion quickly',
+                    type: 'tap',
                     sid,
                   };
                 }
@@ -108,10 +102,16 @@ export const getActionStream = () => {
 
                 break;
               }
-              case 3: {
-                if (isTap(array)) {
+              case 5: {
+                const type = checkEnterMotionType(array);
+                if (type && type === 'slow') {
                   return {
-                    type: 'tap',
+                    type: 'start motion slowly',
+                    sid,
+                  };
+                } else if (type && type === 'quick') {
+                  return {
+                    type: 'start motion quickly',
                     sid,
                   };
                 }
