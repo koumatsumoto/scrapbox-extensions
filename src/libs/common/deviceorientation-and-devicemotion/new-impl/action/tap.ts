@@ -1,35 +1,78 @@
 import { ActionTypes } from '../types';
 import { Movement } from '../movement/classify-movement';
 
+const sameDirection = (x: Movement, y: Movement) => x.direction === y.direction;
+
+/**
+ *
+ * 0 -> 3 -> 1
+ * 0 -> 3 -> 0
+ * 0 -> 3 -> -1
+ * 0 -> 3 -> -2
+ * 1 -> 3 -> 0
+ * 1 -> 3 -> -1
+ * 1 -> 3 -> -2
+ * 1 -> 3 -> -3
+ * 1 -> -2 -> 1
+ * 1 -> -2 -> 2
+ * 1 -> -2 -> 3
+ * 1 -> -3 -> 0
+ * 1 -> -3 -> 1
+ * 1 -> -3 -> 2
+ *
+ * @param values
+ */
 export const isTapMotion = (values: [Movement, Movement, Movement]) => {
-  const beforeMove = values[0];
-  const move = values[1];
-  const afterMove = values[2];
+  const first = values[0];
+  const second = values[1];
+  const third = values[2];
 
-  // need start from rate 0 or 1
-  if (beforeMove.rate > 1) {
-    return false;
-  }
-
-  // need move quickly by rate gte 3
-  if (move.rate < 3) {
-    return false;
-  }
-
-  const tapDirection = move.direction;
-
-  // need stable after move
-  if (afterMove.direction === tapDirection) {
-    if (afterMove.rate > 1) {
+  // 0 start
+  if (first.rate === 0) {
+    // need gte 3
+    if (second.rate < 3) {
       return false;
     }
-  } else {
-    if (afterMove.rate > 3) {
+
+    const rate = sameDirection(second, third) ? third.rate : -third.rate;
+    if (1 <= rate && rate <= -2) {
+      return true;
+    } else {
       return false;
     }
   }
 
-  return true;
+  // 1 start
+  if (first.rate === 1) {
+    if (sameDirection(first, second)) {
+      if (second.rate === 3) {
+        const rate = sameDirection(second, third) ? third.rate : -third.rate;
+        if (-3 <= rate && rate <= 0) {
+          return true;
+        }
+      }
+    } else {
+      if (second.rate === 2) {
+        if (!sameDirection(second, third)) {
+          if (1 <= third.rate && third.rate <= 3) {
+            return true;
+          }
+        }
+      } else if (second.rate === 3) {
+        if (sameDirection(second, third)) {
+          if (third.rate === 0) {
+            return true;
+          }
+        } else {
+          if (1 <= third.rate && third.rate <= 2) {
+            return true;
+          }
+        }
+      }
+    }
+  }
+
+  return false;
 };
 
 /**
