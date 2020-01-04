@@ -56,6 +56,8 @@ export const getActionStream = () => {
   const { Observable } = getRx();
   const { map } = getRx().operators;
   const movementCount = 10;
+  const firstIndex = 0;
+  const lastIndex = movementCount - 1;
 
   return new Observable<Action>((subscriber) => {
     getMovementStream()
@@ -65,21 +67,21 @@ export const getActionStream = () => {
           const movements = items.map((m) => m.data);
           const sid = [items[0].sid, items[items.length - 1].sid];
 
+          // check long hold
+          if (movements[lastIndex].rate === 0 && movements[firstIndex].rate === 0) {
+            if (isLongHold(movements)) {
+              return {
+                type: 'long hold',
+                sid,
+              };
+            }
+          }
+
           const array: Movement[] = [];
           for (let i = 1; i < movementCount; i++) {
             array.unshift(movements[movements.length - i]);
 
             switch (array.length) {
-              case 10: {
-                if (isLongHold(array)) {
-                  return {
-                    type: 'long hold',
-                    sid,
-                  };
-                }
-
-                break;
-              }
               case 5: {
                 const type = checkEnterMotionType(array);
                 if (type && type === 'slow') {
