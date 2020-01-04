@@ -7,25 +7,42 @@ export type RelativeMovement = {
 };
 
 export const simplifyMovements = (movements: Movement[]): RelativeMovement[] => {
-  if (movements.length < 1) {
-    return [];
+  if (movements.length < 2) {
+    throw new Error('bad impl');
   }
 
-  const base = movements[0].direction;
+  const results: RelativeMovement[] = [
+    {
+      rate: movements[0].rate,
+      align: movements[0].align,
+    },
+  ];
 
-  return movements.map((m) => {
-    if (m.direction === base) {
-      return {
-        rate: m.rate,
-        align: m.align,
-      };
+  for (let i = 1; i < movements.length; i++) {
+    const prev = movements[i - 1];
+    const curr = movements[i];
+
+    if (prev.rate === 0) {
+      results.push({
+        rate: curr.rate,
+        align: curr.align,
+      });
     } else {
-      return {
-        rate: m.rate === 0 ? 0 : (-m.rate as RelativeMovement['rate']),
-        align: m.align,
-      };
+      if (curr.direction === prev.direction) {
+        results.push({
+          rate: curr.rate,
+          align: curr.align,
+        });
+      } else {
+        results.push({
+          rate: curr.rate === 0 ? 0 : (-curr.rate as RelativeMovement['rate']),
+          align: curr.align,
+        });
+      }
     }
-  });
+  }
+
+  return results;
 };
 
 export const contain = (source: number[], pattern: number[]): boolean => {

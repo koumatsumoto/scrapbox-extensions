@@ -48,6 +48,38 @@ describe('simplifyMovements', () => {
         align: false,
       },
     ]);
+    expect(
+      simplifyMovements([
+        {
+          rate: 0,
+          direction: 'up',
+          align: true,
+        },
+        {
+          rate: 0,
+          direction: 'down',
+          align: false,
+        },
+        {
+          rate: 1,
+          direction: 'up',
+          align: false,
+        },
+      ]),
+    ).toEqual([
+      {
+        align: true,
+        rate: 0,
+      },
+      {
+        align: false,
+        rate: 0,
+      },
+      {
+        align: false,
+        rate: 1,
+      },
+    ]);
   });
 });
 
