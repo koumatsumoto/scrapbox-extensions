@@ -32,7 +32,7 @@ export const getMovementStream = () => {
   singletonToDebug = get4MotionWithOrientationStream().pipe(
     map(([motions, orientation]) => {
       const gammas = motions.map((m) => m.rotationRate.gamma);
-      const aggregation = combine(gammas);
+      const aggregation = combine(orientation.gamma, gammas);
       const data = classify(aggregation);
 
       const direction = orientation.gamma > 0 ? 'right' : 'left';
@@ -71,7 +71,7 @@ export const debug4 = () => {
   return get4MotionWithOrientationStream().pipe(
     map(([motions, orientation]) => {
       const gammas = motions.map((m) => m.rotationRate.gamma);
-      const aggregation = combine(gammas);
+      const aggregation = combine(orientation.gamma, gammas);
 
       return {
         gamma: roundToInt(orientation.gamma),

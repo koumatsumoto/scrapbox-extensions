@@ -25,7 +25,7 @@ export type CombinedValue = {
 };
 
 // TODO: currently used only for gamma
-export const combine = (accelerations: number[]): CombinedValue => {
+export const combine = (orientation: number, accelerations: number[]): CombinedValue => {
   if (accelerations.length < 2) {
     throw new Error('bad impl');
   }
