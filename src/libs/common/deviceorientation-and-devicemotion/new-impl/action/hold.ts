@@ -27,7 +27,7 @@ export const isLongHold = (movements: Movement[]): boolean => {
  * @param movements
  */
 export const isShortHold = (movements: Movement[]): boolean => {
-  if (movements.length < 4) {
+  if (movements.length < 6) {
     return false;
   }
 
@@ -47,14 +47,14 @@ export const isShortHold = (movements: Movement[]): boolean => {
  * @param movements
  */
 export const checkEnterMotionType = (movements: Movement[]): 'slow' | 'quick' | null => {
-  if (movements.length < 5) {
+  if (movements.length < 7) {
     return null;
   }
 
-  if (isShortHold(movements.slice(0, 4))) {
-    if (movements[4].rate > 1) {
+  if (isShortHold(movements.slice(0, 6))) {
+    if (movements[movements.length - 1].rate > 1) {
       return 'quick';
-    } else if (movements[4].rate > 0) {
+    } else if (movements[movements.length - 1].rate > 0) {
       return 'slow';
     }
   }

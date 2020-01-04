@@ -92,7 +92,7 @@ export const getActionStream = () => {
 
                 break;
               }
-              case 4: {
+              case 6: {
                 if (isShortHold(array)) {
                   return {
                     type: 'short hold',
@@ -102,7 +102,7 @@ export const getActionStream = () => {
 
                 break;
               }
-              case 5: {
+              case 7: {
                 const type = checkEnterMotionType(array);
                 if (type && type === 'slow') {
                   return {
