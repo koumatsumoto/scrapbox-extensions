@@ -140,12 +140,12 @@ export const getCommandHistoryStream = () => {
 };
 
 export const getLastCommandStream = () => {
-  const { distinctUntilChanged, map, pairwise } = getRx().operators;
+  const { distinctUntilChanged, map } = getRx().operators;
 
   return getActionStream().pipe(
     map((v) => v.type),
     distinctUntilChanged(),
-    pairwise(),
+    withHistory(8),
   );
 };
 
