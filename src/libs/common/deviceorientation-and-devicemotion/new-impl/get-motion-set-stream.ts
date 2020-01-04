@@ -20,7 +20,7 @@ export const get4MotionWithOrientationStream = (
 
 // to check data by same sid
 let singletonToDebug: Observable<{ sid: number; direction: string; data: Movement }>;
-export const getMotionAggregationsStream = () => {
+export const getMovementStream = () => {
   const { map } = getRx().operators;
   let sid = 0;
 
@@ -50,7 +50,7 @@ export const getMotionAggregationsStream = () => {
 export const debug3 = () => {
   const { filter, map } = getRx().operators;
 
-  return getMotionAggregationsStream().pipe(
+  return getMovementStream().pipe(
     filter((d) => d.data.rate > 0),
     map((d) => {
       const di = d.data.direction === 'up' ? 'u' : 'd';
@@ -82,7 +82,8 @@ export const debug4 = () => {
 
 type CommandData = {
   command: ActionTypes;
-  sid: number;
+  // [first, last]
+  sid: [number, number];
 };
 
 export const getMotionCommandStream = () => {
@@ -93,19 +94,19 @@ export const getMotionCommandStream = () => {
   return new Observable<CommandData>((subscriber) => {
     let actionSubmittedId = -1;
     let doubleTapCheckCount = 0;
-    getMotionAggregationsStream()
+    getMovementStream()
       .pipe(
         withHistory(minimumRequiredCount),
         map((items) => {
           // targets at least 1 item
           const targets = items.filter((m) => m.sid > actionSubmittedId);
-          const latest = targets[targets.length - 1];
-          const sid = latest.sid;
+          const first = targets[0];
+          const last = targets[targets.length - 1];
 
           if (targets.length < minimumRequiredCount) {
             return {
               command: 'waiting',
-              sid,
+              sid: [first.sid, last.sid],
             };
           }
 
@@ -114,21 +115,26 @@ export const getMotionCommandStream = () => {
             case 'tap': {
               if (doubleTapCheckCount++ < 5) {
                 actionType = 'checking double tap';
+                actionSubmittedId = first.sid;
               } else {
                 doubleTapCheckCount = 0;
-                actionSubmittedId = sid;
+                actionSubmittedId = last.sid;
               }
               break;
             }
+            case 'double tap': {
+              actionSubmittedId = last.sid;
+              break;
+            }
             default: {
-              actionSubmittedId = sid;
+              actionSubmittedId = first.sid;
               break;
             }
           }
 
           return {
             command: actionType,
-            sid,
+            sid: [first.sid, last.sid],
           };
         }),
       )

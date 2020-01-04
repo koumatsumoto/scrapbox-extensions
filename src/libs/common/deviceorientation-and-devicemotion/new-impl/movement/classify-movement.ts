@@ -48,7 +48,7 @@ export const classify = (a: CombinedValue, threshold: Threshold = defaultThresho
     return {
       direction: 'up',
       rate,
-      align: align,
+      align,
     };
   } else if (a.first > a.last) {
     // down
