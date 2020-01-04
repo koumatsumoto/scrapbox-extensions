@@ -46,8 +46,8 @@ export const debug3 = () => {
   );
 };
 
-type CommandData = {
-  command: ActionTypes;
+type Action = {
+  type: ActionTypes;
   // [first, last]
   sid?: number[];
 };
@@ -56,7 +56,7 @@ export const getActionStream = () => {
   const { Observable } = getRx();
   const { map } = getRx().operators;
 
-  return new Observable<CommandData>((subscriber) => {
+  return new Observable<Action>((subscriber) => {
     getMovementStream()
       .pipe(
         withHistory(10),
@@ -65,14 +65,14 @@ export const getActionStream = () => {
           const sid = [items[0].sid, items[items.length - 1].sid];
 
           const array: Movement[] = [];
-          for (let i = 1; i < 10; i++) {
+          for (let i = 1; i < movements.length; i++) {
             array.unshift(movements[movements.length - i]);
 
             switch (array.length) {
               case 10: {
                 if (isLongHold(array)) {
                   return {
-                    command: 'long hold',
+                    type: 'long hold',
                     sid,
                   };
                 }
@@ -83,12 +83,12 @@ export const getActionStream = () => {
                 const type = checkEnterMotionType(array);
                 if (type && type === 'slow') {
                   return {
-                    command: 'start motion slowly',
+                    type: 'start motion slowly',
                     sid,
                   };
                 } else if (type && type === 'quick') {
                   return {
-                    command: 'start motion quickly',
+                    type: 'start motion quickly',
                     sid,
                   };
                 }
@@ -98,7 +98,7 @@ export const getActionStream = () => {
               case 4: {
                 if (isShortHold(array)) {
                   return {
-                    command: 'short hold',
+                    type: 'short hold',
                     sid,
                   };
                 }
@@ -108,7 +108,7 @@ export const getActionStream = () => {
               case 3: {
                 if (isTap(array)) {
                   return {
-                    command: 'tap',
+                    type: 'tap',
                     sid,
                   };
                 }
@@ -119,13 +119,13 @@ export const getActionStream = () => {
           }
 
           return {
-            command: 'moving',
+            type: 'moving',
             sid,
           };
         }),
       )
       .subscribe((value) => {
-        subscriber.next(value as CommandData);
+        subscriber.next(value as Action);
       });
   });
 };
@@ -135,7 +135,7 @@ export const getCommandHistoryStream = () => {
 
   return getActionStream().pipe(
     withHistory(32),
-    map((values) => values.map((v) => v.command).reverse()),
+    map((values) => values.map((v) => v.type).reverse()),
   );
 };
 
@@ -143,17 +143,23 @@ export const getLastCommandStream = () => {
   const { distinctUntilChanged, map, pairwise } = getRx().operators;
 
   return getActionStream().pipe(
-    map((v) => v.command),
+    map((v) => v.type),
     distinctUntilChanged(),
     pairwise(),
   );
+};
+
+type Command = {
+  type: string;
+  // [first, last]
+  sid?: number[];
 };
 
 export const getCommandStream = () => {
   const { Observable } = getRx();
   const { map } = getRx().operators;
 
-  return new Observable<CommandData>((subscriber) => {
+  return new Observable<Action>((subscriber) => {
     getActionStream().pipe(
       withHistory(10),
       map((action) => {
