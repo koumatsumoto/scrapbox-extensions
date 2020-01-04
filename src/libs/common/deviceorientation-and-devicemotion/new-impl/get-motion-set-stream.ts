@@ -108,7 +108,7 @@ export const getMotionCommandStream = () => {
               case 3: {
                 if (isTap(array)) {
                   return {
-                    command: 'short hold',
+                    command: 'tap',
                     sid,
                   };
                 }
