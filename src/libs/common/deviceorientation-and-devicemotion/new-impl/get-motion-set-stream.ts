@@ -52,7 +52,7 @@ type CommandData = {
   sid?: number[];
 };
 
-export const getMotionCommandStream = () => {
+export const getActionStream = () => {
   const { Observable } = getRx();
   const { map } = getRx().operators;
 
@@ -133,7 +133,7 @@ export const getMotionCommandStream = () => {
 export const getCommandHistoryStream = () => {
   const { map } = getRx().operators;
 
-  return getMotionCommandStream().pipe(
+  return getActionStream().pipe(
     withHistory(32),
     map((values) => values.map((v) => v.command).reverse()),
   );
@@ -142,9 +142,23 @@ export const getCommandHistoryStream = () => {
 export const getLastCommandStream = () => {
   const { distinctUntilChanged, map, pairwise } = getRx().operators;
 
-  return getMotionCommandStream().pipe(
+  return getActionStream().pipe(
     map((v) => v.command),
     distinctUntilChanged(),
     pairwise(),
   );
+};
+
+export const getCommandStream = () => {
+  const { Observable } = getRx();
+  const { map } = getRx().operators;
+
+  return new Observable<CommandData>((subscriber) => {
+    getActionStream().pipe(
+      withHistory(10),
+      map((action) => {
+        // not implemented
+      }),
+    );
+  });
 };
