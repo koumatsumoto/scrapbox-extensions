@@ -55,17 +55,18 @@ type Action = {
 export const getActionStream = () => {
   const { Observable } = getRx();
   const { map } = getRx().operators;
+  const movementCount = 10;
 
   return new Observable<Action>((subscriber) => {
     getMovementStream()
       .pipe(
-        withHistory(10),
+        withHistory(movementCount),
         map((items) => {
           const movements = items.map((m) => m.data);
           const sid = [items[0].sid, items[items.length - 1].sid];
 
           const array: Movement[] = [];
-          for (let i = 1; i < 10; i++) {
+          for (let i = 1; i < movementCount; i++) {
             array.unshift(movements[movements.length - i]);
 
             switch (array.length) {
@@ -159,10 +160,11 @@ type Command = {
 export const getCommandStream = () => {
   const { Observable } = getRx();
   const { map } = getRx().operators;
+  const actionCount = 6;
 
   return new Observable<Action>((subscriber) => {
     getActionStream().pipe(
-      withHistory(10),
+      withHistory(actionCount),
       map((action) => {
         // not implemented
       }),
