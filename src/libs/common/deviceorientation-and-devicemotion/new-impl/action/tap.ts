@@ -1,5 +1,7 @@
 import { ActionTypes } from '../types';
 import { Movement } from '../movement/classify-movement';
+import { within } from '../../../arithmetic';
+import { simplifyMovements } from './util';
 
 const sameDirection = (x: Movement, y: Movement) => x.direction === y.direction;
 
@@ -20,54 +22,34 @@ const sameDirection = (x: Movement, y: Movement) => x.direction === y.direction;
  * 1 -> -3 -> 1
  * 1 -> -3 -> 2
  *
- * @param values
+ * @param movements
  */
-export const isTap = (values: [Movement, Movement, Movement]) => {
+export const isTap = (movements: [Movement, Movement, Movement]) => {
+  const values = simplifyMovements(movements);
   const first = values[0];
   const second = values[1];
   const third = values[2];
 
-  // 0 start
-  if (first.rate === 0) {
-    // need gte 3
-    if (second.rate < 3) {
-      return false;
-    }
-
-    const rate = sameDirection(second, third) ? third.rate : -third.rate;
-    if (-2 <= rate && rate <= 1) {
-      return true;
-    } else {
-      return false;
+  if (first === 0) {
+    if (second === 3) {
+      if (within(third, -2, 1)) {
+        return true;
+      }
     }
   }
 
-  // 1 start
-  if (first.rate === 1) {
-    if (sameDirection(first, second)) {
-      if (second.rate === 3) {
-        const rate = sameDirection(second, third) ? third.rate : -third.rate;
-        if (-3 <= rate && rate <= 0) {
-          return true;
-        }
+  if (first === 1) {
+    if (second === 3) {
+      if (within(third, -3, 0)) {
+        return true;
       }
-    } else {
-      if (second.rate === 2) {
-        if (!sameDirection(second, third)) {
-          if (1 <= third.rate && third.rate <= 3) {
-            return true;
-          }
-        }
-      } else if (second.rate === 3) {
-        if (third.rate === 0) {
-          return true;
-        }
-
-        if (!sameDirection(second, third)) {
-          if (1 <= third.rate && third.rate <= 2) {
-            return true;
-          }
-        }
+    } else if (second === -2) {
+      if (within(third, 1, 3)) {
+        return true;
+      }
+    } else if (second === -3) {
+      if (within(third, 0, 2)) {
+        return true;
       }
     }
   }
