@@ -1,6 +1,7 @@
 import { CombinedValue } from './combine';
 
 type Threshold = {
+  veryHigh: number;
   high: number;
   mid: number;
   low: number;
@@ -11,7 +12,8 @@ type Threshold = {
 
 // TODO: make generalize for other types like as alpha, beta, x, y, z
 export const defaultThreshold: Threshold = {
-  high: 100,
+  veryHigh: 120,
+  high: 75,
   mid: 40,
   low: 20,
   round: 10,
@@ -20,13 +22,15 @@ export const defaultThreshold: Threshold = {
 export type Movement = {
   direction: 'up' | 'down';
   // stopping, slightly, low, mid, high
-  rate: 0 | 1 | 2 | 3 | 4;
+  rate: 0 | 1 | 2 | 3 | 4 | 5;
   // all direction of value change is same
   align: boolean;
 };
 
 const calcRate = (value: number, threshold: Threshold) => {
-  if (value > threshold.high) {
+  if (value > threshold.veryHigh) {
+    return 5;
+  } else if (value > threshold.high) {
     return 4;
   } else if (value > threshold.mid) {
     return 3;

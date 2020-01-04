@@ -24,7 +24,7 @@ export const isTapMotion = (values: [Movement, Movement, Movement]) => {
       return false;
     }
   } else {
-    if (afterMove.rate > 2) {
+    if (afterMove.rate > 3) {
       return false;
     }
   }
