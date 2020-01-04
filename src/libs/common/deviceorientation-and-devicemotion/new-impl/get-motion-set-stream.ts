@@ -166,6 +166,6 @@ export const getLastCommandStream = () => {
         return true;
       }
     }),
-    pairwise(),
+    // pairwise(),
   );
 };
