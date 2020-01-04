@@ -63,18 +63,20 @@ export const getMotionCommandStream = () => {
         map((items) => {
           const movements = items.map((m) => m.data);
           const sid = [items[0].sid, items[items.length - 1].sid];
+          const a3 = movements.slice(-3);
+          const a4 = movements.slice(-4);
 
           if (isLongHold(movements)) {
             return {
               command: 'long hold',
               sid,
             };
-          } else if (isShortHold(movements)) {
+          } else if (isShortHold(a4)) {
             return {
               command: 'short hold',
               sid,
             };
-          } else if (isTap(movements)) {
+          } else if (isTap(a3)) {
             return {
               command: 'tap',
               sid,
