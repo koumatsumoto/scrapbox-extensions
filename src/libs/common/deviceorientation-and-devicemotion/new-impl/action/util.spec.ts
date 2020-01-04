@@ -7,25 +7,47 @@ describe('simplifyMovements', () => {
         {
           rate: 1,
           direction: 'up',
-        } as any,
+          align: true,
+        },
         {
           rate: 1,
           direction: 'down',
-        } as any,
+          align: false,
+        },
       ]),
-    ).toEqual([1, -1]);
+    ).toEqual([
+      {
+        rate: 1,
+        align: true,
+      },
+      {
+        rate: -1,
+        align: false,
+      },
+    ]);
     expect(
       simplifyMovements([
         {
           rate: 0,
           direction: 'up',
-        } as any,
+          align: true,
+        },
         {
           rate: 0,
           direction: 'down',
-        } as any,
+          align: false,
+        },
       ]),
-    ).toEqual([0, 0]);
+    ).toEqual([
+      {
+        rate: 0,
+        align: true,
+      },
+      {
+        rate: 0,
+        align: false,
+      },
+    ]);
   });
 });
 
