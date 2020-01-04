@@ -8,6 +8,7 @@ import { combine } from './movement/combine';
 import { ActionTypes } from './types';
 import { detectTap } from './action/tap';
 import { classify, Movement } from './movement/classify-movement';
+import { simplifyMovements } from './action/util';
 
 export const get4MotionWithOrientationStream = (
   orientation$: Observable<DeviceOrientation> = getDeviceOrientationStream(),
@@ -135,6 +136,7 @@ export const getMotionCommandStream = () => {
           return {
             command: actionType,
             sid: [first.sid, last.sid],
+            debug: simplifyMovements(targets.map((m) => m.data)),
           };
         }),
       )
@@ -149,7 +151,7 @@ export const getCommandHistoryStream = () => {
 
   return getMotionCommandStream().pipe(
     withHistory(32),
-    map((values) => values.map((v) => v.command)),
+    map((values) => values.map((v) => v.command).reverse()),
   );
 };
 
