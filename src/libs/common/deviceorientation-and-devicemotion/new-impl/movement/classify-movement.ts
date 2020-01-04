@@ -20,6 +20,7 @@ export const defaultThreshold: Threshold = {
 };
 
 export type Movement = {
+  orientation: 'up' | 'down';
   direction: 'up' | 'down';
   // stopping, slightly, low, mid, high
   rate: 0 | 1 | 2 | 3 | 4 | 5;
@@ -50,6 +51,7 @@ export const classify = (a: CombinedValue, threshold: Threshold = defaultThresho
     const align = a.count === a.increase;
 
     return {
+      orientation: a.orientation,
       direction: 'up',
       rate,
       align,
@@ -60,6 +62,7 @@ export const classify = (a: CombinedValue, threshold: Threshold = defaultThresho
     const align = a.count === a.decrease;
 
     return {
+      orientation: a.orientation,
       direction: 'down',
       rate,
       align,
@@ -76,6 +79,7 @@ export const classify = (a: CombinedValue, threshold: Threshold = defaultThresho
     }
 
     return {
+      orientation: a.orientation,
       direction: betweenPositive > betweenNegative ? 'up' : 'down',
       rate: 0,
       align: a.first === a.max && a.first === a.min,

@@ -8,6 +8,7 @@ const createMovement = (value: number, direction: Movement['direction'] = 'up'):
   }
 
   return {
+    orientation: 'up',
     direction,
     rate: rate as Movement['rate'],
     align: false,

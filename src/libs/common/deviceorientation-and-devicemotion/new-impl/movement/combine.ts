@@ -13,6 +13,7 @@ import { roundToInt } from '../../../arithmetic';
  *
  */
 export type CombinedValue = {
+  readonly orientation: 'up' | 'down';
   readonly count: number;
   readonly increase: number;
   readonly decrease: number;
@@ -34,6 +35,7 @@ export const combine = (orientation: number, accelerations: number[]): CombinedV
   const last = accelerations[accelerations.length - 1];
 
   const movement: Writeable<CombinedValue> = {
+    orientation: orientation >= 0 ? 'up' : 'down',
     count: accelerations.length,
     increase: 0,
     decrease: 0,

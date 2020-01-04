@@ -1,82 +1,46 @@
+import { Movement } from '../movement/classify-movement';
 import { contain, simplifyMovements } from './util';
 
 describe('simplifyMovements', () => {
+  const v = (rate: Movement['rate'], direction: Movement['direction']): Movement => ({
+    rate,
+    direction,
+    orientation: 'up',
+    align: true,
+  });
+
   it('should work', () => {
-    expect(
-      simplifyMovements([
-        {
-          rate: 1,
-          direction: 'up',
-          align: true,
-        },
-        {
-          rate: 1,
-          direction: 'down',
-          align: false,
-        },
-      ]),
-    ).toEqual([
+    expect(simplifyMovements([v(1, 'up'), v(1, 'down')])).toEqual([
       {
         rate: 1,
         align: true,
       },
       {
         rate: -1,
-        align: false,
+        align: true,
       },
     ]);
-    expect(
-      simplifyMovements([
-        {
-          rate: 0,
-          direction: 'up',
-          align: true,
-        },
-        {
-          rate: 0,
-          direction: 'down',
-          align: false,
-        },
-      ]),
-    ).toEqual([
+    expect(simplifyMovements([v(0, 'up'), v(0, 'down')])).toEqual([
       {
         rate: 0,
         align: true,
       },
       {
         rate: 0,
-        align: false,
+        align: true,
       },
     ]);
-    expect(
-      simplifyMovements([
-        {
-          rate: 0,
-          direction: 'up',
-          align: true,
-        },
-        {
-          rate: 0,
-          direction: 'down',
-          align: false,
-        },
-        {
-          rate: 1,
-          direction: 'up',
-          align: false,
-        },
-      ]),
-    ).toEqual([
+    expect(simplifyMovements([v(0, 'up'), v(0, 'down'), v(1, 'up')])).toEqual([
       {
         align: true,
         rate: 0,
       },
       {
-        align: false,
+        align: true,
         rate: 0,
       },
       {
-        align: false,
+        align: true,
         rate: 1,
       },
     ]);
