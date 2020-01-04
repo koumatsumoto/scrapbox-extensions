@@ -7,7 +7,7 @@ import { combine } from './movement/combine';
 import { ActionTypes } from './types';
 import { isTap } from './action/tap';
 import { classify, Movement } from './movement/classify-movement';
-import { simplifyMovements } from './action/util';
+import { isLongHold, isShortHold } from './action/hold';
 
 export const getMovementStream = (
   orientation$: Observable<DeviceOrientation> = getDeviceOrientationStream(),
@@ -62,17 +62,29 @@ export const getMotionCommandStream = () => {
         withHistory(10),
         map((items) => {
           const movements = items.map((m) => m.data);
+          const sid = [items[0].sid, items[items.length - 1].sid];
 
-          let actionType: ActionTypes = 'none';
-          const tap = isTap(movements);
-          if (tap) {
-            actionType = 'tap';
+          if (isLongHold(movements)) {
+            return {
+              command: 'long hold',
+              sid,
+            };
+          } else if (isShortHold(movements)) {
+            return {
+              command: 'short hold',
+              sid,
+            };
+          } else if (isTap(movements)) {
+            return {
+              command: 'tap',
+              sid,
+            };
+          } else {
+            return {
+              command: 'none',
+              sid,
+            };
           }
-
-          return {
-            command: actionType,
-            sid: [items[0].sid, items[items.length - 1].sid],
-          };
         }),
       )
       .subscribe((value) => {
@@ -91,16 +103,11 @@ export const getCommandHistoryStream = () => {
 };
 
 export const getLastCommandStream = () => {
-  const { filter, pairwise } = getRx().operators;
+  const { distinctUntilChanged, map, pairwise } = getRx().operators;
 
   return getMotionCommandStream().pipe(
-    filter((c) => {
-      if (c.command === 'none' || c.command === 'waiting') {
-        return false;
-      } else {
-        return true;
-      }
-    }),
-    // pairwise(),
+    map((v) => v.command),
+    distinctUntilChanged(),
+    pairwise(),
   );
 };
