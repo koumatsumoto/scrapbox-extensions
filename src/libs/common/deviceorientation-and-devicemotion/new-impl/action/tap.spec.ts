@@ -1,0 +1,42 @@
+import { Movement } from '../movement/classify-movement';
+import { isTap } from './tap';
+
+const createMovement = (value: number, direction: Movement['direction'] = 'up'): Movement => {
+  let rate = value;
+  if (rate < 0) {
+    direction = direction === 'up' ? 'down' : 'up';
+    rate = -value;
+  }
+
+  return {
+    direction,
+    rate: rate as Movement['rate'],
+    align: false,
+  };
+};
+
+const createMovements = (values: number[], direction: Movement['direction'] = 'up'): Movement[] => {
+  return values.map((v) => createMovement(v, direction));
+};
+
+describe('isTap', () => {
+  const upBased = (xyz: [number, number, number]) => createMovements(xyz, 'up') as [Movement, Movement, Movement];
+  const downBased = (xyz: [number, number, number]) => createMovements(xyz, 'down') as [Movement, Movement, Movement];
+
+  it.each([[upBased], [downBased]])('detect tap', (v: typeof upBased | typeof downBased) => {
+    expect(isTap(v([0, 3, 1]))).toBe(true);
+    expect(isTap(v([0, 3, 0]))).toBe(true);
+    expect(isTap(v([0, 3, -1]))).toBe(true);
+    expect(isTap(v([0, 3, -2]))).toBe(true);
+    expect(isTap(v([1, 3, 0]))).toBe(true);
+    expect(isTap(v([1, 3, -1]))).toBe(true);
+    expect(isTap(v([1, 3, -2]))).toBe(true);
+    expect(isTap(v([1, 3, -3]))).toBe(true);
+    expect(isTap(v([1, -2, 1]))).toBe(true);
+    expect(isTap(v([1, -2, 2]))).toBe(true);
+    expect(isTap(v([1, -2, 3]))).toBe(true);
+    expect(isTap(v([1, -3, 0]))).toBe(true);
+    expect(isTap(v([1, -3, 1]))).toBe(true);
+    expect(isTap(v([1, -3, 2]))).toBe(true);
+  });
+});

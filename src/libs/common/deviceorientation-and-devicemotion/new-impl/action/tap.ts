@@ -22,7 +22,7 @@ const sameDirection = (x: Movement, y: Movement) => x.direction === y.direction;
  *
  * @param values
  */
-export const isTapMotion = (values: [Movement, Movement, Movement]) => {
+export const isTap = (values: [Movement, Movement, Movement]) => {
   const first = values[0];
   const second = values[1];
   const third = values[2];
@@ -35,7 +35,7 @@ export const isTapMotion = (values: [Movement, Movement, Movement]) => {
     }
 
     const rate = sameDirection(second, third) ? third.rate : -third.rate;
-    if (1 <= rate && rate <= -2) {
+    if (-2 <= rate && rate <= 1) {
       return true;
     } else {
       return false;
@@ -59,11 +59,11 @@ export const isTapMotion = (values: [Movement, Movement, Movement]) => {
           }
         }
       } else if (second.rate === 3) {
-        if (sameDirection(second, third)) {
-          if (third.rate === 0) {
-            return true;
-          }
-        } else {
+        if (third.rate === 0) {
+          return true;
+        }
+
+        if (!sameDirection(second, third)) {
           if (1 <= third.rate && third.rate <= 2) {
             return true;
           }
@@ -94,8 +94,7 @@ export const detectTap = (values: Movement[]): ActionTypes | null => {
       break;
     }
 
-    const isTap = isTapMotion([values[pointer - 2], values[pointer - 1], values[pointer]]);
-    if (isTap) {
+    if (isTap([values[pointer - 2], values[pointer - 1], values[pointer]])) {
       if (tappedOnce) {
         return 'double tap';
       }
