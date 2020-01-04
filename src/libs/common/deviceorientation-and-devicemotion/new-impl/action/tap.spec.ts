@@ -1,23 +1,6 @@
 import { Movement } from '../movement/classify-movement';
 import { isTap } from './tap';
-
-const createMovement = (value: number, direction: Movement['direction'] = 'up'): Movement => {
-  let rate = value;
-  if (rate < 0) {
-    direction = direction === 'up' ? 'down' : 'up';
-    rate = -value;
-  }
-
-  return {
-    direction,
-    rate: rate as Movement['rate'],
-    align: false,
-  };
-};
-
-const createMovements = (values: number[], direction: Movement['direction'] = 'up'): Movement[] => {
-  return values.map((v) => createMovement(v, direction));
-};
+import { createMovements } from './test-helpers';
 
 describe('isTap', () => {
   const upBased = (xyz: [number, number, number]) => createMovements(xyz, 'up') as [Movement, Movement, Movement];
