@@ -16,9 +16,17 @@ export const isTapMotion = (values: [Movement, Movement, Movement]) => {
     return false;
   }
 
+  const tapDirection = move.direction;
+
   // need stable after move
-  if (afterMove.rate > 1) {
-    return false;
+  if (afterMove.direction === tapDirection) {
+    if (afterMove.rate > 1) {
+      return false;
+    }
+  } else {
+    if (afterMove.rate > 2) {
+      return false;
+    }
   }
 
   return true;
