@@ -1,6 +1,12 @@
 import { Movement } from '../movement/classify-movement';
 
-export const simplifyMovements = (movements: Movement[]): number[] => {
+export type RelativeMovement = {
+  rate: -5 | -4 | -3 | -2 | -1 | 0 | 1 | 2 | 3 | 4 | 5;
+  // all direction of value change is same
+  align: boolean;
+};
+
+export const simplifyMovements = (movements: Movement[]): RelativeMovement[] => {
   if (movements.length < 1) {
     return [];
   }
@@ -9,9 +15,15 @@ export const simplifyMovements = (movements: Movement[]): number[] => {
 
   return movements.map((m) => {
     if (m.direction === base) {
-      return m.rate;
+      return {
+        rate: m.rate,
+        align: m.align,
+      };
     } else {
-      return m.rate === 0 ? 0 : -m.rate;
+      return {
+        rate: m.rate === 0 ? 0 : (-m.rate as RelativeMovement['rate']),
+        align: m.align,
+      };
     }
   });
 };

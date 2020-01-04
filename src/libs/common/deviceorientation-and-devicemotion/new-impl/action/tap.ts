@@ -3,8 +3,6 @@ import { Movement } from '../movement/classify-movement';
 import { within } from '../../../arithmetic';
 import { simplifyMovements } from './util';
 
-const sameDirection = (x: Movement, y: Movement) => x.direction === y.direction;
-
 /**
  *
  * 0 -> 3 -> 1
@@ -30,25 +28,25 @@ export const isTap = (movements: [Movement, Movement, Movement]) => {
   const second = values[1];
   const third = values[2];
 
-  if (first === 0) {
-    if (second === 3) {
-      if (within(third, -2, 1)) {
+  if (first.rate === 0) {
+    if (second.rate === 3) {
+      if (within(third.rate, -2, 1)) {
         return true;
       }
     }
   }
 
-  if (first === 1) {
-    if (second === 3) {
-      if (within(third, -3, 0)) {
+  if (first.rate === 1) {
+    if (second.rate === 3) {
+      if (within(third.rate, -3, 0)) {
         return true;
       }
-    } else if (second === -2) {
-      if (within(third, 1, 3)) {
+    } else if (second.rate === -2) {
+      if (within(third.rate, 1, 3)) {
         return true;
       }
-    } else if (second === -3) {
-      if (within(third, 0, 2)) {
+    } else if (second.rate === -3) {
+      if (within(third.rate, 0, 2)) {
         return true;
       }
     }
