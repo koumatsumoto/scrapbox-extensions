@@ -146,6 +146,7 @@ export const getLastCommandStream = () => {
     map((v) => v.type),
     distinctUntilChanged(),
     withHistory(8),
+    map((values) => values.reverse()),
   );
 };
 
