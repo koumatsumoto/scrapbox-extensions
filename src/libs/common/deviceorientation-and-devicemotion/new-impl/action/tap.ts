@@ -5,10 +5,11 @@ import { simplifyMovements } from './util';
 
 /**
  *
- * 0 -> 3 -> 1
- * 0 -> 3 -> 0
- * 0 -> 3 -> -1
+ * 0 -> 3 -> -3
  * 0 -> 3 -> -2
+ * 0 -> 3 -> -1
+ * 0 -> 3 -> 0
+ * 0 -> 3 -> 1
  * 1 -> 3 -> 0
  * 1 -> 3 -> -1
  * 1 -> 3 -> -2
@@ -30,7 +31,7 @@ export const isTap = (movements: [Movement, Movement, Movement]) => {
 
   if (first.rate === 0) {
     if (second.rate === 3) {
-      if (within(third.rate, -2, 1)) {
+      if (within(third.rate, -3, 1)) {
         return true;
       }
     }
