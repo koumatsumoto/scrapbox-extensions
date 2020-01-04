@@ -65,7 +65,7 @@ export const getActionStream = () => {
           const sid = [items[0].sid, items[items.length - 1].sid];
 
           const array: Movement[] = [];
-          for (let i = 1; i < movements.length; i++) {
+          for (let i = 1; i < 10; i++) {
             array.unshift(movements[movements.length - i]);
 
             switch (array.length) {
