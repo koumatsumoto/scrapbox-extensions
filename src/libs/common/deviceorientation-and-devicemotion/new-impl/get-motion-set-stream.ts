@@ -119,7 +119,7 @@ export const getMotionCommandStream = () => {
           }
 
           return {
-            command: 'none',
+            command: 'moving',
             sid,
           };
         }),
