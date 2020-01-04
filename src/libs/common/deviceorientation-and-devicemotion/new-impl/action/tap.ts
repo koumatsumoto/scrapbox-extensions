@@ -24,7 +24,11 @@ import { simplifyMovements } from './util';
  *
  * @param movements
  */
-export const isTap = (movements: [Movement, Movement, Movement]) => {
+export const isTap = (movements: Movement[]): boolean => {
+  if (movements.length < 3) {
+    return false;
+  }
+
   const values = simplifyMovements(movements);
   const first = values[0];
   const second = values[1];

@@ -6,7 +6,7 @@ import { getRx, withHistory } from '../../rxjs';
 import { roundToInt } from '../../arithmetic';
 import { combine } from './movement/combine';
 import { ActionTypes } from './types';
-import { detectTap } from './action/tap';
+import { isTap } from './action/tap';
 import { classify, Movement } from './movement/classify-movement';
 import { simplifyMovements } from './action/util';
 
@@ -84,53 +84,37 @@ export const debug4 = () => {
 type CommandData = {
   command: ActionTypes;
   // [first, last]
-  sid: [number, number];
+  sid?: [number, number];
 };
 
 export const getMotionCommandStream = () => {
   const { Observable } = getRx();
   const { map } = getRx().operators;
-  const minimumRequiredCount = 8;
+  const minimumRequiredCount = 3;
 
   return new Observable<CommandData>((subscriber) => {
     let actionSubmittedId = -1;
-    let doubleTapCheckCount = 0;
     getMovementStream()
       .pipe(
-        withHistory(minimumRequiredCount),
+        withHistory(8),
         map((items) => {
           // targets at least 1 item
           const targets = items.filter((m) => m.sid > actionSubmittedId);
-          const first = targets[0];
-          const last = targets[targets.length - 1];
-
           if (targets.length < minimumRequiredCount) {
             return {
               command: 'waiting',
-              sid: [first.sid, last.sid],
             };
           }
 
-          let actionType: string = detectTap(targets.map((m) => m.data)) || 'none';
-          switch (actionType) {
-            case 'tap': {
-              if (doubleTapCheckCount++ < 5) {
-                actionType = 'checking double tap';
-                actionSubmittedId = first.sid;
-              } else {
-                doubleTapCheckCount = 0;
-                actionSubmittedId = last.sid;
-              }
-              break;
-            }
-            case 'double tap': {
-              actionSubmittedId = last.sid;
-              break;
-            }
-            default: {
-              actionSubmittedId = first.sid;
-              break;
-            }
+          const first = targets[0];
+          const last = targets[targets.length - 1];
+          const tap = isTap(targets.map((m) => m.data));
+          let actionType: ActionTypes = 'none';
+          if (tap) {
+            actionType = 'tap';
+            actionSubmittedId = last.sid;
+          } else {
+            actionSubmittedId = first.sid;
           }
 
           return {
