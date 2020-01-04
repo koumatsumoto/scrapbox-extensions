@@ -2,16 +2,16 @@ import { Movement } from '../movement/classify-movement';
 
 /**
  *
- * 0 -> 0 -> 0 -> 0 -> 0 -> 0 -> 0 > 0 -> 0 -> 0
+ * 0 -> 0 -> 0 -> 0 -> 0 -> 0 -> 0 -> 0 -> 0 -> 0
  *
  * @param movements
  */
 export const isLongHold = (movements: Movement[]): boolean => {
-  if (movements.length < 8) {
+  if (movements.length < 10) {
     return false;
   }
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < movements.length; i++) {
     if (movements[i].rate !== 0) {
       return false;
     }
@@ -31,7 +31,7 @@ export const isShortHold = (movements: Movement[]): boolean => {
     return false;
   }
 
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < movements.length; i++) {
     if (movements[i].rate !== 0) {
       return false;
     }
@@ -52,7 +52,11 @@ export const checkEnterMotionType = (movements: Movement[]): 'slow' | 'quick' | 
   }
 
   if (isShortHold(movements.slice(0, 4))) {
-    return movements[4].rate === 1 ? 'slow' : 'quick';
+    if (movements[4].rate > 1) {
+      return 'quick';
+    } else if (movements[4].rate > 0) {
+      return 'slow';
+    }
   }
 
   return null;
