@@ -63,30 +63,43 @@ export const getMotionCommandStream = () => {
         map((items) => {
           const movements = items.map((m) => m.data);
           const sid = [items[0].sid, items[items.length - 1].sid];
-          const a3 = movements.slice(-3);
-          const a4 = movements.slice(-4);
 
-          if (isLongHold(movements)) {
-            return {
-              command: 'long hold',
-              sid,
-            };
-          } else if (isShortHold(a4)) {
-            return {
-              command: 'short hold',
-              sid,
-            };
-          } else if (isTap(a3)) {
-            return {
-              command: 'tap',
-              sid,
-            };
-          } else {
-            return {
-              command: 'none',
-              sid,
-            };
+          const array: Movement[] = [];
+          for (let i = 1; i < 10; i++) {
+            array.unshift(movements[movements.length - i]);
+
+            switch (array.length) {
+              case 10: {
+                if (isLongHold(array)) {
+                  return {
+                    command: 'long hold',
+                    sid,
+                  };
+                }
+              }
+              case 4: {
+                if (isShortHold(array)) {
+                  return {
+                    command: 'short hold',
+                    sid,
+                  };
+                }
+              }
+              case 3: {
+                if (isTap(array)) {
+                  return {
+                    command: 'short hold',
+                    sid,
+                  };
+                }
+              }
+            }
           }
+
+          return {
+            command: 'none',
+            sid,
+          };
         }),
       )
       .subscribe((value) => {
