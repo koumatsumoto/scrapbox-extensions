@@ -7,7 +7,15 @@ import { combine } from './movement/combine';
 import { ActionTypes } from './types';
 import { isTap } from './action/tap';
 import { classify, Movement } from './movement/classify-movement';
-import { checkEnterMotionType, isLongHold, isShortHold } from './action/hold';
+import {
+  checkEnterMotionType,
+  isLongHold,
+  isShortHold,
+  isStopping,
+  motionEnteringCount,
+  shortHoldCount,
+  stoppingCount,
+} from './action/hold';
 
 export const getMovementStream = (
   orientation$: Observable<DeviceOrientation> = getDeviceOrientationStream(),
@@ -92,7 +100,18 @@ export const getActionStream = () => {
 
                 break;
               }
-              case 6: {
+              case stoppingCount: {
+                if (isStopping(array)) {
+                  return {
+                    type: 'stopping',
+                    sid,
+                  };
+                }
+
+                break;
+              }
+
+              case shortHoldCount: {
                 if (isShortHold(array)) {
                   return {
                     type: 'short hold',
@@ -102,7 +121,7 @@ export const getActionStream = () => {
 
                 break;
               }
-              case 7: {
+              case motionEnteringCount: {
                 const type = checkEnterMotionType(array);
                 if (type && type === 'slow') {
                   return {
