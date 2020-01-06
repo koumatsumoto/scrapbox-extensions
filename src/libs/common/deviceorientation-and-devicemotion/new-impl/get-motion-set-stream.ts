@@ -73,7 +73,7 @@ export const getActionStream = () => {
             };
           }
 
-          if (isQuickReverse(movements.slice(0, 2))) {
+          if (isQuickReverse(movements.slice(-2))) {
             return {
               type: 'quick reverse',
               sid,

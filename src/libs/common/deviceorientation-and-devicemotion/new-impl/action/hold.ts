@@ -62,7 +62,7 @@ export const checkEnterMotionType = (movements: Movement[]): 'quick start' | 'sl
     return null;
   }
 
-  if (isShortHold(movements.slice(0, shortHoldCount))) {
+  if (isShortHold(movements.slice(-shortHoldCount))) {
     if (movements[movements.length - 1].rate > 1) {
       return 'quick start';
     } else if (movements[movements.length - 1].rate > 0) {
