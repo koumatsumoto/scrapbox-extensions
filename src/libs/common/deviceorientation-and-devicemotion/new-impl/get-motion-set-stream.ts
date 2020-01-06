@@ -17,6 +17,7 @@ import {
   shortHoldCount,
   stoppingCount,
 } from './action/hold';
+import { isQuickReverse } from './action/reverse';
 
 export const getMovementStream = (
   orientation$: Observable<DeviceOrientation> = getDeviceOrientationStream(),
@@ -82,9 +83,9 @@ export const getActionStream = () => {
             };
           }
 
-          if (isTap(movements.slice(0, 3))) {
+          if (isQuickReverse(movements.slice(0, 2))) {
             return {
-              type: 'tap',
+              type: 'quick reverse',
               sid,
             };
           }
