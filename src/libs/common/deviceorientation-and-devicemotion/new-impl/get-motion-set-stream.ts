@@ -5,18 +5,8 @@ import { getDeviceMotionStream } from '../devicemotion';
 import { getRx, withHistory } from '../../rxjs';
 import { combine } from './movement/combine';
 import { ActionTypes } from './types';
-import { isTap } from './action/tap';
 import { classify, Movement } from './movement/classify-movement';
-import {
-  checkEnterMotionType,
-  checkHoldAndEntering,
-  isLongHold,
-  isShortHold,
-  isStopping,
-  motionEnteringCount,
-  shortHoldCount,
-  stoppingCount,
-} from './action/hold';
+import { checkHoldAndEntering } from './action/hold';
 import { isQuickReverse } from './action/reverse';
 
 export const getMovementStream = (

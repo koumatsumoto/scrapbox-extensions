@@ -57,16 +57,16 @@ export const isShortHold = (movements: Movement[]): boolean => {
  *
  * @param movements
  */
-export const checkEnterMotionType = (movements: Movement[]): 'start slowly' | 'start quickly' | null => {
+export const checkEnterMotionType = (movements: Movement[]): 'quick start' | 'slow start' | null => {
   if (movements.length < motionEnteringCount) {
     return null;
   }
 
   if (isShortHold(movements.slice(0, shortHoldCount))) {
     if (movements[movements.length - 1].rate > 1) {
-      return 'start quickly';
+      return 'quick start';
     } else if (movements[movements.length - 1].rate > 0) {
-      return 'start slowly';
+      return 'slow start';
     }
   }
 
@@ -75,7 +75,7 @@ export const checkEnterMotionType = (movements: Movement[]): 'start slowly' | 's
 
 export const checkHoldAndEntering = (
   movements: Movement[],
-): 'long hold' | 'short hold' | 'stopping' | 'start quickly' | 'start slowly' | null => {
+): 'long hold' | 'short hold' | 'stopping' | 'quick start' | 'slow start' | null => {
   const hold = checkHold(movements);
   if (hold) {
     return hold;
