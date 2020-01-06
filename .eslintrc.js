@@ -25,6 +25,7 @@ module.exports = {
   },
   plugins: ['@typescript-eslint'],
   rules: {
+    'for-direction': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
     // for webpack html-loader
