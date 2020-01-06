@@ -8,7 +8,7 @@ export const longHoldCount = 10;
 const checkHold = (movements: Movement[]): 'long hold' | 'short hold' | 'stopping' | null => {
   let consecutive = 0;
   // check value from right
-  for (let i = movements.length - 1; i <= 0; i--) {
+  for (let i = movements.length - 1; i >= 0; i--) {
     if (movements[i].rate === 0) {
       consecutive++;
     } else {
