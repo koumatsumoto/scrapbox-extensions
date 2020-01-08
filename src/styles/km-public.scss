@@ -15,12 +15,33 @@
 }
 
 .navbar-brand {
-  display: none;
+  display: none !important;
 }
 
 .project-home {
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  z-index: 10000;
+  position: absolute !important;
+  top: 0px !important;
+  left: 0px !important;
+  z-index: 10000 !important;
+  width: 5em !important;
+  height: 54px !important;
+  padding-left: 16px !important;
+  color: #ffffff !important;
+
+  &::after {
+    content: 'TOP';
+  }
+
+  .title {
+    display: none;
+  }
+}
+
+.page-sort-menu {
+  display: none !important;
+}
+
+// file control menu in page
+.expandable-menu {
+  display: none !important;
 }
