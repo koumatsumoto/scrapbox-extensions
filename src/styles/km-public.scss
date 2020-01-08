@@ -45,3 +45,21 @@
 .expandable-menu {
   display: none !important;
 }
+
+// add page button in page
+.quick-launch.layout-page {
+  // cannot use display:none to visible .project-home
+  height: 0 !important;
+  margin: 0 !important;
+
+  .new-button {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  // page container
+  .col-page {
+    padding: 0 !important;
+  }
+}
