@@ -13,3 +13,14 @@
   border-bottom: 2px solid map_get($material-colors, blue-grey-50) !important;
   border-radius: 2px !important;
 }
+
+.navbar-brand {
+  display: none;
+}
+
+.project-home {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 10000;
+}
