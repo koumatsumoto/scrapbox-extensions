@@ -19,14 +19,14 @@ const makeCheckboxesHTML = (tagOptions: TagOption[]) => {
   return tagOptions
     .map((group) => {
       const inputs = group
-        .map((v) => {
+        .map((obj) => {
           const id = `usd-${labelId++}`;
 
-          return `<input id="${id}" type="checkbox" name="${inputName}" value="${v}"><label for="${id}">${v}</label>`;
+          return `<input id="${id}" type="checkbox" name="${inputName}" value="${obj.value}"><label for="${id}">${obj}</label>`;
         })
         .join('');
 
-      return `<div class="tag-group">${inputs}</div>>`;
+      return `<div class="tag-group">${inputs}</div>`;
     })
     .join('');
 };
