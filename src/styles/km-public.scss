@@ -1,3 +1,4 @@
+@import 'variables';
 @import 'base';
 @import 'text';
 @import 'icons';
@@ -9,7 +10,7 @@
 /**
  * Apply only non-login (public) user.
  */
-body:not(#{map_get($custom-css-class-names)}) {
+body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
   .navbar-brand {
     display: none !important;
   }
