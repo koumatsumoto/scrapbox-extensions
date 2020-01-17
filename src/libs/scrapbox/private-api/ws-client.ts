@@ -79,6 +79,10 @@ export class WebsocketClient {
     this.initialize();
   }
 
+  sendCommit(message: string) {
+    this.send(message);
+  }
+
   private sendJoinRoom() {
     this.send(createJoinRoomMessage({ projectId: this.option.projectId }));
   }
@@ -119,7 +123,3 @@ export class WebsocketClient {
     });
   }
 }
-
-// debug
-const client = new WebsocketClient({ projectId: '5dc685a50fc39d0017e27559' });
-(window as any).client = client;
