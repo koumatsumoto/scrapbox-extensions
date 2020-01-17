@@ -1,9 +1,7 @@
-import { WebsocketClient } from '../../libs/scrapbox/private-api';
+import { getPrivateApi } from '../../libs/scrapbox';
 
-const projectId = '5dc685a50fc39d0017e27559';
-
-export const enablePrivateApi = () => {
+export const enablePrivateApi = async () => {
   // debug
-  const client = new WebsocketClient({ projectId });
-  (window as any).client = client;
+  const api = await getPrivateApi();
+  (window as any).api = api;
 };

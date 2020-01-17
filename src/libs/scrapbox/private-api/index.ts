@@ -1,1 +1,1 @@
-export * from './ws-client';
+export * from './private-api';
