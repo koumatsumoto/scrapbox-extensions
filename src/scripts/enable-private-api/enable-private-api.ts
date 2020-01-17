@@ -1,7 +1,5 @@
-import { WebsocketClient } from '../../libs/scrapbox/private-api';
-const projectId = '5d5b7c3fcf67b30017947699';
+const projectId = '5dc685a50fc39d0017e27559';
 
 export const enablePrivateApi = () => {
-  const client = new WebsocketClient({ projectId });
-  console.log(client);
+  // const client = new WebsocketClient({ projectId });
 };
