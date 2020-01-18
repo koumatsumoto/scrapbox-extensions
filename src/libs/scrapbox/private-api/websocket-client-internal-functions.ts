@@ -41,7 +41,7 @@ export const createCommitMessage = (param: {
     },
   ];
 
-  return `${protocol}${payload}`;
+  return `${protocol}${JSON.stringify(payload)}`;
 };
 
 export const createUpdateSingleLineChange = (param: { id: string; text: string }) => {
