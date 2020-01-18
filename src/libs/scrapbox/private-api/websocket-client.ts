@@ -4,6 +4,8 @@ const endpoint = 'wss://scrapbox.io/socket.io/?EIO=3&transport=websocket';
 
 export class WebsocketClient {
   private readonly socket: WebSocket;
+  // need buffer if try to send until connection opened
+  private sendBuffer: Function[] = [];
 
   constructor() {
     this.socket = new WebSocket(endpoint);
@@ -19,7 +21,11 @@ export class WebsocketClient {
   }
 
   private send(message: string) {
-    // TODO: validate connection status, this.socket.OPEN
+    if (this.socket.readyState !== WebSocket.OPEN) {
+      this.sendBuffer.push(() => this.socket.send(message));
+
+      return;
+    }
 
     this.socket.send(message);
   }
@@ -30,6 +36,10 @@ export class WebsocketClient {
   private initialize() {
     this.socket.addEventListener('open', (event: Event) => {
       console.log('[websocket-client] connection opened ', event);
+
+      // resolve buffer
+      this.sendBuffer.forEach((f) => f());
+      this.sendBuffer = [];
     });
 
     this.socket.addEventListener('message', (event: MessageEvent) => {
