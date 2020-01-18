@@ -5,7 +5,7 @@ const endpoint = 'wss://scrapbox.io/socket.io/?EIO=3&transport=websocket';
 export class WebsocketClient {
   private readonly socket: WebSocket;
 
-  constructor(private readonly option: { projectId: string }) {
+  constructor(private readonly option: { projectId: string; pageId: string }) {
     this.socket = new WebSocket(endpoint);
     this.initialize();
   }
@@ -15,7 +15,7 @@ export class WebsocketClient {
   }
 
   private sendJoinRoom() {
-    this.send(createJoinRoomMessage({ projectId: this.option.projectId }));
+    this.send(createJoinRoomMessage({ projectId: this.option.projectId, pageId: this.option.pageId }));
   }
 
   private send(message: string) {
@@ -38,10 +38,9 @@ export class WebsocketClient {
         throw new Error('unexpected data received');
       }
 
-      console.log('[debug] ws message', event.data);
       const message = event.data;
       const [protocol, data] = extractMessage(message);
-      console.log('[debug] extracted', data);
+      console.log('[websocket-client] message', protocol, data);
     });
 
     this.socket.addEventListener('close', (event: CloseEvent) => {

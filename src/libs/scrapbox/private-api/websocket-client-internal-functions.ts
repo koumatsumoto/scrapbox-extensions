@@ -1,12 +1,12 @@
 import { CommitChanges, ReceivedMessage } from './websocket-client-types';
 
-export const createJoinRoomMessage = (param: { projectId: string }) => {
+export const createJoinRoomMessage = (param: { pageId: string; projectId: string }) => {
   const payload = [
     'socket.io-request',
     {
       method: 'room:join',
       data: {
-        pageId: null,
+        pageId: param.pageId,
         projectId: param.projectId,
         projectUpdatesStream: false,
       },
