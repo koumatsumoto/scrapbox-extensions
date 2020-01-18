@@ -5,17 +5,17 @@ const endpoint = 'wss://scrapbox.io/socket.io/?EIO=3&transport=websocket';
 export class WebsocketClient {
   private readonly socket: WebSocket;
 
-  constructor(private readonly option: { projectId: string; pageId: string }) {
+  constructor() {
     this.socket = new WebSocket(endpoint);
     this.initialize();
   }
 
-  sendCommit(message: string) {
+  commit(message: string) {
     this.send(message);
   }
 
-  private sendJoinRoom() {
-    this.send(createJoinRoomMessage({ projectId: this.option.projectId, pageId: this.option.pageId }));
+  joinRoom(param: { projectId: string; pageId: string }) {
+    this.send(createJoinRoomMessage(param));
   }
 
   private send(message: string) {
@@ -30,7 +30,6 @@ export class WebsocketClient {
   private initialize() {
     this.socket.addEventListener('open', (event: Event) => {
       console.log('[websocket-client] connection opened ', event);
-      this.sendJoinRoom();
     });
 
     this.socket.addEventListener('message', (event: MessageEvent) => {
