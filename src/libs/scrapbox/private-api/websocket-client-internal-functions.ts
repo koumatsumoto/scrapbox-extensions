@@ -44,6 +44,15 @@ export const createCommitMessage = (param: {
   return `${protocol}${payload}`;
 };
 
+export const createUpdateSingleLineChange = (param: { id: string; text: string }) => {
+  return {
+    _update: param.id,
+    lines: {
+      text: param.text,
+    },
+  };
+};
+
 // 430[{...}}] => 430, [{}]
 export const extractMessage = (message: string): ProtocolAndPayload => {
   let protocol = '';
