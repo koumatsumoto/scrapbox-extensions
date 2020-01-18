@@ -8,7 +8,7 @@ export class PrivateApi {
 export const getPrivateApi = async () => {
   const apiClient = new ApiClient();
   // eslint-disable-next-line
-  debugger;
+  console.log('[debug] scrapbox', { ...window.scrapbox });
   const [page, project] = await Promise.all([apiClient.getCurrentPage(), apiClient.getCurrentProject()]);
   const websocketClient = new WebsocketClient();
   websocketClient.joinRoom({ projectId: project.id, pageId: page.id });
