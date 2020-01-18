@@ -12,7 +12,7 @@ export type ReceivedMessage = ConnectionOpenMessage | ConnectionResultReceiveMes
 
 export type ProtocolAndPayload = ['0', ConnectionOpenMessage] | [Protocol, ReceivedMessage];
 
-export type CommitChanges =
+export type CommitChange =
   | {
       _insert: '_end';
       lines: {
@@ -27,7 +27,6 @@ export type CommitChanges =
         text: string;
       };
     };
-[];
 
 export type CommitSendMessage = [
   'socket.io-request',
@@ -37,7 +36,7 @@ export type CommitSendMessage = [
       kind: 'page';
       // last committed id
       parentId: string;
-      changes: CommitChanges;
+      changes: CommitChange[];
       cursor: null;
       pageId: string;
       userId: string;

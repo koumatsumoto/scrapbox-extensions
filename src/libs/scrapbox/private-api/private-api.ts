@@ -17,10 +17,12 @@ export class PrivateApi {
       projectId: project.id,
       pageId: page.id,
       parentId: page.commitId,
-      changes: createUpdateSingleLineChange({
-        id: param.lineId,
-        text: param.text,
-      }),
+      changes: [
+        createUpdateSingleLineChange({
+          id: param.lineId,
+          text: param.text,
+        }),
+      ],
     });
   }
 }
