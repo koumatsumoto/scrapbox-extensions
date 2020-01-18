@@ -1,4 +1,4 @@
-import { CommitChanges, ReceivedMessage } from './websocket-client-types';
+import { CommitChanges, ProtocolAndPayload, ReceivedMessage } from './websocket-client-types';
 
 export const createJoinRoomMessage = (param: { projectId: string; pageId: string }) => {
   const payload = [
@@ -45,7 +45,7 @@ export const createCommitMessage = (param: {
 };
 
 // 430[{...}}] => 430, [{}]
-export const extractMessage = (message: string): [string, ReceivedMessage] => {
+export const extractMessage = (message: string): ProtocolAndPayload => {
   let protocol = '';
   while (message.length) {
     const head = message[0];

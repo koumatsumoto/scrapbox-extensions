@@ -1,4 +1,3 @@
-import { getCurrentProjectName } from '../public-api';
 import { ApiClient } from './api-client';
 import { WebsocketClient } from './websocket-client';
 
@@ -8,8 +7,6 @@ export class PrivateApi {
 
 export const getPrivateApi = async () => {
   const apiClient = new ApiClient();
-  // eslint-disable-next-line
-  console.log('[debug] scrapbox', { ...window.scrapbox }, getCurrentProjectName());
   const [page, project] = await Promise.all([apiClient.getCurrentPage(), apiClient.getCurrentProject()]);
   const websocketClient = new WebsocketClient();
   websocketClient.joinRoom({ projectId: project.id, pageId: page.id });

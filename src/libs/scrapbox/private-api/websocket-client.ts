@@ -1,4 +1,5 @@
 import { createJoinRoomMessage, extractMessage } from './websocket-client-internal-functions';
+import { ConnectionOpenMessage } from './websocket-client-types';
 
 const endpoint = 'wss://scrapbox.io/socket.io/?EIO=3&transport=websocket';
 
@@ -36,10 +37,6 @@ export class WebsocketClient {
   private initialize() {
     this.socket.addEventListener('open', (event: Event) => {
       console.log('[websocket-client] connection opened ', event);
-
-      // resolve buffer
-      this.sendBuffer.forEach((f) => f());
-      this.sendBuffer = [];
     });
 
     this.socket.addEventListener('message', (event: MessageEvent) => {
@@ -50,6 +47,11 @@ export class WebsocketClient {
       const message = event.data;
       const [protocol, data] = extractMessage(message);
       console.log('[websocket-client] message', protocol, data);
+
+      // message just after connection opened
+      if (protocol === '0') {
+        this.handleOpen(data as ConnectionOpenMessage);
+      }
     });
 
     this.socket.addEventListener('close', (event: CloseEvent) => {
@@ -60,5 +62,16 @@ export class WebsocketClient {
     this.socket.addEventListener('error', (event: any) => {
       console.error('[websocket-client] connection errored ', event);
     });
+  }
+
+  private handleOpen(message: ConnectionOpenMessage) {
+    // setup ping
+    setInterval(() => {
+      this.send('2');
+    }, message.pingInterval);
+
+    // consume buffer
+    this.sendBuffer.forEach((f) => f());
+    this.sendBuffer = [];
   }
 }
