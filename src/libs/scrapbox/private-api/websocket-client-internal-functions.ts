@@ -23,7 +23,7 @@ export const createCommitMessage = (param: {
   parentId: string;
   changes: CommitChanges;
 }) => {
-  const protocol = '42';
+  const protocol = '421';
   const payload = [
     'socket.io-request',
     {
