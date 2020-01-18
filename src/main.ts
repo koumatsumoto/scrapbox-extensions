@@ -16,10 +16,10 @@ export const main = () => {
 
     highlightTagsInListItem();
     enableConsoleButton();
-  });
 
-  // add custom css class to body tag
-  applyLoginCSSClass();
-  // enable private api
-  enablePrivateApi();
+    // add custom css class to body tag
+    applyLoginCSSClass();
+    // enable private api
+    enablePrivateApi();
+  });
 };
