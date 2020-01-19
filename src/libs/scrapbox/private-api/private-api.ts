@@ -22,7 +22,7 @@ export class PrivateApi {
     });
   }
 
-  async updateSingleLine(param: { projectId: string; pageId: string; commitId: string; lineId: string; text: string }) {
+  async updateSingleLine(param: { projectId: string; pageId: string; commitId: string; lineId: ID; text: string }) {
     this.websocketClient.commit({
       userId: this.userId,
       projectId: param.projectId,
@@ -62,7 +62,7 @@ export class PrivateApi {
     });
   }
 
-  async updateSingleLineOfCurrentPage(param: { lineId: string; text: string }) {
+  async updateSingleLineOfCurrentPage(param: { lineId: ID; text: string }) {
     const [project, page] = await Promise.all([this.apiClient.getCurrentProject(), this.apiClient.getCurrentPage()]);
 
     this.updateSingleLine({

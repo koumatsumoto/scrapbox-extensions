@@ -63,7 +63,7 @@ export const createInsertionChange = (param: { userId: ID; position: ID | '_end'
   };
 };
 
-export const createUpdationChange = (param: { id: string; text: string }): UpdateCommitChange => {
+export const createUpdationChange = (param: { id: ID; text: string }): UpdateCommitChange => {
   return {
     _update: param.id,
     lines: {
