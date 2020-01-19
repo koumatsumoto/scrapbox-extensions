@@ -8,7 +8,7 @@ import { getSettingsPageText } from './templates';
 
 (async () => {
   const userPageText = await loadUserScript();
-  const settingsPageText = getSettingsPageText(await loadUserCSS());
+  const settingsPageText = await loadUserCSS();
 
   // deploy user script and user css
   await Promise.all([
