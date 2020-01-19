@@ -1,6 +1,6 @@
-import { ApiClient } from './api-client';
-import { WebsocketClient } from './websocket-client';
-import { createUpdateSingleLineChange } from './websocket-client-internal-functions';
+import { ApiClient } from './api-client/api-client';
+import { WebsocketClient } from './websocket-clinet/websocket-client';
+import { createUpdationChange } from './websocket-clinet/websocket-client-internal-functions';
 
 export class PrivateApi {
   constructor(private readonly userId: string, private readonly apiClient: ApiClient, private readonly websocketClient: WebsocketClient) {}
@@ -12,7 +12,7 @@ export class PrivateApi {
       pageId: param.pageId,
       parentId: param.commitId,
       changes: [
-        createUpdateSingleLineChange({
+        createUpdationChange({
           id: param.lineId,
           text: param.text,
         }),
