@@ -18,6 +18,4 @@ export const deployByPrivateApi = async (param: { browser: puppeteer.Browser; ur
   await loadBrowserJavaScript(page);
   // update script text
   await updateScriptText(page, param.codeName, param.text);
-
-  await page.close();
 };
