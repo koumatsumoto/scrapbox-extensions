@@ -4,11 +4,12 @@ import * as puppeteer from 'puppeteer';
 export const updateScriptText = async (page: puppeteer.Page, codeName: string, text: string) => {
   page.evaluate(
     (n: string, t: string) => {
-      if (!window.__myScripts) {
-        throw new Error('script is not loaded');
-      }
-
-      window.__myScripts.updateSourceCode(n, t);
+      return window
+        .waitForMyScriptsReady()
+        .then((scripts) => {
+          return scripts.updateSourceCode(n, t);
+        })
+        .catch(console.error);
     },
     codeName,
     text,
