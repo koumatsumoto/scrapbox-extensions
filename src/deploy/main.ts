@@ -3,8 +3,7 @@ require('dotenv').config();
 
 import { config } from './config';
 import { deployByPrivateApi } from './deploy-by-private-api/deploy-by-private-api';
-import { loadUserCSS, loadUserScript } from './loaders';
-import { getSettingsPageText } from './templates';
+import { loadUserCSS, loadUserScript } from './file-loaders';
 
 (async () => {
   const userPageText = await loadUserScript();
