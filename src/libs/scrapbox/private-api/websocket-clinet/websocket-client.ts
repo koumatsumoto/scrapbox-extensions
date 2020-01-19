@@ -1,34 +1,59 @@
-import { createCommitMessage, createJoinRoomMessage, extractMessage } from './websocket-client-internal-functions';
-import { CommitChange, ConnectionOpenMessage } from './websocket-client-types';
+import { ID } from '../../public-api';
+import { extractMessage } from './websocket-client-internal-functions';
+import { CommitChange, ConnectionOpenMessage, SendMessage } from './websocket-client-types';
 
 const endpoint = 'wss://scrapbox.io/socket.io/?EIO=3&transport=websocket';
+const sendProtocol = '42';
 
 export class WebsocketClient {
   private readonly socket: WebSocket;
   // need buffer if try to send until connection opened
   private sendBuffer: Function[] = [];
+  private counter = 0;
 
   constructor() {
     this.socket = new WebSocket(endpoint);
     this.initialize();
   }
 
-  commit(param: { projectId: string; userId: string; pageId: string; parentId: string; changes: CommitChange[] }) {
-    this.send(createCommitMessage(param));
+  commit(param: { projectId: string; userId: ID; pageId: string; parentId: string; changes: CommitChange[] }) {
+    this.send({
+      method: 'commit',
+      data: {
+        kind: 'page',
+        parentId: param.parentId,
+        changes: param.changes,
+        cursor: null,
+        pageId: param.pageId,
+        userId: param.userId,
+        projectId: param.projectId,
+        freeze: true,
+      },
+    });
   }
 
   joinRoom(param: { projectId: string; pageId: string }) {
-    this.send(createJoinRoomMessage(param));
+    this.send({
+      method: 'room:join',
+      data: {
+        pageId: param.pageId,
+        projectId: param.projectId,
+        projectUpdatesStream: false,
+      },
+    });
   }
 
-  private send(message: string) {
+  private send(payload: SendMessage) {
+    const body = ['socket.io-request', payload];
+    const data = `${sendProtocol}${this.counter++}${JSON.stringify(body)}`;
+
     if (this.socket.readyState !== WebSocket.OPEN) {
-      this.sendBuffer.push(() => this.socket.send(message));
+      this.sendBuffer.push(() => this.socket.send(data));
 
       return;
     }
 
-    this.socket.send(message);
+    this.socket.send(data);
   }
 
   /**
@@ -67,7 +92,7 @@ export class WebsocketClient {
   private handleOpen(message: ConnectionOpenMessage) {
     // setup ping
     setInterval(() => {
-      this.send('2');
+      this.socket.send('2');
     }, message.pingInterval);
 
     // consume buffer

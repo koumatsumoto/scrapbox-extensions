@@ -39,22 +39,28 @@ export type DeleteCommitChange = {
 
 export type CommitChange = InsertCommitChange | UpdateCommitChange | DeleteCommitChange;
 
-export type CommitSendMessage = [
-  'socket.io-request',
-  {
-    method: 'commit';
-    data: {
-      kind: 'page';
-      // last committed id
-      parentId: string;
-      changes: CommitChange[];
-      cursor: null;
-      pageId: string;
-      userId: ID;
-      projectId: string;
-      freeze: true;
-    };
-  },
-];
+export type CommitPayload = {
+  method: 'commit';
+  data: {
+    kind: 'page';
+    // last committed id
+    parentId: string;
+    changes: CommitChange[];
+    cursor: null;
+    pageId: string;
+    userId: ID;
+    projectId: string;
+    freeze: true;
+  };
+};
 
-export type SendMessage = CommitSendMessage;
+type JoinRoomPayload = {
+  method: 'room:join';
+  data: {
+    pageId: string;
+    projectId: string;
+    projectUpdatesStream: false;
+  };
+};
+
+export type SendMessage = CommitPayload | JoinRoomPayload;
