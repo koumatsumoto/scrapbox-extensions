@@ -16,6 +16,8 @@ const loadFile = (path: string) =>
     }),
   );
 
-export const loadJS = () => loadFile(bundleJsFilePath);
-export const loadCSS = () => loadFile(cssFilePath);
+// first space is needed for scrapbox code block
+export const loadUserScript = async () => ` ${loadFile(bundleJsFilePath)}`;
+export const loadUserCSS = () => ` ${loadFile(cssFilePath)}`;
+// script to be evaluated in browser
 export const loadBrowserScript = () => loadFile(browserScriptPath);
