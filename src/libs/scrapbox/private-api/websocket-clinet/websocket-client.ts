@@ -16,7 +16,7 @@ export class WebsocketClient {
    * if map.get(key) === undefined, message sent and response unreceived
    * if map.get(key) !== undefined, message sent and response received
    */
-  private receivePool = new Map<Protocol, ReceivedMessage | undefined>();
+  private receivePool = new Map<string, ReceivedMessage | undefined>();
 
   constructor() {
     this.socket = new WebSocket(endpoint);
@@ -52,9 +52,8 @@ export class WebsocketClient {
 
   private async send(payload: SendMessage): Promise<ReceivedMessage> {
     const body = JSON.stringify(['socket.io-request', payload]);
-    const senderId = this.senderId++;
-    const header = `${sendProtocol}${senderId}`;
-    const data = `${header}${body}`;
+    const senderId = `${this.senderId++}`;
+    const data = `${sendProtocol}${senderId}${body}`;
 
     if (this.socket.readyState !== WebSocket.OPEN) {
       this.sendBuffer.push(() => this.socket.send(data));
@@ -62,11 +61,11 @@ export class WebsocketClient {
       this.socket.send(data);
     }
 
-    this.receivePool.set(header, undefined);
-    await waitUntil(() => this.receivePool.get(header) !== undefined, 10, websocketResponseTimeoutMs);
+    this.receivePool.set(senderId, undefined);
+    await waitUntil(() => this.receivePool.get(senderId) !== undefined, 10, websocketResponseTimeoutMs);
 
-    const result = this.receivePool.get(header) || null;
-    this.receivePool.delete(header);
+    const result = this.receivePool.get(senderId) || null;
+    this.receivePool.delete(senderId);
 
     return result as ReceivedMessage;
   }
@@ -94,7 +93,8 @@ export class WebsocketClient {
       }
       // for send()
       if (header.startsWith(sendProtocol)) {
-        this.receivePool.set(header, body);
+        const senderId = header.slice(sendProtocol.length);
+        this.receivePool.set(senderId, body);
       }
     });
 
