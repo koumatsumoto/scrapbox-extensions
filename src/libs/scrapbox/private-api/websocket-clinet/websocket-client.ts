@@ -1,15 +1,22 @@
+import { waitUntil } from '../../../common';
 import { ID } from '../../public-api';
 import { extractMessage } from './websocket-client-internal-functions';
-import { CommitChange, ConnectionOpenMessage, SendMessage } from './websocket-client-types';
+import { CommitChange, ConnectionOpenMessage, Protocol, ReceivedMessage, SendMessage } from './websocket-client-types';
 
 const endpoint = 'wss://scrapbox.io/socket.io/?EIO=3&transport=websocket';
 const sendProtocol = '42';
+const websocketResponseTimeoutMs = 1000 * 30;
 
 export class WebsocketClient {
   private readonly socket: WebSocket;
   // need buffer if try to send until connection opened
   private sendBuffer: Function[] = [];
-  private counter = 0;
+  private senderId = 0;
+  /**
+   * if map.get(key) === undefined, message sent and response unreceived
+   * if map.get(key) !== undefined, message sent and response received
+   */
+  private receivePool = new Map<Protocol, ReceivedMessage | undefined>();
 
   constructor() {
     this.socket = new WebSocket(endpoint);
@@ -43,9 +50,11 @@ export class WebsocketClient {
     });
   }
 
-  private send(payload: SendMessage) {
-    const body = ['socket.io-request', payload];
-    const data = `${sendProtocol}${this.counter++}${JSON.stringify(body)}`;
+  private async send(payload: SendMessage) {
+    const body = JSON.stringify(['socket.io-request', payload]);
+    const senderId = this.senderId++;
+    const header = `${sendProtocol}${senderId}`;
+    const data = `${header}${body}`;
 
     if (this.socket.readyState !== WebSocket.OPEN) {
       this.sendBuffer.push(() => this.socket.send(data));
@@ -54,6 +63,13 @@ export class WebsocketClient {
     }
 
     this.socket.send(data);
+    this.receivePool.set(header, undefined);
+    await waitUntil(() => this.receivePool.get(header) !== undefined, 10, websocketResponseTimeoutMs);
+
+    const result = this.receivePool.get(header);
+    this.receivePool.delete(header);
+
+    return result;
   }
 
   /**
@@ -70,12 +86,16 @@ export class WebsocketClient {
       }
 
       const message = event.data;
-      const [protocol, data] = extractMessage(message);
-      console.log('[websocket-client] message', protocol, data);
+      const [header, body] = extractMessage(message);
+      console.log('[websocket-client] message', header, body);
 
       // message just after connection opened
-      if (protocol === '0') {
-        this.handleOpen(data as ConnectionOpenMessage);
+      if (header === '0') {
+        this.handleOpen(body as ConnectionOpenMessage);
+      }
+      // for send()
+      if (header.startsWith(sendProtocol)) {
+        this.receivePool.set(header, body);
       }
     });
 

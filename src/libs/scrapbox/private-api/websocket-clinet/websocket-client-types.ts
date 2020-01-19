@@ -1,7 +1,14 @@
 // only actually used values
 import { ID } from '../../public-api';
 
-export type Protocol = '0' | '40' | '42' | '420' | '421' | '422' | '423' | '430' | '431' | '432' | '433';
+/**
+ * - '0'
+ * - '2'
+ * - '3'
+ * - '40'
+ * - '42x'
+ */
+export type Protocol = '0' | '2' | '3' | '40' | '42' | string;
 
 export type ConnectionOpenMessage = {
   sid: string;
