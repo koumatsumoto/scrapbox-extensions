@@ -20,6 +20,9 @@ export const deployByPrivateApi = async (param: { url: string; codeName: string;
   // update script text
   await updateScriptText(page, param.codeName, param.text);
 
+  // if remove this, error occurs
+  await page.waitFor(1000 * 3);
+
   await page.close();
   await browser.close();
 };
