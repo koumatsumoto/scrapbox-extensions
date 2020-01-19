@@ -21,5 +21,4 @@ export const deployByPrivateApi = async (param: { url: string; codeName: string;
   await updateScriptText(page, param.codeName, param.text);
 
   await page.close();
-  await browser.close();
 };
