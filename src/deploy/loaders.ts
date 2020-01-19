@@ -3,6 +3,7 @@ import * as fs from 'fs';
 // relative where deploy command executed
 const bundleJsFilePath = './dist/bundle.min.js';
 const cssFilePath = './dist/style.min.css';
+const browserScriptPath = './dist/run-in-puppeteer-page.min.js';
 
 const loadFile = (path: string) =>
   new Promise<string>((resolve, reject) =>
@@ -17,3 +18,4 @@ const loadFile = (path: string) =>
 
 export const loadJS = () => loadFile(bundleJsFilePath);
 export const loadCSS = () => loadFile(cssFilePath);
+export const loadBrowserScript = () => loadFile(browserScriptPath);
