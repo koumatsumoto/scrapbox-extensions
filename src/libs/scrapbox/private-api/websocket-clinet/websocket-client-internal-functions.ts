@@ -52,7 +52,7 @@ export const createCommitMessage = (param: {
   return `${protocol}${JSON.stringify(payload)}`;
 };
 
-export const createInsertionChange = (param: { userId: ID; position: string; text: string }): InsertCommitChange => {
+export const createInsertionChange = (param: { userId: ID; position: ID | '_end'; text: string }): InsertCommitChange => {
   return {
     _insert: param.position,
     lines: {
