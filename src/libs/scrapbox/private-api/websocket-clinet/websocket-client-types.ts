@@ -32,7 +32,12 @@ export type UpdateCommitChange = {
   };
 };
 
-export type CommitChange = InsertCommitChange | UpdateCommitChange;
+export type DeleteCommitChange = {
+  _delete: ID;
+  lines: -1;
+};
+
+export type CommitChange = InsertCommitChange | UpdateCommitChange | DeleteCommitChange;
 
 export type CommitSendMessage = [
   'socket.io-request',
