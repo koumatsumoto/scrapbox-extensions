@@ -6,9 +6,8 @@ import { updateScriptText } from './internal/update-script-text';
 
 const applicationBootstrapWaitTime = 1000 * 8;
 
-export const deployByPrivateApi = async (param: { url: string; codeName: string; text: string }) => {
-  const browser = await puppeteer.launch({ headless: !config.local });
-  const context = await getFullPermissionBrowserContext(browser, config.origin);
+export const deployByPrivateApi = async (param: { browser: puppeteer.Browser; url: string; codeName: string; text: string }) => {
+  const context = await getFullPermissionBrowserContext(param.browser, config.origin);
   const page = await getConfiguredPage(context);
 
   // wait for react bootstrapped
