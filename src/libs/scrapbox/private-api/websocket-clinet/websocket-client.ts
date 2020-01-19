@@ -24,7 +24,7 @@ export class WebsocketClient {
   }
 
   commit(param: { projectId: string; userId: ID; pageId: string; parentId: string; changes: CommitChange[] }) {
-    this.send({
+    return this.send({
       method: 'commit',
       data: {
         kind: 'page',
@@ -40,7 +40,7 @@ export class WebsocketClient {
   }
 
   joinRoom(param: { projectId: string; pageId: string }) {
-    this.send({
+    return this.send({
       method: 'room:join',
       data: {
         pageId: param.pageId,
@@ -50,7 +50,7 @@ export class WebsocketClient {
     });
   }
 
-  private async send(payload: SendMessage) {
+  private async send(payload: SendMessage): Promise<ReceivedMessage> {
     const body = JSON.stringify(['socket.io-request', payload]);
     const senderId = this.senderId++;
     const header = `${sendProtocol}${senderId}`;
@@ -58,18 +58,17 @@ export class WebsocketClient {
 
     if (this.socket.readyState !== WebSocket.OPEN) {
       this.sendBuffer.push(() => this.socket.send(data));
-
-      return;
+    } else {
+      this.socket.send(data);
     }
 
-    this.socket.send(data);
     this.receivePool.set(header, undefined);
     await waitUntil(() => this.receivePool.get(header) !== undefined, 10, websocketResponseTimeoutMs);
 
-    const result = this.receivePool.get(header);
+    const result = this.receivePool.get(header) || null;
     this.receivePool.delete(header);
 
-    return result;
+    return result as ReceivedMessage;
   }
 
   /**
