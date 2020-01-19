@@ -5,6 +5,7 @@ import { CommitChange, ConnectionOpenMessage, Protocol, ReceivedMessage, SendMes
 
 const endpoint = 'wss://scrapbox.io/socket.io/?EIO=3&transport=websocket';
 const sendProtocol = '42';
+const receiveProtocol = '43';
 const websocketResponseTimeoutMs = 1000 * 30;
 
 export class WebsocketClient {
@@ -92,8 +93,8 @@ export class WebsocketClient {
         this.handleOpen(body as ConnectionOpenMessage);
       }
       // for send()
-      if (header.startsWith(sendProtocol)) {
-        const senderId = header.slice(sendProtocol.length);
+      if (header.startsWith(receiveProtocol)) {
+        const senderId = header.slice(receiveProtocol.length);
         this.receivePool.set(senderId, body);
       }
     });
