@@ -6,9 +6,7 @@ export const updateScriptText = async (page: puppeteer.Page, codeName: string, t
     (n: string, t: string) => {
       return window
         .waitForMyScriptsReady()
-        .then((scripts) => {
-          return scripts.updateSourceCode(n, t);
-        })
+        .then((scripts) => scripts.updateSourceCode(n, t))
         .catch(console.error);
     },
     codeName,
