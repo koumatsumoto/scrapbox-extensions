@@ -1,6 +1,6 @@
 import { waitUntil } from '../../../common';
 import { ID } from '../../public-api';
-import { CommitChange } from './internal/commit-change';
+import { CommitChangeParam, createChanges } from './internal/commit-change-param';
 import { extractMessage } from './websocket-client-internal-functions';
 import { ConnectionOpenMessage, ReceivedMessage, SendMessage } from './websocket-client-types';
 
@@ -25,7 +25,7 @@ export class WebsocketClient {
     this.initialize();
   }
 
-  commit(param: { projectId: string; userId: ID; pageId: string; parentId: string; changes: CommitChange[] }) {
+  commit(param: { projectId: string; userId: ID; pageId: string; parentId: string; changes: CommitChangeParam[] }) {
     return this.send({
       method: 'commit',
       data: {
@@ -34,7 +34,7 @@ export class WebsocketClient {
         projectId: param.projectId,
         pageId: param.pageId,
         parentId: param.parentId,
-        changes: param.changes,
+        changes: createChanges(param.changes),
         cursor: null,
         freeze: true,
       },

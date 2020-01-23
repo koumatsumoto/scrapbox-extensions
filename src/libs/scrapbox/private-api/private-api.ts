@@ -1,7 +1,6 @@
 import { generateId, ID } from '../public-api';
 import { ApiClient } from './api-client/api-client';
-import { ChangeParam, createChanges } from './private-api-internal-functions';
-import { WebsocketClient } from './websocket-clinet/websocket-client';
+import { CommitChangeParam, WebsocketClient } from './websocket-clinet';
 
 export class PrivateApi {
   constructor(private readonly userId: ID, private readonly apiClient: ApiClient, private readonly websocketClient: WebsocketClient) {}
@@ -56,7 +55,7 @@ export class PrivateApi {
 
   async updateDescription(param: { description: string }) {
     const [project, page] = await Promise.all([this.apiClient.getCurrentProject(), this.apiClient.getCurrentPage()]);
-    const changes: ChangeParam[] = [];
+    const changes: CommitChangeParam[] = [];
 
     // page has not description line yet
     if (page.lines.length === 1) {
@@ -76,13 +75,13 @@ export class PrivateApi {
     });
   }
 
-  private async changeLines(param: { projectId: string; pageId: string; commitId: string; changes: ChangeParam[] }) {
+  private async changeLines(param: { projectId: string; pageId: string; commitId: string; changes: CommitChangeParam[] }) {
     return this.websocketClient.commit({
       userId: this.userId,
       projectId: param.projectId,
       pageId: param.pageId,
       parentId: param.commitId,
-      changes: createChanges(param.changes),
+      changes: param.changes,
     });
   }
 }
