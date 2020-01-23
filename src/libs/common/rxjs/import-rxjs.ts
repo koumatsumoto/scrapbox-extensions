@@ -26,6 +26,7 @@ type RxJS = {
     debounceTime: typeof operatorsType.debounceTime;
     distinctUntilChanged: typeof operatorsType.distinctUntilChanged;
     filter: typeof operatorsType.filter;
+    first: typeof operatorsType.first;
     map: typeof operatorsType.map;
     pairwise: typeof operatorsType.pairwise;
     scan: typeof operatorsType.scan;
