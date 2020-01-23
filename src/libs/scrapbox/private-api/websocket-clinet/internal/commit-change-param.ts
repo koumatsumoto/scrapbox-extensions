@@ -8,7 +8,7 @@ import {
   createUpdationChange,
 } from './commit-change';
 
-export type InsertParam = { type: 'insert'; id: ID; position?: ID; text: string };
+type InsertParam = { type: 'insert'; id: ID; position?: ID; text: string };
 type UpdateParam = { type: 'update'; id: ID; text: string };
 type DeleteParam = { type: 'delete'; id: ID };
 type TitleParam = { type: 'title'; title: string };
