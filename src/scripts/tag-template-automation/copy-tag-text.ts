@@ -1,4 +1,4 @@
-import { getDateText, getPrivateApi, isEmptyPage, makeTag } from '../../libs/scrapbox';
+import { getDateText, getPrivateApi, hasEmptyEOF, isEmptyPage, makeTag } from '../../libs/scrapbox';
 import { tagOptions } from './config';
 import { openDialog } from './dialog';
 import { getDateOrTimeText } from './get-date-or-time-text';
@@ -13,6 +13,9 @@ export const openDialogAndWriteTags = async () => {
         await api.updateTitle({ title: getDateText() });
         await api.updateDescription({ description: tagLineText });
       } else {
+        if (hasEmptyEOF()) {
+          await api.insertSingleLineIntoCurrentPage({ text: '' });
+        }
         await api.insertSingleLineIntoCurrentPage({ text: tagLineText });
       }
     }
