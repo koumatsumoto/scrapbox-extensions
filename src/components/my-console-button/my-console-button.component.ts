@@ -1,4 +1,4 @@
-import { openDialogAndWriteTags } from '../../scripts/write-tag';
+import { openDialogAndWriteTags } from '../../scripts/tag-template-automation';
 
 const html = require('./my-console-button.component.html');
 
