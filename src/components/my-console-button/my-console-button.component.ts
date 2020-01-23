@@ -1,4 +1,4 @@
-import { openDialogAndSelectTags } from '../../scripts/tag-selector';
+import { openDialogAndWriteTags } from '../../scripts/write-tag';
 
 const html = require('./my-console-button.component.html');
 
@@ -19,6 +19,6 @@ export class MyConsoleButton extends HTMLElement {
   }
 
   private async openDialog() {
-    await openDialogAndSelectTags();
+    await openDialogAndWriteTags();
   }
 }
