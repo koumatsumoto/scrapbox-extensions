@@ -13,7 +13,7 @@ export const openDialogAndWriteTags = async () => {
         await api.updateTitle({ title: getDateText() });
         await api.updateDescription({ description: tagLineText });
       } else {
-        if (hasEmptyEOF()) {
+        if (!hasEmptyEOF()) {
           await api.insertSingleLineIntoCurrentPage({ text: '' });
         }
         await api.insertSingleLineIntoCurrentPage({ text: tagLineText });

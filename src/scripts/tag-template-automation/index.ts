@@ -1,1 +1,1 @@
-export * from './copy-tag-text';
+export * from './open-dialog-and-write-tags';
