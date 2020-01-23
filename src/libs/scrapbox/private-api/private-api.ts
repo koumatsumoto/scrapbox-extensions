@@ -86,7 +86,7 @@ export class PrivateApi {
   }
 }
 
-const setupPrivateApi = async () => {
+const preparePrivateApi = async () => {
   const apiClient = new ApiClient();
   const [user, project, page] = await Promise.all([apiClient.getMe(), apiClient.getCurrentProject(), apiClient.getCurrentPage()]);
   const websocketClient = new WebsocketClient(user.id);
@@ -98,11 +98,11 @@ const setupPrivateApi = async () => {
 let privateApiPreparation: Promise<PrivateApi> | undefined;
 export const getPrivateApi = async (option: { newInstance: boolean } = { newInstance: false }) => {
   if (option.newInstance) {
-    return setupPrivateApi();
+    return preparePrivateApi();
   }
 
   if (!privateApiPreparation) {
-    privateApiPreparation = setupPrivateApi();
+    privateApiPreparation = preparePrivateApi();
   }
 
   return privateApiPreparation;
