@@ -17,6 +17,7 @@ export const openDialogAndWriteTags = async () => {
           await api.insertSingleLineIntoCurrentPage({ text: '' });
         }
         await api.insertSingleLineIntoCurrentPage({ text: tagLineText });
+        await api.insertSingleLineIntoCurrentPage({ text: '' });
       }
     }
   } catch (e) {
