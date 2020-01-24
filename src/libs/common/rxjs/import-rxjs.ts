@@ -5,8 +5,8 @@ import * as RxType from 'rxjs';
 import * as operatorsType from 'rxjs/operators';
 import { loadScript } from '../load-scripts/load-scripts';
 
-export const importRxJS = () =>
-  new Promise<RxJS>((resolve, reject) => {
+export const importRxJS = () => {
+  return new Promise<RxJS>((resolve, reject) => {
     if (window.rxjs) {
       resolve(window.rxjs);
     }
@@ -15,6 +15,7 @@ export const importRxJS = () =>
       .then(() => resolve(window.rxjs))
       .catch(reject);
   });
+};
 
 type RxJS = {
   Observable: typeof RxType.Observable;
@@ -42,4 +43,10 @@ declare global {
 }
 
 // lazy load
-export const getRx = () => window.rxjs as RxJS;
+export const getRx = () => {
+  if (window.rxjs === undefined) {
+    throw new Error('RxJS is not imported');
+  }
+
+  return window.rxjs as RxJS;
+};

@@ -1,3 +1,4 @@
+import { Subject } from 'rxjs';
 import { getRx } from '../../../common';
 import { ID } from '../../public-api';
 import { CommitChangeParam, createChanges } from './internal/commit-change-param';
@@ -15,13 +16,19 @@ export class WebsocketClient {
   private senderId = 0;
   // pageId, lastCommitId
   private readonly lastCommitId = new Map<string, string>();
-  readonly response$ = new (getRx().Subject)<{ senderId: string; data: CommitResponse }>();
-  readonly open$ = new (getRx().Subject)<Event>();
-  readonly close$ = new (getRx().Subject)<CloseEvent>();
-  readonly error$ = new (getRx().Subject)<Event>();
+  readonly response$: Subject<{ senderId: string; data: CommitResponse }>;
+  readonly open$: Subject<Event>;
+  readonly close$: Subject<CloseEvent>;
+  readonly error$: Subject<Event>;
 
   constructor(private readonly userId: ID) {
+    const { Subject } = getRx();
     this.socket = new WebSocket(endpoint);
+    this.response$ = new Subject<{ senderId: string; data: CommitResponse }>();
+    this.open$ = new Subject<Event>();
+    this.close$ = new Subject<CloseEvent>();
+    this.error$ = new Subject<Event>();
+
     this.initialize();
   }
 
