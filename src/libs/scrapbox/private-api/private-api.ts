@@ -1,4 +1,4 @@
-import { generateId, ID } from '../public-api';
+import { generateId, ID, isPage, onPageChange } from '../public-api';
 import { ApiClient } from './api-client/api-client';
 import { CommitChangeParam, WebsocketClient } from './websocket-clinet';
 
@@ -86,9 +86,24 @@ export class PrivateApi {
 
 const preparePrivateApi = async () => {
   const apiClient = new ApiClient();
-  const [user, project, page] = await Promise.all([apiClient.getMe(), apiClient.getCurrentProject(), apiClient.getCurrentPage()]);
+  const [user, project] = await Promise.all([apiClient.getMe(), apiClient.getCurrentProject()]);
   const websocketClient = new WebsocketClient(user.id);
-  await websocketClient.joinRoom({ projectId: project.id, pageId: page.id });
+
+  if (isPage()) {
+    const page = await apiClient.getCurrentPage();
+    await websocketClient.setPage({ projectId: project.id, pageId: page.id, lastCommitId: page.commitId });
+  }
+
+  // register page change handling
+  onPageChange(async (title) => {
+    // layout:list
+    if (title === null) {
+      websocketClient.setPage({ projectId: project.id, pageId: null });
+    } else {
+      const page = await apiClient.getCurrentPage();
+      websocketClient.setPage({ projectId: project.id, pageId: page.id, lastCommitId: page.commitId });
+    }
+  });
 
   return new PrivateApi(user.id, apiClient, websocketClient);
 };
