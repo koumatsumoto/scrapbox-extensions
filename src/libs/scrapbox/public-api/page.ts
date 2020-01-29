@@ -18,7 +18,7 @@ export const hasEmptyEOF = (lines: PageLine[] = getLines()) => {
   return last.text === '';
 };
 
-const pageChangeObserveInterval = 500 * 1;
+const pageChangeObserveInterval = 250;
 export const onPageChange = (callback: (title: string | null) => any) => {
   let state: string | null = getScrapbox().Page.title;
 
