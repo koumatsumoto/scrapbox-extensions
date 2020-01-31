@@ -14,3 +14,11 @@ export const getPageUrl = (title: string) => `${baseUrl}/${encodeURIComponent(ge
 
 // ready after api requests initiated on react bootstrap completed
 export const isScrapboxReady = () => getCurrentProjectName() !== undefined && getCurrentPageName() !== undefined;
+
+export const changeRoute = (title: string) =>
+  window.history.pushState(
+    {
+      path: `/${encodeURIComponent(getCurrentProjectName())}/${title}`,
+    },
+    title,
+  );
