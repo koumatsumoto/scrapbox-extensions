@@ -7,7 +7,7 @@ import { updateScriptText } from './internal/update-script-text';
 
 const applicationBootstrapWaitTime = 1000 * 8;
 
-export const deployByPrivateApi = async (param: { browser: puppeteer.Browser; url: string; codeTitle: string; sourceCode: string }) => {
+const deployByPrivateApi = async (param: { browser: puppeteer.Browser; url: string; codeTitle: string; sourceCode: string }) => {
   const context = await getFullPermissionBrowserContext(param.browser, config.origin);
   const page = await getConfiguredPage(context);
 

@@ -1,1 +1,1 @@
-export { deployByPrivateApi } from './deploy-by-api';
+export { deployCssAndScriptForProject } from './deploy-by-api';

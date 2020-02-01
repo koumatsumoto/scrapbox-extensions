@@ -3,7 +3,7 @@ require('dotenv').config();
 
 import * as puppeteer from 'puppeteer';
 import { config } from './config';
-import { deployCssAndScriptForProject } from './internal/deploy-by-api';
+import { deployCssAndScriptForProject } from './internal';
 
 (async () => {
   const browser = await puppeteer.launch({ headless: !config.local });
