@@ -72,6 +72,7 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
 .page-list {
   $row-size: 108px;
   $img-size: $row-size - 24px;
+  $list-item-each-space: 8px;
 
   ul.grid {
     display: flex;
@@ -83,12 +84,17 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
     li {
       width: 100%;
       height: $row-size;
-      margin: 0;
+      margin: $list-item-each-space 0 0;
       visibility: visible;
+
+      &:first-of-type {
+        margin-top: 0;
+      }
 
       &.page-list-item a {
         .content {
           flex-direction: row;
+          height: 100%;
         }
 
         .icon {
@@ -97,16 +103,15 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
 
           img {
             position: absolute;
-            top: calc(50% + 5px);
             left: 8px;
             max-width: $img-size;
             max-height: $img-size;
-            transform: translateY(-50%);
           }
         }
 
         .header {
           order: 2;
+          border: none;
         }
 
         .description {
