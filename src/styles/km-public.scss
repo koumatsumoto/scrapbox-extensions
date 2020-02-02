@@ -67,6 +67,25 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
   display: none !important;
 }
 
+// layout:list
+// main list items in index page
+.page-list {
+  ul.grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0px;
+  }
+
+  .grid li {
+    width: 100%;
+    height: 214px;
+    margin: 0;
+    visibility: visible;
+  }
+}
+
 @media (max-width: 767px) {
   // page container
   .col-page {
