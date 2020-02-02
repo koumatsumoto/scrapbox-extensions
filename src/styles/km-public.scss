@@ -93,14 +93,17 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
       }
 
       &.page-list-item a {
-        transition: all 2s;
+        $anim: 108ms map_get($easing, easeInOutCirc);
+        transition: background-color $anim, box-shadow $anim, opacity $anim;
 
         &:hover {
-          background-color: map_get($material-colors, blue-grey-100);
+          // TODO: adjust
+          background-color: #ebf2ff;
+          opacity: 0.9;
+        }
 
-          .hover {
-            opacity: initial;
-          }
+        .hover {
+          display: none;
         }
 
         .content {
