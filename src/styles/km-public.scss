@@ -73,6 +73,7 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
   $row-size: 108px;
   $img-size: $row-size - 24px;
   $list-item-each-space: 8px;
+  $list-item-inner-padding: 16px;
 
   ul.grid {
     display: flex;
@@ -92,6 +93,16 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
       }
 
       &.page-list-item a {
+        transition: all 2s;
+
+        &:hover {
+          background-color: map_get($material-colors, blue-grey-100);
+
+          .hover {
+            opacity: initial;
+          }
+        }
+
         .content {
           flex-direction: row;
           height: 100%;
@@ -103,6 +114,7 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
 
           img {
             position: absolute;
+            top: 8px;
             left: 8px;
             max-width: $img-size;
             max-height: $img-size;
@@ -111,6 +123,8 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
 
         .header {
           order: 2;
+          padding: $list-item-inner-padding $list-item-inner-padding
+            $list-item-inner-padding $row-size;
           border: none;
         }
 
