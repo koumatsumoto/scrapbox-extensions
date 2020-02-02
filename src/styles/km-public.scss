@@ -70,8 +70,8 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
 // layout:list
 // main list items in index page
 .page-list {
-  $row-size: 108px;
-  $img-size: $row-size - 24px;
+  $row-size: 104px;
+  $img-size: 72px;
   $list-item-each-space: 8px;
   $list-item-inner-padding: 16px;
 
@@ -117,8 +117,8 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
 
           img {
             position: absolute;
-            top: 8px;
-            left: 8px;
+            top: 16px;
+            left: 12px;
             max-width: $img-size;
             max-height: $img-size;
           }
