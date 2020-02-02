@@ -33,6 +33,12 @@ export class PrivateApi {
       this.pageData = page;
       this.websocketClient.joinRoom({ projectId: this.projectId, pageId: page === null ? null : page.id });
     });
+    // handle update by other user
+    this.websocketClient.commitIdUpdate$.subscribe((data) => {
+      if (this.pageData && this.pageData.id === data.pageId) {
+        this.pageData.commitId = data.parentId;
+      }
+    });
     onPageChange((t) => this.pageRequest$.next(t));
   }
 
