@@ -73,7 +73,8 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
   $row-size: 104px;
   $img-size: 72px;
   $list-item-each-space: 8px;
-  $list-item-inner-padding: 16px;
+  $list-item-inner-v-padding: 16px;
+  $list-item-inner-h-padding: 12px;
 
   ul.grid {
     display: flex;
@@ -99,7 +100,7 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
         &:hover {
           // TODO: adjust
           background-color: #ebf2ff;
-          opacity: 0.9;
+          opacity: 0.96;
         }
 
         .hover {
@@ -117,8 +118,8 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
 
           img {
             position: absolute;
-            top: 16px;
-            left: 12px;
+            top: $list-item-inner-v-padding;
+            left: $list-item-inner-h-padding;
             max-width: $img-size;
             max-height: $img-size;
           }
@@ -126,8 +127,8 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
 
         .header {
           order: 2;
-          padding: $list-item-inner-padding $list-item-inner-padding
-            $list-item-inner-padding $row-size;
+          padding: $list-item-inner-v-padding $list-item-inner-h-padding
+            $list-item-inner-v-padding $row-size;
           border: none;
         }
 
