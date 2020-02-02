@@ -14,7 +14,7 @@ const loadFile = (path: string) =>
   );
 
 const deployTime = getJSTString();
-const versionString = `/* ${version}: ${deployTime} */`;
+const versionString = `/* ${version.slice(0, 7)} ${deployTime} */`;
 const browserScriptPath = './dist/run-in-puppeteer-page.min.js';
 
 // first space is needed for scrapbox code block
