@@ -70,8 +70,8 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
 // layout:list
 // main list items in index page
 .page-list {
-  $row-size: 214px;
-  $img-size: 214px - 64px;
+  $row-size: 108px;
+  $img-size: $row-size - 24px;
 
   ul.grid {
     display: flex;
@@ -93,6 +93,16 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
 
         .icon {
           order: 1;
+          padding: 0;
+
+          img {
+            position: absolute;
+            top: calc(50% + 5px);
+            left: 8px;
+            max-width: $img-size;
+            max-height: $img-size;
+            transform: translateY(-50%);
+          }
         }
 
         .header {
@@ -100,7 +110,7 @@ body:not(#{map_get($custom-css-class-names, 'apply-login-css-class')}) {
         }
 
         .description {
-          order: 3;
+          display: none;
         }
       }
     }
