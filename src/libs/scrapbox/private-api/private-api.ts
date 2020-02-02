@@ -36,7 +36,7 @@ export class PrivateApi {
     // handle update by other user
     this.websocketClient.commitIdUpdate$.subscribe((data) => {
       if (this.pageData && this.pageData.id === data.pageId) {
-        this.pageData.commitId = data.parentId;
+        this.pageData.commitId = data.id;
       }
     });
     onPageChange((t) => this.pageRequest$.next(t));

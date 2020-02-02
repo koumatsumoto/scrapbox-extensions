@@ -98,6 +98,7 @@ export type ExternalCommitData = {
   userId: ID;
   projectId: string;
   freeze: true;
+  // new commit id
   id: string;
 };
 
