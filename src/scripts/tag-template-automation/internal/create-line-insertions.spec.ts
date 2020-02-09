@@ -10,8 +10,6 @@ describe('createLineInsertions', () => {
   const hasPreviousTags = [{ text: 'Symbol' }, { text: '#tag' }] as any;
 
   it('should work', () => {
-    jest.spyOn(global.Date, 'now').mockImplementationOnce(() => new Date('2019-05-14T11:01:58.135Z').valueOf());
-
     expect(createLineInsertions(words, date, dailyTitleOnly)).toEqual([{ text: '#12:00 #tag1 #tag2' }, { text: '' }]);
     expect(createLineInsertions(words, date, dailyTitleEOF)).toEqual([{ text: '#12:00 #tag1 #tag2' }, { text: '' }]);
     expect(createLineInsertions(words, date, symbolTitleOnly)).toEqual([{ text: '#2020/02/09 #tag1 #tag2' }, { text: '' }]);
