@@ -1,8 +1,9 @@
+import { getFakeJSTDate } from '../../../libs/common/test-helpers';
 import { createLineInsertions } from './create-line-insertions';
 
 describe('createLineInsertions', () => {
   const words = ['tag1', 'tag2'];
-  const date = new Date(1581218918036); // 2020-02-09T03:28:38.036Z
+  const date = getFakeJSTDate(1581218918036); // 2020-02-09T03:28:38.036Z
   const dailyTitleOnly = [{ text: '2020/02/08' }] as any;
   const dailyTitleEOF = [{ text: '2020/02/08' }, { text: '' }] as any;
   const symbolTitleOnly = [{ text: 'Symbol' }] as any;

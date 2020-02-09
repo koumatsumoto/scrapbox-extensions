@@ -13,7 +13,7 @@ export const createLineInsertions = (words: string[], date: Date = new Date(), l
   }
 
   const changes: { text: string }[] = [];
-  const timeWord = isDiaryPageTitle(lines[0].text) ? getTimeText() : getDateText();
+  const timeWord = isDiaryPageTitle(lines[0].text) ? getTimeText(date) : getDateText(date);
   const tagLineText = [timeWord, ...words].map(makeTag).join(' ');
 
   if (lines.length === 1) {
