@@ -5,7 +5,8 @@ import { customCSSClassName } from '../config';
 
 const createDatetimeElement = (timestamp: number) => {
   const elem = document.createElement('div');
-  elem.textContent = getFormattedDateString(new Date(timestamp));
+  // TODO: need commonize timestamp operation, scrapbox use second, but millisecond requires in javascript
+  elem.textContent = getFormattedDateString(new Date(timestamp * 1000));
   elem.classList.add(customCSSClassName.datetimeOnListItem);
 
   return elem;
