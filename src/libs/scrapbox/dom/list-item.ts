@@ -8,7 +8,7 @@ const selectListItems = (parent: ParentNode = document) => getElements(selectors
 
 const selectTitle = (element: ListItemElement) => getElementOrFail('.title', element);
 
-export const selectContainer = (element: ListItemElement) => getElementOrFail('.container', element);
+export const selectContainer = (element: ListItemElement) => getElementOrFail('.content', element);
 
 // internal
 const retrieveTitle = (listItem: ListItemElement) => {
