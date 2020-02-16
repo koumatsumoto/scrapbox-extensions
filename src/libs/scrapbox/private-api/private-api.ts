@@ -61,37 +61,6 @@ export class PrivateApi {
     });
   }
 
-  async updateTitleAndDescription(param: { title: string; description?: string } | { title?: string; description: string }) {
-    if (!this.pageData) {
-      throw new Error('Page data is not set');
-    }
-
-    const titleLine = this.pageData.lines[0];
-    const changes: CommitChangeParam[] = [];
-
-    if (typeof param.title === 'string') {
-      changes.push({ type: 'update', id: titleLine.id, text: param.title });
-      changes.push({ type: 'title', title: param.title });
-    }
-    if (typeof param.description === 'string') {
-      // page has not description line yet
-      if (this.pageData.lines.length === 1) {
-        changes.push({ type: 'insert', text: param.description });
-        changes.push({ type: 'insert', text: '' });
-      } else {
-        changes.push({ type: 'update', id: this.pageData.lines[1].id, text: param.description });
-      }
-      changes.push({ type: 'description', text: param.description });
-    }
-
-    return this.commit({
-      changes,
-      projectId: this.projectId,
-      pageId: this.pageData.id,
-      commitId: this.pageData.commitId,
-    });
-  }
-
   private async commit(param: { projectId: string; pageId: string; commitId: string; changes: CommitChangeParam[] }) {
     const response = await this.websocketClient.commit({
       userId: this.userId,
