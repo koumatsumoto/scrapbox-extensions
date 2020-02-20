@@ -8,6 +8,10 @@ const appendImg = (elem: HTMLElement) => {
   elem.appendChild(container);
 };
 
+const yetHaveIcon = (elem: HTMLElement) => {
+  return elem.querySelector('.icon') === null;
+};
+
 /**
  * Add <img> into list item that does not have own image.
  */
@@ -15,7 +19,9 @@ export const defaultImage = () =>
   registerElementManagement({
     targetsSelector: listItemContentSelectorFn,
     onFirstCheck: (elem) => {
-      appendImg(elem);
+      if (yetHaveIcon(elem)) {
+        appendImg(elem);
+      }
     },
     checkInterval: 1000 * 5,
   });
