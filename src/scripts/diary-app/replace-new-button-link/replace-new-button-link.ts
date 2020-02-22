@@ -12,5 +12,8 @@ export const replaceNewButtonLink = () => {
 };
 
 export const registerUpdatingNewButton = () => {
+  // initial
+  replaceNewButtonLink();
+  // on route change
   onPageChange(replaceNewButtonLink);
 };
