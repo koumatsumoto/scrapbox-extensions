@@ -21,7 +21,10 @@ export class MyConsoleButton extends HTMLElement {
   }
 
   private async openDialog() {
-    openTagFormDialog(tagOptions);
+    const result = await openTagFormDialog(tagOptions);
+    console.log(result);
+
+    return;
 
     await openDialogAndWriteTags();
   }
