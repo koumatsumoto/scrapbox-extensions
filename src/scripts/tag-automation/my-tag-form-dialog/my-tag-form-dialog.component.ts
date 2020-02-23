@@ -1,7 +1,7 @@
 import { removeElement } from '../../../libs/common/dom';
 import { TagOption } from '../config';
 const html = require('./my-tag-form-dialog.component.html');
-import { addWord, removeWord } from './textarea-operation';
+import { addWord, removeWord, splitWords } from './textarea-operation';
 
 type CustomDialogResult<T> = { ok: false } | { ok: true; data: T };
 
@@ -28,7 +28,6 @@ export class MyTagFormDialog extends HTMLElement {
   static readonly elementName = 'my-tag-form-dialog';
   private dialogElement: HTMLDialogElement;
   private checkboxesContainerElement: HTMLDivElement;
-  private formElement: HTMLFormElement;
   private inputTextElement: HTMLInputElement;
   // this component can emit result only once.
   // after emission, component will be removed from <body> and destroyed.
@@ -39,7 +38,6 @@ export class MyTagFormDialog extends HTMLElement {
 
     this.innerHTML = `${html}`;
     this.dialogElement = this.querySelector<HTMLDialogElement>('dialog')!;
-    this.formElement = this.querySelector<HTMLFormElement>('form')!;
     this.inputTextElement = this.querySelector<HTMLInputElement>('input[type=text]')!;
 
     // construct DOM of checkboxes
@@ -58,12 +56,11 @@ export class MyTagFormDialog extends HTMLElement {
     // button handling
     const cancelButton = this.querySelector<HTMLButtonElement>('button[value=cancel]')!;
     const submitButton = this.querySelector<HTMLButtonElement>('button[value=default]')!;
-    this.dialogCloseResult = new Promise<CustomDialogResult<string[]>>((resolve, reject) => {
+    this.dialogCloseResult = new Promise<CustomDialogResult<string[]>>((resolve) => {
       submitButton.addEventListener(
         'click',
         () => {
-          const values = this.retrieveFormValues();
-          resolve({ ok: true, data: values });
+          resolve({ ok: true, data: splitWords(this.inputTextElement.value) });
           this.dialogElement.close();
           removeElement(this);
         },
@@ -85,12 +82,5 @@ export class MyTagFormDialog extends HTMLElement {
     this.dialogElement.showModal();
 
     return this.dialogCloseResult;
-  }
-
-  private retrieveFormValues() {
-    const formData = new FormData(this.formElement);
-    const checked = formData.getAll('tags') as string[];
-
-    return checked.filter((str) => 0 < str.length);
   }
 }

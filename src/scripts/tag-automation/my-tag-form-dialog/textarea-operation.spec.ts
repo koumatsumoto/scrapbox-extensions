@@ -5,6 +5,7 @@ describe('textarea operation', () => {
     it('should work', () => {
       expect(splitWords('a b c')).toEqual(['a', 'b', 'c']);
       expect(splitWords(' a b  c ')).toEqual(['a', 'b', 'c']);
+      expect(splitWords(' a b　c ')).toEqual(['a', 'b', 'c']); // full-width space
     });
   });
 

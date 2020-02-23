@@ -1,6 +1,9 @@
+// space, full-width space, tab
+const spaceRegexp = /[\u{20}\u{3000}\t]/gu;
+
 export const splitWords = (text: string) =>
   text
-    .split(' ')
+    .split(spaceRegexp)
     .map((str) => str.trim())
     .filter((wordOrEmpty) => !!wordOrEmpty);
 
