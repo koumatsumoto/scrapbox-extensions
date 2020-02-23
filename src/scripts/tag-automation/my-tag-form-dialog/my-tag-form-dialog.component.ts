@@ -5,6 +5,25 @@ const html = require('./my-tag-form-dialog.component.html');
 
 type CustomDialogResult<T> = { ok: false } | { ok: true; data: T };
 
+const makeCheckboxesHTML = (tagOptions: TagOption[]) => {
+  let labelId = 0;
+
+  return tagOptions
+    .map((group) => {
+      const inputs = group
+        .map((obj) => {
+          const id = `tag-${labelId++}`;
+          const value = obj.value;
+
+          return `<input id="${id}" type="checkbox" name="tags" value="${value}"><label for="${id}">${value}</label>`;
+        })
+        .join('');
+
+      return `<div class="tag-group">${inputs}</div>`;
+    })
+    .join('');
+};
+
 export class MyTagFormDialog extends HTMLElement {
   static readonly elementName = 'my-tag-form-dialog';
   private dialogElement: HTMLDialogElement;
@@ -22,7 +41,13 @@ export class MyTagFormDialog extends HTMLElement {
     this.formElement = this.querySelector<HTMLFormElement>('form')!;
     // construct DOM of checkboxes
     this.checkboxesContainerElement = this.querySelector<HTMLDivElement>('div.checkboxes')!;
-    this.checkboxesContainerElement.innerHTML = this.makeCheckboxesHTML(tagOptions);
+    this.checkboxesContainerElement.innerHTML = makeCheckboxesHTML(tagOptions);
+    for (const e of this.querySelectorAll<HTMLInputElement>('input[type=checkbox]')) {
+      e.addEventListener('change', (event) => {
+        console.log(event);
+      });
+    }
+
     // button handling
     const cancelButton = this.querySelector<HTMLButtonElement>('button[value=cancel]')!;
     const submitButton = this.querySelector<HTMLButtonElement>('button[value=default]')!;
@@ -53,23 +78,6 @@ export class MyTagFormDialog extends HTMLElement {
     this.dialogElement.showModal();
 
     return this.dialogCloseResult;
-  }
-
-  private makeCheckboxesHTML(tagOptions: TagOption[]) {
-    return tagOptions
-      .map((group) => {
-        const inputs = group
-          .map((obj) => {
-            const id = `usd-${this.labelId++}`;
-            const value = obj.value;
-
-            return `<input id="${id}" type="checkbox" name="tags" value="${value}"><label for="${id}">${value}</label>`;
-          })
-          .join('');
-
-        return `<div class="tag-group">${inputs}</div>`;
-      })
-      .join('');
   }
 
   private retrieveFormValues() {
