@@ -3,7 +3,8 @@
 my-tag-form-dialog {
   dialog {
     width: 80vw;
-    min-height: 40vh;
+    // don't use vh because viewport will be changed on keyboard area appeared
+    min-height: 320px;
     max-height: 80vh;
     padding: 0;
     overflow: hidden;
