@@ -1,3 +1,4 @@
+import { removeElement } from '../../../libs/common/dom';
 import { TagOption } from '../config';
 
 const html = require('./my-tag-form-dialog.component.html');
@@ -32,6 +33,7 @@ export class MyTagFormDialog extends HTMLElement {
           const values = this.retrieveFormValues();
           resolve({ ok: true, data: values });
           this.dialogElement.close();
+          removeElement(this);
         },
         { once: true },
       );
@@ -40,13 +42,14 @@ export class MyTagFormDialog extends HTMLElement {
         () => {
           resolve({ ok: false });
           this.dialogElement.close();
+          removeElement(this);
         },
         { once: true },
       );
     });
   }
 
-  showModal() {
+  open() {
     this.dialogElement.showModal();
 
     return this.dialogCloseResult;
@@ -77,14 +80,15 @@ export class MyTagFormDialog extends HTMLElement {
   }
 }
 
-const isDefined = false;
+let isDefined = false;
 export const openTagFormDialog = (tagOptions: TagOption[]) => {
   if (!isDefined) {
     customElements.define(MyTagFormDialog.elementName, MyTagFormDialog);
+    isDefined = true;
   }
 
   const dialog = new MyTagFormDialog(tagOptions);
   document.body.appendChild(dialog);
 
-  return dialog.showModal();
+  return dialog.open();
 };
