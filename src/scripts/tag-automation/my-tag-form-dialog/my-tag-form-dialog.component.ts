@@ -47,6 +47,7 @@ export class MyTagFormDialog extends HTMLElement {
       e.addEventListener('change', () => {
         if (e.checked) {
           addWord(e.value, this.inputTextElement);
+          this.inputTextElement.value = this.inputTextElement.value + ' ';
         } else {
           removeWord(e.value, this.inputTextElement);
         }
