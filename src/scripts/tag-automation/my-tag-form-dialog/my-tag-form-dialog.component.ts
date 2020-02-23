@@ -1,7 +1,7 @@
 import { removeElement } from '../../../libs/common/dom';
 import { TagOption } from '../config';
-
 const html = require('./my-tag-form-dialog.component.html');
+import { addWord, removeWord } from './textarea-operation';
 
 type CustomDialogResult<T> = { ok: false } | { ok: true; data: T };
 
@@ -29,8 +29,9 @@ export class MyTagFormDialog extends HTMLElement {
   private dialogElement: HTMLDialogElement;
   private checkboxesContainerElement: HTMLDivElement;
   private formElement: HTMLFormElement;
-  // for checkbox id
-  private labelId = 0;
+  private textareaElement: HTMLTextAreaElement;
+  // this component can emit result only once.
+  // after emission, component will be removed from <body> and destroyed.
   private dialogCloseResult: Promise<CustomDialogResult<string[]>>;
 
   constructor(tagOptions: TagOption[]) {
@@ -39,12 +40,18 @@ export class MyTagFormDialog extends HTMLElement {
     this.innerHTML = `${html}`;
     this.dialogElement = this.querySelector<HTMLDialogElement>('dialog')!;
     this.formElement = this.querySelector<HTMLFormElement>('form')!;
+    this.textareaElement = this.querySelector<HTMLTextAreaElement>('textarea')!;
+
     // construct DOM of checkboxes
     this.checkboxesContainerElement = this.querySelector<HTMLDivElement>('div.checkboxes')!;
     this.checkboxesContainerElement.innerHTML = makeCheckboxesHTML(tagOptions);
     for (const e of this.querySelectorAll<HTMLInputElement>('input[type=checkbox]')) {
-      e.addEventListener('change', (event) => {
-        console.log(event);
+      e.addEventListener('change', () => {
+        if (e.checked) {
+          addWord(e.value, this.textareaElement);
+        } else {
+          removeWord(e.value, this.textareaElement);
+        }
       });
     }
 
