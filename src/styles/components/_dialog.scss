@@ -41,6 +41,7 @@ my-tag-form-dialog {
   .input-container {
     position: relative; // for border under input
     flex: 0 1 auto;
+    margin-bottom: 8px;
   }
 
   /* buttons layout */
@@ -161,7 +162,6 @@ my-tag-form-dialog {
     width: 100%;
     padding: 8px 0;
     color: #333;
-    letter-spacing: 1px;
     border: 0;
     border-bottom: 1px solid #ccc;
     outline: none;
@@ -182,7 +182,7 @@ my-tag-form-dialog {
       width: 0;
       height: 100%;
       content: '';
-      background-color: #4caf50;
+      background-color: #fb8c00;
       transition: 0.4s;
     }
     & ~ .focus-border:after {
