@@ -60,7 +60,7 @@ my-tag-form-dialog {
     font: inherit;
     font-size: 14px;
     line-height: 32px;
-    color: map_get($material-colors, 'grey-600');
+    color: map_get($material-colors, 'grey-500');
     text-align: left;
     white-space: nowrap;
     vertical-align: middle;
@@ -71,8 +71,8 @@ my-tag-form-dialog {
     border: 1px solid #eeeeee;
     border-radius: 4px;
     box-shadow: 2px 3px 2px -2px rgba(206, 206, 206, 0.78),
-      6px 6px 6px -4px rgba(232, 232, 232, 0.72),
-      -5px -4px 6px -6px rgba(206, 206, 206, 0.72);
+      6px 6px 6px -4px rgba(232, 232, 232, 0.54),
+      -5px -4px 6px -6px rgba(206, 206, 206, 0.54);
     transition: all 0.2s;
     -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
@@ -95,6 +95,7 @@ my-tag-form-dialog {
     font-style: normal;
     font-weight: 900;
     font-variant: normal;
+    color: map_get($material-colors, 'grey-400');
     content: '\f067';
     opacity: 0.54;
     transition: transform 0.12s ease-in-out;
