@@ -6,17 +6,17 @@ export const splitWords = (text: string) =>
 
 export const joinWords = (words: string[]) => words.join(' ');
 
-export const addWord = (word: string, textarea: HTMLTextAreaElement) => {
-  const words = splitWords(textarea.value);
+export const addWord = (word: string, element: { value: string }) => {
+  const words = splitWords(element.value);
   if (!words.includes(word)) {
     words.push(word);
   }
 
-  textarea.value = joinWords(words);
+  element.value = joinWords(words);
 };
 
-export const removeWord = (word: string, textarea: HTMLTextAreaElement) => {
-  const existing = splitWords(textarea.value);
+export const removeWord = (word: string, element: { value: string }) => {
+  const existing = splitWords(element.value);
   const result: string[] = [];
 
   for (const e of existing) {
@@ -25,5 +25,5 @@ export const removeWord = (word: string, textarea: HTMLTextAreaElement) => {
     }
   }
 
-  textarea.value = joinWords(result);
+  element.value = joinWords(result);
 };

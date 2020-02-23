@@ -17,14 +17,14 @@ describe('textarea operation', () => {
 
   describe('addWord', () => {
     it('should add new word', () => {
-      const textarea = { value: 'a b' } as any;
+      const textarea = { value: 'a b' };
       addWord('c', textarea);
 
       expect(textarea.value).toBe('a b c');
     });
 
     it('should not add duplicated word', () => {
-      const textarea = { value: 'a b' } as any;
+      const textarea = { value: 'a b' };
       addWord('b', textarea);
 
       expect(textarea.value).toBe('a b');
@@ -33,14 +33,14 @@ describe('textarea operation', () => {
 
   describe('removeWord', () => {
     it('should remove existing word', () => {
-      const textarea = { value: 'a b c' } as any;
+      const textarea = { value: 'a b c' };
       removeWord('a', textarea);
 
       expect(textarea.value).toBe('b c');
     });
 
     it('should do nothing if not existing', () => {
-      const textarea = { value: 'a b c' } as any;
+      const textarea = { value: 'a b c' };
       removeWord('d', textarea);
 
       expect(textarea.value).toBe('a b c');

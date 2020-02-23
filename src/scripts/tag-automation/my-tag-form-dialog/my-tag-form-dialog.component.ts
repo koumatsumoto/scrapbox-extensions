@@ -29,7 +29,7 @@ export class MyTagFormDialog extends HTMLElement {
   private dialogElement: HTMLDialogElement;
   private checkboxesContainerElement: HTMLDivElement;
   private formElement: HTMLFormElement;
-  private textareaElement: HTMLTextAreaElement;
+  private inputTextElement: HTMLInputElement;
   // this component can emit result only once.
   // after emission, component will be removed from <body> and destroyed.
   private dialogCloseResult: Promise<CustomDialogResult<string[]>>;
@@ -40,7 +40,7 @@ export class MyTagFormDialog extends HTMLElement {
     this.innerHTML = `${html}`;
     this.dialogElement = this.querySelector<HTMLDialogElement>('dialog')!;
     this.formElement = this.querySelector<HTMLFormElement>('form')!;
-    this.textareaElement = this.querySelector<HTMLTextAreaElement>('textarea')!;
+    this.inputTextElement = this.querySelector<HTMLInputElement>('input[type=text]')!;
 
     // construct DOM of checkboxes
     this.checkboxesContainerElement = this.querySelector<HTMLDivElement>('div.checkboxes')!;
@@ -48,9 +48,9 @@ export class MyTagFormDialog extends HTMLElement {
     for (const e of this.querySelectorAll<HTMLInputElement>('input[type=checkbox]')) {
       e.addEventListener('change', () => {
         if (e.checked) {
-          addWord(e.value, this.textareaElement);
+          addWord(e.value, this.inputTextElement);
         } else {
-          removeWord(e.value, this.textareaElement);
+          removeWord(e.value, this.inputTextElement);
         }
       });
     }
