@@ -68,8 +68,11 @@ my-tag-form-dialog {
     -webkit-user-select: none;
     user-select: none;
     background-color: #ffffff;
-    border: 1px solid #c7c7c7;
+    border: 1px solid #eeeeee;
     border-radius: 4px;
+    box-shadow: 2px 3px 2px -2px rgba(206, 206, 206, 0.78),
+      6px 6px 6px -4px rgba(232, 232, 232, 0.72),
+      -5px -4px 6px -6px rgba(206, 206, 206, 0.72);
     transition: all 0.2s;
     -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
