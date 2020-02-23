@@ -1,4 +1,6 @@
 import { openDialogAndWriteTags } from '../../scripts/tag-automation';
+import { tagOptions } from '../../scripts/tag-automation/config';
+import { openTagFormDialog } from '../../scripts/tag-automation/my-tag-form-dialog/my-tag-form-dialog.component';
 
 const html = require('./my-console-button.component.html');
 
@@ -19,6 +21,8 @@ export class MyConsoleButton extends HTMLElement {
   }
 
   private async openDialog() {
+    openTagFormDialog(tagOptions);
+
     await openDialogAndWriteTags();
   }
 }

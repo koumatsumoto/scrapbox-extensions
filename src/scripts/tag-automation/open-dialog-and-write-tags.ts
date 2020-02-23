@@ -2,13 +2,8 @@ import { getDateText, getPrivateApi, isEmptyPage, isTitleOnlyPage, loadPage } fr
 import { tagOptions } from './config';
 import { openDialog } from './dialog';
 import { createLineInsertions } from './internal/create-line-insertions';
-import { openTagFormDialog } from './my-tag-form-dialog/my-tag-form-dialog.component';
 
 export const openDialogAndWriteTags = async () => {
-  openTagFormDialog(tagOptions);
-
-  return;
-
   try {
     const [api, result] = await Promise.all([getPrivateApi(), openDialog({ tagOptions })]);
 
