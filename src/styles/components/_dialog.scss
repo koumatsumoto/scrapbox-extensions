@@ -31,19 +31,24 @@ my-tag-form-dialog {
     padding: 24px 8px 8px 24px;
     overflow: scroll;
     border: none;
+  }
 
-    /* input checkbox layout */
-    & > div {
-      flex: 1 1 auto;
-    }
+  /* input checkbox layout */
+  .checkbox-container {
+    flex: 1 1 auto;
+  }
 
-    /* buttons layout */
-    & > menu {
-      display: flex;
-      flex: 0 1 auto;
-      align-items: center;
-      justify-content: flex-end;
-    }
+  .input-container {
+    position: relative; // for border under input
+    flex: 0 1 auto;
+  }
+
+  /* buttons layout */
+  .button-container {
+    display: flex;
+    flex: 0 1 auto;
+    align-items: center;
+    justify-content: flex-end;
   }
 
   label {
