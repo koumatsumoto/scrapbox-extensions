@@ -16,7 +16,7 @@ my-tag-form-dialog {
 
   .tag-group {
     display: block;
-    padding-bottom: 4px;
+    padding-bottom: 2px;
   }
 
   /* used as layout container */
@@ -25,7 +25,7 @@ my-tag-form-dialog {
     flex-direction: column;
     width: 80vw;
     // don't use vh because viewport will be changed on keyboard area appeared
-    min-height: 350px;
+    min-height: 320px;
     max-height: 80vh;
     padding: 24px 8px 8px 24px;
     overflow: scroll;
