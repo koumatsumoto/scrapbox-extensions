@@ -35,7 +35,7 @@ export const createLineInsertions = (words: string[], date: Date = new Date(), l
       changes.push({ type: 'title', title });
       changes.push({ type: 'insert', text: tagLineText });
       changes.push({ type: 'insert', text: '' });
-      changes.push({ type: 'description', text: 'tagLineText' });
+      changes.push({ type: 'description', text: tagLineText });
 
       break;
     }
