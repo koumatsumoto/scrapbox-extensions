@@ -24,7 +24,8 @@ my-tag-form-dialog {
     display: flex;
     flex-direction: column;
     width: 80vw;
-    min-height: 40vh;
+    // don't use vh because viewport will be changed on keyboard area appeared
+    min-height: 350px;
     max-height: 80vh;
     padding: 24px 8px 8px 24px;
     overflow: scroll;
