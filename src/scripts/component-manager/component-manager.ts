@@ -1,7 +1,7 @@
-import { MyConsoleButton, MyDebugBoard, MyDialog } from '../../components';
+import { MyConsoleButton, MyDebugBoard } from '../../components';
 import { Constructor } from '../../types';
 
-type ManagedComponents = MyConsoleButton | MyDebugBoard | MyDialog;
+type ManagedComponents = MyConsoleButton | MyDebugBoard;
 type ComponentConstructor = Constructor<ManagedComponents>;
 
 /**
@@ -29,10 +29,6 @@ export class ComponentManager {
     // instantiate components and hold its reference
     const consoleButton = new MyConsoleButton();
     this.components.set(MyConsoleButton, consoleButton);
-
-    // global dialog
-    const dialog = new MyDialog();
-    this.components.set(MyDialog, dialog);
 
     // append to dom
     for (const c of this.components.values()) {
