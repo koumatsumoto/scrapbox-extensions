@@ -1,6 +1,6 @@
 import { openDialogAndWriteTags } from '../../scripts/tag-automation';
 import { tagOptions } from '../../scripts/tag-automation/config';
-import { openTagFormDialog } from '../../scripts/tag-automation/my-tag-form-dialog/my-tag-form-dialog.component';
+import { openTagFormDialog } from '../../scripts/tag-automation/my-tag-form-dialog/open-tag-form-dialog';
 
 const html = require('./my-console-button.component.html');
 
