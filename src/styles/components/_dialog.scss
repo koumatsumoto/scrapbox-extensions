@@ -1,6 +1,6 @@
 @import 'src/styles/variables';
 
-$dialog-mix-width: 400px;
+$dialog-min-width: 400px;
 $dialog-max-width: 84vw;
 // don't use vh because viewport will be changed on keyboard area appeared
 $dialog-min-height: 320px;
