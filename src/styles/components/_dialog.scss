@@ -10,8 +10,8 @@ my-tag-form-dialog {
   // layout size
   dialog,
   form {
-    min-width: $dialog--min-width;
-    max-width: $dialog--max-width;
+    min-width: $dialog-min-width;
+    max-width: $dialog-max-width;
     min-height: $dialog-min-height;
     max-height: $dialog-max-height;
   }
