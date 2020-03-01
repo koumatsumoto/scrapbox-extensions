@@ -1,11 +1,15 @@
 @import 'src/styles/variables';
 
+$dialog-width: 84vw;
+// don't use vh because viewport will be changed on keyboard area appeared
+$dialog-min-height: 320px;
+$dialog-max-height: 80vh;
+
 my-tag-form-dialog {
   dialog {
-    width: 80vw;
-    // don't use vh because viewport will be changed on keyboard area appeared
-    min-height: 320px;
-    max-height: 80vh;
+    width: $dialog-width;
+    min-height: $dialog-min-height;
+    max-height: $dialog-max-height;
     padding: 0;
     overflow: hidden;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -24,10 +28,9 @@ my-tag-form-dialog {
   form {
     display: flex;
     flex-direction: column;
-    width: 80vw;
-    // don't use vh because viewport will be changed on keyboard area appeared
-    min-height: 320px;
-    max-height: 80vh;
+    width: $dialog-width;
+    min-height: $dialog-min-height;
+    max-height: $dialog-max-height;
     padding: 24px 8px 8px 24px;
     overflow: scroll;
     border: none;
