@@ -27,7 +27,8 @@ module.exports = {
     '/testing/',
     '/tests/',
   ],
-  coverageReporters: ['lcov', 'text-summary'],
+  // often not working in circle-ci
+  // coverageReporters: ['lcov', 'text-summary'],
   verbose: true,
   preset: 'ts-jest',
   restoreMocks: true,
