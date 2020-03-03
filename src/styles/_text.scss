@@ -64,6 +64,8 @@
       $color: map_get($COLORS, 'bordered-tag');
       $border: 1px solid $color;
       $font-size: map_get($font-size, 'bordered-tag');
+      $color-hovered: map_get($COLORS, 'bordered-hover');
+      $background-color-hovered: map_get($COLORS, 'bordered-hover-bg');
 
       // "#"
       span:first-child {
@@ -89,8 +91,8 @@
       }
 
       &:hover {
-        color: #ea692d !important;
-        background-color: #ffe3d5;
+        color: $color-hovered !important;
+        background-color: $background-color-hovered;
       }
     }
   }
