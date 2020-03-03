@@ -62,7 +62,7 @@
     // hash tag
     &[type='hashTag'] {
       $color: map_get($COLORS, 'bordered-tag');
-      $border: 1px solid map_get($COLORS, 'bordered-tag-border');
+      $border: 1px solid $color;
       $font-size: map_get($font-size, 'bordered-tag');
 
       // "#"
