@@ -87,7 +87,7 @@
         background: #fff;
         border: $border;
         border-radius: 2px;
-        transition: 0.24s;
+        transition: 0.24s map_get($easing, easeInOutCirc);
       }
 
       &:hover {
