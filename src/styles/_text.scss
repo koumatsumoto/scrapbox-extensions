@@ -43,7 +43,7 @@
       &:visited,
       &:hover,
       &:active {
-        color: map_get($textColors, 'page-link') !important;
+        color: map_get($COLORS, 'page-link') !important;
         text-decoration: none;
       }
     }
@@ -54,14 +54,16 @@
       &:visited,
       &:hover,
       &:active {
-        color: map_get($textColors, 'empty-page-link') !important;
+        color: map_get($COLORS, 'empty-page-link') !important;
         text-decoration: none;
       }
     }
 
     // hash tag
     &[type='hashTag'] {
-      $color: map_get($textColors, 'bordered-tag');
+      $color: map_get($COLORS, 'bordered-tag');
+      $border: 1px solid map_get($COLORS, 'bordered-tag-border');
+      $font-size: map_get($font-size, 'bordered-tag');
 
       // "#"
       span:first-child {
@@ -77,11 +79,11 @@
         padding: 4px 6px;
         margin: 8px 2px 8px 0;
         font-family: 'Kosugi Maru', sans-serif !important;
-        font-size: 0.88em;
-        line-height: 16px;
+        font-size: $font-size;
+        line-height: 15px;
         color: $color !important;
         background: #fff;
-        border: 1px solid #f27e48;
+        border: $border;
         border-radius: 2px;
         transition: 0.24s;
       }
