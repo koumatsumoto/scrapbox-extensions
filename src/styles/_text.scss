@@ -61,6 +61,8 @@
 
     // hash tag
     &[type='hashTag'] {
+      $color: map_get($textColors, 'bordered-tag');
+
       // "#"
       span:first-child {
         display: none;
@@ -77,7 +79,7 @@
         font-family: 'Kosugi Maru', sans-serif !important;
         font-size: 0.88em;
         line-height: 16px;
-        color: #f27e48 !important;
+        color: $color !important;
         background: #fff;
         border: 1px solid #f27e48;
         border-radius: 2px;
