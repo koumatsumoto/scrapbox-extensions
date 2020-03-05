@@ -39,4 +39,17 @@ export class ScrapboxObserver {
   }
 }
 
-export const scrapboxObserver = new ScrapboxObserver();
+/**
+ * cannot instantiate until RxJS imported.
+ * call this after preparation.
+ */
+let scrapboxObserver: ScrapboxObserver;
+export const getScrapboxObserver = () => {
+  if (scrapboxObserver) {
+    return scrapboxObserver;
+  }
+
+  scrapboxObserver = new ScrapboxObserver();
+
+  return scrapboxObserver;
+};

@@ -1,12 +1,13 @@
 import { MyConsoleButton } from '../../components';
 import { getPrivateApi } from '../../libs/scrapbox/private-api';
 import { loadPage } from '../../libs/scrapbox/public-api';
-import { scrapboxObserver } from '../../libs/scrapbox/public-api/observer';
+import { getScrapboxObserver } from '../../libs/scrapbox/public-api/observer';
 import { getDateText } from '../../libs/scrapbox/text';
 import { componentManager } from '../component-manager';
 import { openDialogAndWriteTags } from '../tag-automation';
 
 export const setupConsoleButton = async () => {
+  const scrapboxObserver = getScrapboxObserver();
   const button = componentManager.getInstance(MyConsoleButton);
 
   // change icon when layout change
