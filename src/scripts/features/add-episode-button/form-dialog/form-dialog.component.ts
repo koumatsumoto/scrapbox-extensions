@@ -24,7 +24,7 @@ const makeCheckboxesHTML = (tagOptions: TagOption[]) => {
     .join('');
 };
 
-const hideCSSClass = '-hide'; // display: none
+const showingIndicatorCSS = '-showing-indicator'; // used in css
 
 export class MyTagFormDialog extends HTMLElement {
   // whether form submitted or canceled
@@ -95,9 +95,8 @@ export class MyTagFormDialog extends HTMLElement {
     removeElement(this);
   }
 
-  // in api requesting
+  // call before api request
   showLoadingIndicator() {
-    this.form.classList.add(hideCSSClass);
-    this.loadingIndicatorContainer.classList.remove(hideCSSClass);
+    this.classList.add(showingIndicatorCSS);
   }
 }

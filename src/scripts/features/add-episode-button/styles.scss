@@ -19,10 +19,6 @@ $dialog-max-height: 80vh;
 }
 
 add-episode-form-dialog {
-  .-hide {
-    display: none !important;
-  }
-
   // layout size
   dialog,
   form,
@@ -50,7 +46,7 @@ add-episode-form-dialog {
 
   /* used as layout container */
   form {
-    display: flex;
+    display: flex; // will change to none by .-showing-indicator
     flex-direction: column;
     padding: 24px 8px 8px 24px;
     overflow: auto;
@@ -225,10 +221,19 @@ add-episode-form-dialog {
   }
 
   .loading-indicator-container {
-    display: flex;
+    display: none; // will change to flex by .-showing-indicator
     align-items: center;
     justify-content: center;
     font-size: 36px;
     color: $ui-color;
+  }
+
+  .-showing-indicator {
+    form {
+      display: none;
+    }
+    .loading-indicator-container {
+      display: flex;
+    }
   }
 }
