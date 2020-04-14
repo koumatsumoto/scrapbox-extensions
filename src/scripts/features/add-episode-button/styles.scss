@@ -228,7 +228,7 @@ add-episode-form-dialog {
     color: $ui-color;
   }
 
-  .-showing-indicator {
+  &.-showing-indicator {
     form {
       display: none;
     }
