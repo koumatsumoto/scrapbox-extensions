@@ -65,8 +65,22 @@ export class MyTagFormDialog extends HTMLElement {
     const cancelButton = this.querySelector<HTMLButtonElement>('button[value=cancel]')!;
     const submitButton = this.querySelector<HTMLButtonElement>('button[value=default]')!;
     this.result = new Promise<CustomDialogResult<string[]>>((resolve) => {
-      submitButton.addEventListener('click', () => resolve({ ok: true, data: splitWords(this.textInput.value) }), { once: true });
-      cancelButton.addEventListener('click', () => resolve({ ok: false }), { once: true });
+      submitButton.addEventListener(
+        'click',
+        (ev) => {
+          ev.preventDefault();
+          resolve({ ok: true, data: splitWords(this.textInput.value) });
+        },
+        { once: true },
+      );
+      cancelButton.addEventListener(
+        'click',
+        (ev) => {
+          ev.preventDefault();
+          resolve({ ok: false });
+        },
+        { once: true },
+      );
     });
   }
 
