@@ -1,4 +1,4 @@
-type AllowedTag = 'div';
+type AllowedTag = 'button' | 'div';
 
 export const createElement = <K extends AllowedTag>(param: {
   tag: K;

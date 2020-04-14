@@ -5,10 +5,13 @@ import { openDialogAndWriteTags } from '../../tag-automation';
 
 const createAddEpisodeButton = () => {
   return createElement({
-    tag: 'div',
+    tag: 'button',
     contents: 'Add Episode',
     class: 'sx-add-episode-button',
-    onClick: () => openDialogAndWriteTags(),
+    onClick: (ev) => {
+      ev.stopPropagation();
+      openDialogAndWriteTags();
+    },
   });
 };
 
