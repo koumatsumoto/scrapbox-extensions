@@ -42,7 +42,7 @@ export class MyTagFormDialog extends HTMLElement {
     this.innerHTML = `${html}`;
 
     this.dialog = this.querySelector<HTMLDialogElement>('dialog')!;
-    this.layout = this.querySelector<HTMLDivElement>('.container')!;
+    this.layout = this.querySelector<HTMLDivElement>('container')!;
     this.textInput = this.querySelector<HTMLInputElement>('input[type=text]')!;
 
     // construct DOM of checkboxes
