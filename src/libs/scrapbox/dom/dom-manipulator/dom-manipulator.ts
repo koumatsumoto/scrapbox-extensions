@@ -1,4 +1,4 @@
-import { findElement, findElementOrFail } from '../../../common/dom';
+import { findElementOrFail } from '../../../common/dom';
 
 const getAppRoot = () => findElementOrFail('#app-container');
 
