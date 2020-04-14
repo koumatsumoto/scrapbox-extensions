@@ -3,11 +3,11 @@ import { DomManipulator } from '../../../libs/scrapbox/dom/dom-manipulator';
 import { Router } from '../../../libs/scrapbox/router';
 import { openDialogAndWriteTags } from '../../tag-automation';
 
-const createAddEpisodeButton = (type: 'title-right' | 'editor-bottom') => {
+const createAddEpisodeButton = (subclass: 'for-title-right' | 'for-editor-bottom') => {
   return createElement({
     tag: 'button',
     contents: 'Add Episode',
-    class: ['sx-add-episode-button', `for-${type}`],
+    class: ['sx-add-episode-button', subclass],
     onClick: (ev) => {
       ev.stopPropagation();
       openDialogAndWriteTags();
@@ -17,10 +17,10 @@ const createAddEpisodeButton = (type: 'title-right' | 'editor-bottom') => {
 
 export const attachAddEpisodeButton = () => {
   // for title right side
-  DomManipulator.getTitleLine().appendChild(createAddEpisodeButton('title-right'));
+  DomManipulator.getTitleLine().appendChild(createAddEpisodeButton('for-title-right'));
 
   // for page bottom
-  DomManipulator.getPageContainer().appendChild(createAddEpisodeButton('editor-bottom'));
+  DomManipulator.getPageContainer().appendChild(createAddEpisodeButton('for-editor-bottom'));
 };
 
 export const useAddEpisodeButton = () => {
