@@ -17,10 +17,10 @@ const createAddEpisodeButton = () => {
 
 export const attachAddEpisodeButton = () => {
   // for title right side
-  const title = DomManipulator.getTitleLine();
-  if (title) {
-    title.appendChild(createAddEpisodeButton());
-  }
+  DomManipulator.getTitleLine().appendChild(createAddEpisodeButton());
+
+  // for page bottom
+  DomManipulator.getPageContainer().appendChild(createAddEpisodeButton());
 };
 
 export const useAddEpisodeButton = () => {

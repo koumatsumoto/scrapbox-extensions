@@ -1,6 +1,6 @@
-import { findElement, getElementOrFail } from '../../../common/dom';
+import { findElement, findElementOrFail } from '../../../common/dom';
 
-const getAppRoot = () => getElementOrFail('#app-container');
+const getAppRoot = () => findElementOrFail('#app-container');
 
 // alias for breaking change for scrapbox.io
 type LineElement = HTMLDivElement;
@@ -10,6 +10,11 @@ type LineElement = HTMLDivElement;
  */
 export class DomManipulator {
   static getTitleLine() {
-    return findElement<LineElement>('.page .lines .line-title', getAppRoot());
+    return findElementOrFail<LineElement>('.page .lines .line-title', getAppRoot());
+  }
+
+  // contains editor as first-level
+  static getPageContainer() {
+    return findElementOrFail<LineElement>('.page', getAppRoot());
   }
 }
