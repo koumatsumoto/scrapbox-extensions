@@ -24,5 +24,6 @@ export const attachAddEpisodeButton = () => {
 };
 
 export const useAddEpisodeButton = () => {
+  attachAddEpisodeButton(); // initial page
   Router.onPageChange(attachAddEpisodeButton);
 };
