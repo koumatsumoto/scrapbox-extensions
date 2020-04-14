@@ -21,12 +21,11 @@ $loading-container-min-height: 200px;
 }
 
 add-episode-form-dialog {
-  .-hide {
-    display: none !important;
-  }
-
   dialog {
     display: flex;
+    // for animation, can change by .-show-indicator
+    max-width: $dialog-max-width;
+    max-height: $dialog-max-height;
     padding: 0;
     overflow: auto;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -34,7 +33,7 @@ add-episode-form-dialog {
     border: none;
     border-radius: 2px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-    transition: all 1s ease-out;
+    transition: max-width 400ms ease-out, max-height 400ms ease-out;
   }
 
   .tag-group {
@@ -223,12 +222,25 @@ add-episode-form-dialog {
   }
 
   .loading-indicator-container {
-    display: flex;
+    display: none; // set flex by .-show-indicator
     align-items: center;
     justify-content: center;
     min-width: $loading-container-min-width;
     min-height: $loading-container-min-height;
     font-size: 36px;
     color: $ui-color;
+  }
+
+  .-show-indicator {
+    dialog {
+      max-width: $loading-container-min-width;
+      max-height: $loading-container-min-height;
+    }
+    form {
+      display: none !important;
+    }
+    .loading-indicator-container {
+      display: flex;
+    }
   }
 }
