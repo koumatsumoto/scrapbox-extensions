@@ -1,22 +1,22 @@
 @import '../../../styles/variables';
 
 $same-color-to-scrapbox-menu-icon: #363c48;
-
-.sx-add-episode-button {
-  margin-top: 8px;
-  font-size: 12px;
-  line-height: 2em;
-  color: $same-color-to-scrapbox-menu-icon;
-  background: none;
-  border: 1px solid $same-color-to-scrapbox-menu-icon;
-  border-radius: 4px;
-}
-
+$ui-color: $same-color-to-scrapbox-menu-icon;
 $dialog-min-width: 400px;
 $dialog-max-width: 84vw;
 // don't use vh because viewport will be changed on keyboard area appeared
 $dialog-min-height: 320px;
 $dialog-max-height: 80vh;
+
+.sx-add-episode-button {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 2em;
+  color: $ui-color;
+  background: none;
+  border: 1px solid $ui-color;
+  border-radius: 4px;
+}
 
 add-episode-form-dialog {
   .-hide {
@@ -25,7 +25,8 @@ add-episode-form-dialog {
 
   // layout size
   dialog,
-  form {
+  form,
+  .loading-indicator-container {
     min-width: $dialog-min-width;
     max-width: $dialog-max-width;
     min-height: $dialog-min-height;
@@ -221,5 +222,13 @@ add-episode-form-dialog {
       width: 50%;
       transition: 0.4s;
     }
+  }
+
+  .loading-indicator-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    color: $ui-color;
   }
 }
