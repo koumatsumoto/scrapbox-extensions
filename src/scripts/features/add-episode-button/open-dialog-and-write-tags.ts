@@ -12,6 +12,7 @@ export const openDialogAndWriteTags = async () => {
       // FIXME: scrapbox editor can not receive line changes if title-only page.
       const needReloadAfterUpdation = isEmptyPage() || isTitleOnlyPage();
 
+      dialog.showLoadingIndicator();
       await api.changeLine(makeInsertParams(result.data));
 
       const titleLine = getFirstLineOrFail();

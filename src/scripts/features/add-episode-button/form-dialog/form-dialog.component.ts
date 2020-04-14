@@ -24,32 +24,39 @@ const makeCheckboxesHTML = (tagOptions: TagOption[]) => {
     .join('');
 };
 
+const hideCSSClass = '-hide'; // display: none
+
 export class MyTagFormDialog extends HTMLElement {
   // whether form submitted or canceled
   readonly result: Promise<CustomDialogResult<string[]>>;
 
-  static readonly elementName = 'my-tag-form-dialog';
-  private dialogElement: HTMLDialogElement;
-  private checkboxesContainerElement: HTMLDivElement;
-  private inputTextElement: HTMLInputElement;
+  // used in css also
+  static readonly elementName = 'add-episode-form-dialog';
+  private dialog: HTMLDialogElement;
+  private form: HTMLFormElement;
+  private checkboxContainer: HTMLDivElement;
+  private textInput: HTMLInputElement;
+  private loadingIndicatorContainer: HTMLDivElement;
 
   constructor(tagOptions: TagOption[]) {
     super();
 
     this.innerHTML = `${html}`;
-    this.dialogElement = this.querySelector<HTMLDialogElement>('dialog')!;
-    this.inputTextElement = this.querySelector<HTMLInputElement>('input[type=text]')!;
+    this.dialog = this.querySelector<HTMLDialogElement>('dialog')!;
+    this.form = this.querySelector<HTMLFormElement>('form')!;
+    this.textInput = this.querySelector<HTMLInputElement>('input[type=text]')!;
+    this.loadingIndicatorContainer = this.querySelector<HTMLDivElement>('.loading-indicator-container')!;
 
     // construct DOM of checkboxes
-    this.checkboxesContainerElement = this.querySelector<HTMLDivElement>('#checkboxContainer')!;
-    this.checkboxesContainerElement.innerHTML = makeCheckboxesHTML(tagOptions);
+    this.checkboxContainer = this.querySelector<HTMLDivElement>('#checkboxContainer')!;
+    this.checkboxContainer.innerHTML = makeCheckboxesHTML(tagOptions);
     for (const e of this.querySelectorAll<HTMLInputElement>('input[type=checkbox]')) {
       e.addEventListener('change', () => {
         if (e.checked) {
-          addWord(e.value, this.inputTextElement);
-          this.inputTextElement.value = this.inputTextElement.value + ' ';
+          addWord(e.value, this.textInput);
+          this.textInput.value = this.textInput.value + ' ';
         } else {
-          removeWord(e.value, this.inputTextElement);
+          removeWord(e.value, this.textInput);
         }
       });
     }
@@ -58,19 +65,25 @@ export class MyTagFormDialog extends HTMLElement {
     const cancelButton = this.querySelector<HTMLButtonElement>('button[value=cancel]')!;
     const submitButton = this.querySelector<HTMLButtonElement>('button[value=default]')!;
     this.result = new Promise<CustomDialogResult<string[]>>((resolve) => {
-      submitButton.addEventListener('click', () => resolve({ ok: true, data: splitWords(this.inputTextElement.value) }), { once: true });
+      submitButton.addEventListener('click', () => resolve({ ok: true, data: splitWords(this.textInput.value) }), { once: true });
       cancelButton.addEventListener('click', () => resolve({ ok: false }), { once: true });
     });
   }
 
   open() {
-    this.dialogElement.showModal();
+    this.dialog.showModal();
 
     return this.result;
   }
 
   close() {
-    this.dialogElement.close();
+    this.dialog.close();
     removeElement(this);
+  }
+
+  // in api requesting
+  showLoadingIndicator() {
+    this.form.classList.add(hideCSSClass);
+    this.loadingIndicatorContainer.classList.remove(hideCSSClass);
   }
 }
