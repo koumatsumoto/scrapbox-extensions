@@ -44,14 +44,11 @@ add-episode-form-dialog {
   }
 
   .animation-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+    @include position-center();
     background: #ffffff;
     border-radius: 2px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
     transition: max-width $animation, max-width $animation;
-    transform: translate(-50%, -50%);
   }
 
   .tag-group {
@@ -236,9 +233,7 @@ add-episode-form-dialog {
   }
 
   .loading-indicator-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+    @include position-center();
     display: none; // will change to flex by .-showing-indicator
     align-items: center;
     justify-content: center;
@@ -248,7 +243,6 @@ add-episode-form-dialog {
     max-height: $loading-indicator-container-height;
     font-size: 36px;
     color: $ui-color;
-    transform: translate(-50%, -50%);
   }
 
   &.-showing-indicator {
