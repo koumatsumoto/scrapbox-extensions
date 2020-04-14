@@ -3,16 +3,15 @@
  */
 import { defineCustomElements } from './components';
 import { importRxJS } from './libs/common';
+import { getPrivateApi } from './libs/scrapbox/private-api';
 import { runOnScrapboxReady } from './libs/scrapbox/public-api';
 import {
   addDatetimeOnListItem,
   applyLoginCSSClass,
   componentManager,
-  useAddEpisodeButton,
   enableCustomListItem,
   registerUpdatingNewButton,
-  setupConsoleButton,
-  setupLibs,
+  useAddEpisodeButton,
 } from './scripts';
 
 const main = () => {
@@ -20,14 +19,12 @@ const main = () => {
     await importRxJS();
 
     // connect to websocket, fetch initial data from api
-    setupLibs();
+    await getPrivateApi();
 
     // register custom web components to browser
     defineCustomElements();
     // components will be connect to DOM
     componentManager.setupComponents();
-
-    setupConsoleButton();
 
     enableCustomListItem();
 
