@@ -9,7 +9,7 @@ $dialog-min-height: 320px;
 $dialog-max-height: 80vh;
 $loading-indicator-container-width: 200px;
 $loading-indicator-container-height: 200px;
-$animation: 200ms map_get($easing, 'easeInExpo');
+$animation: 300ms map_get($easing, 'easeInExpo');
 
 .sx-add-episode-button {
   margin-top: 8px;
