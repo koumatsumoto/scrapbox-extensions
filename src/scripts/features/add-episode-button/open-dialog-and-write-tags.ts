@@ -1,4 +1,3 @@
-import { sleep } from '../../../libs/common/time-operation';
 import { getFirstLineOrFail, getPrivateApi, isEmptyPage, isTitleOnlyPage, loadPage } from '../../../libs/scrapbox';
 import { tagOptions } from './config';
 import { openDialog } from './form-dialog/open-dialog';
@@ -14,7 +13,6 @@ export const openDialogAndWriteTags = async () => {
       const needReloadAfterUpdation = isEmptyPage() || isTitleOnlyPage();
 
       dialog.showLoadingIndicator();
-      await sleep(1000);
       await api.changeLine(makeInsertParams(result.data));
 
       const titleLine = getFirstLineOrFail();
