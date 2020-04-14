@@ -1,10 +1,10 @@
 type AllowedTag = 'button' | 'div';
 
-export const createElement = <K extends AllowedTag>(param: {
+export const createElement = <K extends AllowedTag, E extends keyof HTMLElementEventMap>(param: {
   tag: K;
   contents?: string; // TODO: also allow Element
   class?: string | string[];
-  onClick?: (this: HTMLElementTagNameMap[K], ev: MouseEvent) => any;
+  onClick?: (this: HTMLElementTagNameMap[K], ev: Event) => any;
 }): HTMLElementTagNameMap[K] => {
   const e = document.createElement<K>(param.tag);
 
