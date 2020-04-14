@@ -9,7 +9,6 @@ $dialog-min-height: 320px;
 $dialog-max-height: 80vh;
 $loading-container-min-width: 200px;
 $loading-container-min-height: 200px;
-$animation: 400ms map_get($easing, 'easeOutQuint');
 
 .sx-add-episode-button {
   margin-top: 8px;
@@ -34,7 +33,7 @@ add-episode-form-dialog {
     border: none;
     border-radius: 2px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-    transition: max-width $animation, max-height $animation;
+    transition: max-width 400ms ease-out, max-height 400ms ease-out;
   }
 
   .tag-group {
