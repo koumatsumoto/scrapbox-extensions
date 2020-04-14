@@ -1,6 +1,6 @@
-import { removeElement } from '../../../libs/common/dom';
+import { removeElement } from '../../../../libs/common/dom';
 import { TagOption } from '../config';
-const html = require('./my-tag-form-dialog.component.html');
+const html = require('./form-dialog.component.html');
 import { addWord, removeWord, splitWords } from './textarea-operation';
 
 type CustomDialogResult<T> = { ok: false } | { ok: true; data: T };
@@ -25,13 +25,13 @@ const makeCheckboxesHTML = (tagOptions: TagOption[]) => {
 };
 
 export class MyTagFormDialog extends HTMLElement {
+  // whether form submitted or canceled
+  readonly result: Promise<CustomDialogResult<string[]>>;
+
   static readonly elementName = 'my-tag-form-dialog';
   private dialogElement: HTMLDialogElement;
   private checkboxesContainerElement: HTMLDivElement;
   private inputTextElement: HTMLInputElement;
-  // this component can emit result only once.
-  // after emission, component will be removed from <body> and destroyed.
-  private dialogCloseResult: Promise<CustomDialogResult<string[]>>;
 
   constructor(tagOptions: TagOption[]) {
     super();
@@ -57,31 +57,20 @@ export class MyTagFormDialog extends HTMLElement {
     // button handling
     const cancelButton = this.querySelector<HTMLButtonElement>('button[value=cancel]')!;
     const submitButton = this.querySelector<HTMLButtonElement>('button[value=default]')!;
-    this.dialogCloseResult = new Promise<CustomDialogResult<string[]>>((resolve) => {
-      submitButton.addEventListener(
-        'click',
-        () => {
-          resolve({ ok: true, data: splitWords(this.inputTextElement.value) });
-          this.dialogElement.close();
-          removeElement(this);
-        },
-        { once: true },
-      );
-      cancelButton.addEventListener(
-        'click',
-        () => {
-          resolve({ ok: false });
-          this.dialogElement.close();
-          removeElement(this);
-        },
-        { once: true },
-      );
+    this.result = new Promise<CustomDialogResult<string[]>>((resolve) => {
+      submitButton.addEventListener('click', () => resolve({ ok: true, data: splitWords(this.inputTextElement.value) }), { once: true });
+      cancelButton.addEventListener('click', () => resolve({ ok: false }), { once: true });
     });
   }
 
   open() {
     this.dialogElement.showModal();
 
-    return this.dialogCloseResult;
+    return this.result;
+  }
+
+  close() {
+    this.dialogElement.close();
+    removeElement(this);
   }
 }
