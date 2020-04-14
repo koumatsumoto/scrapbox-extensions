@@ -7,6 +7,8 @@ $dialog-max-width: 84vw;
 // don't use vh because viewport will be changed on keyboard area appeared
 $dialog-min-height: 320px;
 $dialog-max-height: 80vh;
+$loading-indicator-container-width: 200px;
+$loading-indicator-container-height: 200px;
 
 .sx-add-episode-button {
   margin-top: 8px;
@@ -40,8 +42,10 @@ add-episode-form-dialog {
   }
 
   .animation-container {
+    background: #ffffff;
     border-radius: 2px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    transition: all 400ms map_get($easing, 'easeInQuart');
   }
 
   .tag-group {
@@ -229,13 +233,21 @@ add-episode-form-dialog {
     display: none; // will change to flex by .-showing-indicator
     align-items: center;
     justify-content: center;
-    min-width: 200px;
-    min-height: 200px;
+    min-width: $loading-indicator-container-width;
+    max-width: $loading-indicator-container-width;
+    min-height: $loading-indicator-container-height;
+    max-height: $loading-indicator-container-height;
     font-size: 36px;
     color: $ui-color;
   }
 
   &.-showing-indicator {
+    .animation-container {
+      min-width: $loading-indicator-container-width;
+      max-width: $loading-indicator-container-width;
+      min-height: $loading-indicator-container-height;
+      max-height: $loading-indicator-container-height;
+    }
     form {
       display: none;
     }
