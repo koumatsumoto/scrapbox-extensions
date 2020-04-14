@@ -24,7 +24,7 @@ const makeCheckboxesHTML = (tagOptions: TagOption[]) => {
     .join('');
 };
 
-const hideCSSClass = '-hide'; // display: none
+const indicatorShowingClass = '-show-indicator'; // used in css
 
 export class MyTagFormDialog extends HTMLElement {
   // whether form submitted or canceled
@@ -33,19 +33,17 @@ export class MyTagFormDialog extends HTMLElement {
   // used in css also
   static readonly elementName = 'add-episode-form-dialog';
   private dialog: HTMLDialogElement;
-  private form: HTMLFormElement;
+  private layout: HTMLDivElement;
   private checkboxContainer: HTMLDivElement;
   private textInput: HTMLInputElement;
-  private loadingIndicatorContainer: HTMLDivElement;
 
   constructor(tagOptions: TagOption[]) {
     super();
-
     this.innerHTML = `${html}`;
+
     this.dialog = this.querySelector<HTMLDialogElement>('dialog')!;
-    this.form = this.querySelector<HTMLFormElement>('form')!;
+    this.layout = this.querySelector<HTMLDivElement>('container')!;
     this.textInput = this.querySelector<HTMLInputElement>('input[type=text]')!;
-    this.loadingIndicatorContainer = this.querySelector<HTMLDivElement>('.loading-indicator-container')!;
 
     // construct DOM of checkboxes
     this.checkboxContainer = this.querySelector<HTMLDivElement>('#checkboxContainer')!;
@@ -95,9 +93,8 @@ export class MyTagFormDialog extends HTMLElement {
     removeElement(this);
   }
 
-  // in api requesting
+  // call before api request
   showLoadingIndicator() {
-    this.form.classList.add(hideCSSClass);
-    this.loadingIndicatorContainer.classList.remove(hideCSSClass);
+    this.layout.classList.add(indicatorShowingClass);
   }
 }

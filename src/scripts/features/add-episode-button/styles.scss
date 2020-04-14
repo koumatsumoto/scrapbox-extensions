@@ -37,6 +37,16 @@ add-episode-form-dialog {
     transition: all 1s ease-out;
   }
 
+  .container {
+    max-width: $dialog-max-width;
+    max-height: $dialog-max-height;
+
+    &.-show-indicator {
+      max-width: $loading-container-min-width;
+      max-height: $loading-container-min-height;
+    }
+  }
+
   .tag-group {
     display: block;
     padding-bottom: 2px;
@@ -47,9 +57,7 @@ add-episode-form-dialog {
     display: flex;
     flex-direction: column;
     min-width: $dialog-min-width;
-    max-width: $dialog-max-width;
     min-height: $dialog-min-height;
-    max-height: $dialog-max-height;
     padding: 24px 8px 8px 24px;
     overflow: auto;
     border: none;
@@ -226,8 +234,8 @@ add-episode-form-dialog {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: $loading-container-min-width;
-    min-height: $loading-container-min-height;
+    width: $loading-container-min-width;
+    height: $loading-container-min-height;
     font-size: 36px;
     color: $ui-color;
   }
