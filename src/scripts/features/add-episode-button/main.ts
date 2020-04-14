@@ -1,6 +1,5 @@
 import { createElement } from '../../../libs/common/dom';
 import { DomManipulator } from '../../../libs/scrapbox/dom/dom-manipulator';
-import { Router } from '../../../libs/scrapbox/router';
 import { openDialogAndWriteTags } from '../../tag-automation';
 
 const createAddEpisodeButton = () => {
