@@ -1,6 +1,6 @@
 type AllowedTag = 'button' | 'div';
 
-export const createElement = <K extends AllowedTag, E extends keyof HTMLElementEventMap>(param: {
+export const createElement = <K extends Extract<keyof HTMLElementTagNameMap, AllowedTag>>(param: {
   tag: K;
   contents?: string; // TODO: also allow Element
   class?: string | string[];
