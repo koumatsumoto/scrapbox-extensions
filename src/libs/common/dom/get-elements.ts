@@ -8,6 +8,10 @@ export const getElementOrFail = <T extends Element>(selector: string, parent: Pa
   return elem;
 };
 
+export const findElement = <T extends Element>(selector: string, parent: ParentNode = document) => {
+  return parent.querySelector<T>(selector);
+};
+
 // TODO: rename to findElements
 export const getElements = <T extends Element>(selector: string, parent: ParentNode = document) =>
   Array.from(parent.querySelectorAll<T>(selector));
