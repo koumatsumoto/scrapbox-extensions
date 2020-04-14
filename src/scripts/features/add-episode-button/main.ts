@@ -21,6 +21,7 @@ export const attachAddEpisodeButton = () => {
 };
 
 export const useAddEpisodeButton = () => {
-  attachAddEpisodeButton(); // initial page
-  Router.onPageChange(attachAddEpisodeButton);
+  // no need to attach new button on page change.
+  // scrapbox.io don't clear DOM of page container.
+  attachAddEpisodeButton();
 };
