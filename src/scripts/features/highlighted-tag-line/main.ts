@@ -8,7 +8,12 @@ const cssClassName = 'sx-highlighted-tag-line';
 const applyCSSClass = (e: Element) => e.classList.add(cssClassName);
 
 const highlightTagLines = () => {
-  const elements = pipe(scrapbox.getTagLineIds(window), map((id) => findElement(`#${id}`)), filter(isSome), compact);
+  const elements = pipe(
+    scrapbox.getTagLineIds(window),
+    map((id) => findElement(`#${id}`)),
+    filter(isSome),
+    compact,
+  );
 
   try {
     elements.forEach((e) => applyCSSClass(e));
