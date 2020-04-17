@@ -11,7 +11,7 @@ describe('findElementOrFail', () => {
   });
 });
 
-describe('getElements', () => {
+describe('findElements', () => {
   beforeEach(() => {
     setupBodyForTest();
   });
