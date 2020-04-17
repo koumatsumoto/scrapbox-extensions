@@ -10,4 +10,9 @@
   color: #51c374;
   white-space: nowrap;
   background: #f4ffea;
+
+  &.cursor-line {
+    // cannot edit if nowrap
+    white-space: pre-wrap!important;
+  }
 }
