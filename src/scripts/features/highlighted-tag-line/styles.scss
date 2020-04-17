@@ -1,6 +1,6 @@
 @import '../../../styles/variables';
 
-.sx-highlighted-tag-line {
+[data-sx-highlighted-tag-line='true'] {
   margin: 12px 0 4px;
   overflow-x: auto;
   font-family: 'Kosugi Maru', sans-serif !important;

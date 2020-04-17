@@ -5,18 +5,18 @@ import { findElement } from '../../../libs/common/dom';
 import { scrapbox } from '../../../libs/scrapbox/public-api';
 
 const cssClassName = 'sx-highlighted-tag-line';
-const applyCSSClass = (e: Element) => e.classList.add(cssClassName);
+const applyStyle = (e: HTMLElement) => (e.dataset[cssClassName] = 'true');
 
 const highlightTagLines = () => {
   const elements = pipe(
     scrapbox.getTagLineIdsForDOM(window),
-    map((id: string) => findElement(`#${id}`)),
+    map((id: string) => findElement<HTMLElement>(`#${id}`)),
     filter(isSome),
     compact,
   );
 
   try {
-    elements.forEach((e) => applyCSSClass(e));
+    elements.forEach((e) => applyStyle(e));
   } catch (e) {
     console.error('[highlighted-tag-line]', e);
   }
