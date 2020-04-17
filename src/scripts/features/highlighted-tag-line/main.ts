@@ -4,8 +4,8 @@ import { pipe } from 'fp-ts/es6/pipeable';
 import { findElement } from '../../../libs/common/dom';
 import { scrapbox } from '../../../libs/scrapbox/public-api';
 
-const cssClassName = 'sx-highlighted-tag-line';
-const applyStyle = (e: HTMLElement) => (e.dataset[cssClassName] = 'true');
+const dataKeyName = 'sx-highlighted-tag-line';
+const applyStyle = (e: HTMLElement) => (e.dataset[dataKeyName] = 'enabled');
 
 const highlightTagLines = () => {
   const elements = pipe(
