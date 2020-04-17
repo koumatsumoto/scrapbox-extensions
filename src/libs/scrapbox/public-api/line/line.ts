@@ -18,4 +18,14 @@ export const isTagLine = (line: Line): line is TagLine => line.text.startsWith('
 // if page layout is not 'page', return empty array
 export const getTagLines = (w = window) => pipe(getLines(w), filter(isTagLine));
 
-export const getTagLineIds = (w = window) => map((line: TagLine) => line.id)(getTagLines(w));
+export const getTagLineIds = (w = window) =>
+  pipe(
+    getTagLines(w),
+    map((line: TagLine) => line.id),
+  );
+
+export const getTagLineIdsForDOM = (w = window) =>
+  pipe(
+    getTagLines(w),
+    map((line: TagLine) => 'L' + line.id),
+  );
