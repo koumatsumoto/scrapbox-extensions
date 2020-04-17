@@ -79,20 +79,12 @@
       &:active {
         display: inline-block;
         padding: 6px;
-        margin: 7px 2px 7px 0;
-        font-family: 'Kosugi Maru', sans-serif !important;
-        font-size: $font-size;
-        line-height: 13px;
         color: $color !important;
-        background: #fff;
-        border: $border;
-        border-radius: 2px;
         transition: 0.24s map_get($easing, easeInOutCirc);
       }
 
       &:hover {
         color: $color-hovered !important;
-        background-color: $background-color-hovered;
       }
     }
   }
