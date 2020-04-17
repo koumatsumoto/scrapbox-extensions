@@ -1,6 +1,6 @@
-import { compact, filter, map } from 'fp-ts/lib/Array';
-import { isSome } from 'fp-ts/lib/Option';
-import { pipe } from 'fp-ts/lib/pipeable';
+import { compact, filter, map } from 'fp-ts/es6/Array';
+import { isSome } from 'fp-ts/es6/Option';
+import { pipe } from 'fp-ts/es6/pipeable';
 import { findElement } from '../../../libs/common/dom';
 import { scrapbox } from '../../../libs/scrapbox/public-api';
 

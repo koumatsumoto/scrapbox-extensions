@@ -1,4 +1,4 @@
-import { fromNullable } from 'fp-ts/lib/Option';
+import { fromNullable } from 'fp-ts/es6/Option';
 
 export const findElementOrFail = <T extends Element>(selector: string, parent: ParentNode = document) => {
   const elem = parent.querySelector<T>(selector);
