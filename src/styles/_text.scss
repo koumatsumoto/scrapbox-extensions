@@ -7,6 +7,15 @@
 // Source Code Pro
 @import url('https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap');
 
+// show "#" on editing to visible cursor
+.cursor-line {
+  a[type='hashTag'] {
+    span:first-child {
+      display: inline !important;
+    }
+  }
+}
+
 .line {
   font-family: 'Noto Sans JP', sans-serif !important;
 
@@ -85,15 +94,6 @@
       &:hover {
         color: $color-hovered !important;
       }
-    }
-  }
-}
-
-// show "#" on editing to visible cursor
-.cursor-line {
-  a[type='hashTag'] {
-    span:first-child {
-      display: inline !important;
     }
   }
 }
