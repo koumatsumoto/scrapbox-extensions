@@ -1,5 +1,5 @@
 import { setupBodyForTest } from '../../../test-helpers';
-import { findElementOrFail, getElements } from './get-elements';
+import { findElementOrFail, findElements } from './find-elements';
 
 describe('findElementOrFail', () => {
   it('should retrieve an element from DOM', () => {
@@ -17,7 +17,7 @@ describe('getElements', () => {
   });
 
   it('should retrieve elements from parent element', () => {
-    expect(getElements('body').length).toBe(1);
-    expect(getElements('not-found').length).toBe(0);
+    expect(findElements('body').length).toBe(1);
+    expect(findElements('not-found').length).toBe(0);
   });
 });

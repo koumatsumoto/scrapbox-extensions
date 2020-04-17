@@ -1,5 +1,11 @@
-export * from './id';
-export * from './line';
-export * from './page';
-export * from './util';
-export * from './scrapbox';
+import { getTagLineIds } from './line/line';
+
+export * from './deprecated/id';
+export * from './deprecated/line';
+export * from './deprecated/page';
+export * from './deprecated/util';
+export * from './deprecated/scrapbox';
+
+export const scrapbox = {
+  getTagLineIds,
+};
