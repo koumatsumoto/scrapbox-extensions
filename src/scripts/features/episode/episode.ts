@@ -30,19 +30,21 @@ export type Line = {
   Φ: Φ<Line>;
 };
 
+// data passes to next episode;
+export type Information = {
+  // parent context + ideation name at current position
+  context: Context;
+  // can 0
+  lines: Line[];
+  Φ: Φ<Link>;
+};
+
 export type Link = {
+  information: Information;
   // parent episode
   from: Episode;
   // destination
-  to: Episode;
-  // data passes to next episode;
-  information: {
-    // parent context + ideation name at current position
-    context: Context;
-    // can 0
-    lines: Line[];
-    Φ: Φ<Link>;
-  };
+  to: (ideation: Name, information: Information) => () => Promise<Episode>;
 };
 
 export type Episode = {
