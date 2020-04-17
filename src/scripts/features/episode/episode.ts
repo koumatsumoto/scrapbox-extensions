@@ -49,7 +49,7 @@ export type Link = {
 
 export type Episode = {
   // where episode belongs to
-  of: Ideation;
+  of: Memory;
   // have an array of tag
   context: Context;
   // all lines in episode block
@@ -63,8 +63,8 @@ export type Episode = {
 
 // construct from scrapbox.Page
 // the node of episodes
-export type Ideation = {
-  name: Name;
+export type Memory = {
+  symbol: Name;
   episodes: Episode[];
-  Φ: Φ<Ideation>;
+  Φ: Φ<Memory>;
 };
