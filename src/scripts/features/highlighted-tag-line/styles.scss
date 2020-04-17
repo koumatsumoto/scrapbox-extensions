@@ -1,12 +1,13 @@
 @import '../../../styles/variables';
 
 [data-sx-highlighted-tag-line] {
-  margin: 12px 0 4px;
+  padding: 8px 4px 8px 0;
+  margin: 16px 0 4px;
   overflow-x: auto;
   font-family: 'Kosugi Maru', sans-serif !important;
   font-size: 1.32rem;
   line-height: 13px;
-  color: #51c374 !important;
+  color: #51c374;
   white-space: nowrap;
   background: #f4ffea;
 }
