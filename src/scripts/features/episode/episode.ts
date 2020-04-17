@@ -5,10 +5,10 @@ import { ID } from '../../../libs/scrapbox/public-api';
 export type Φ<T> = (data: T) => number;
 
 // ideation name that is bracketed in text of line e.g. [Page Name]
-export type Word = Brand<string, 'Word'>;
+export type Name = Brand<string, 'Name'>;
 
 export type Tag = {
-  word: Word;
+  name: Name;
   type: 'date' | 'time' | 'feeling' | 'activity' | 'ideation';
   // differentiate by type
   Φ: Φ<Tag>;
@@ -24,7 +24,6 @@ export type Context = {
 export type Line = {
   id: ID;
   text: string;
-  words: Word[];
   // integrate
   // - length of text
   // - count of bracketed words in text
@@ -63,7 +62,7 @@ export type Episode = {
 // construct from scrapbox.Page
 // the node of episodes
 export type Ideation = {
-  name: string;
+  name: Name;
   episodes: Episode[];
   Φ: Φ<Ideation>;
 };
