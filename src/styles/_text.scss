@@ -88,3 +88,12 @@
     }
   }
 }
+
+// show "#" on editing to visible cursor
+.cursor-line {
+  a[type='hashTag'] {
+    span:first-child {
+      display: inline !important;
+    }
+  }
+}
