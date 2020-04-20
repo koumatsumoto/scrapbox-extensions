@@ -1,7 +1,7 @@
-import { Line, Scrapbox } from '../libs/scrapbox/types';
+import { Line, RawScrapbox } from '../libs/scrapbox/types';
 
 export type SetupWindowScrapboxOption = {
-  layout?: Scrapbox['Layout'];
+  layout?: RawScrapbox['Layout'];
   pageTitle?: string;
   projectName?: string;
   pageLines?: Line[];
