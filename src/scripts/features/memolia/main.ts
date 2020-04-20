@@ -1,8 +1,8 @@
 import { makeBlocks } from './parser/block';
 
 export const useMemolia = () => {
+  let prevCount = 0;
   const fn = () => {
-    let prevCount = 0;
     if (window.scrapbox.Page.lines) {
       if (prevCount !== window.scrapbox.Page.lines.length) {
         prevCount = window.scrapbox.Page.lines.length;
