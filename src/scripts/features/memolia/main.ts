@@ -7,7 +7,7 @@ export const useMemolia = () => {
       if (prevCount !== window.scrapbox.Page.lines.length) {
         prevCount = window.scrapbox.Page.lines.length;
         const blocks = makeBlocks(window.scrapbox.Page.lines);
-        console.log('[dev] memolia', blocks);
+        console.log('[dev] memolia', window.scrapbox.Page.title, blocks);
       }
     }
   };
