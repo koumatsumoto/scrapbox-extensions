@@ -1,6 +1,7 @@
+import { Either, left, right } from 'fp-ts/es6/Either';
 import { TagLine, TextStartWithHash } from '../../../../libs/scrapbox/types';
+import { allTagWords } from '../../add-episode-button/config';
 import { Tag } from '../types';
-import { ParseResult } from './types';
 
 // full-width space separator is allowed
 export const splitToWords = (text: TagLine['text']): string[] => text.split(/\s/);
@@ -9,32 +10,26 @@ export const isValidTagText = (word: string): word is TextStartWithHash => /^#\S
 // e.g. '#word' => 'word'
 export const extractWord = (word: TextStartWithHash) => word.slice(1);
 
-export const parseTagLine = (line: TagLine): ParseResult<Tag[]> => {
-  try {
-    const words = splitToWords(line.text);
-    const tags: Tag[] = [];
-    for (const word of words) {
-      // validation
-      if (!isValidTagText(word)) {
-        throw new Error(`${word} is invalid`);
-      }
+// TODO: implement more types
+export const classifyTag = (word: string) => {
+  return allTagWords.includes(word) ? 'unknown' : 'ideation';
+};
 
-      tags.push({
-        name: extractWord(word),
-        raw: word,
-        // TODO: implement type sorting
-        type: 'unknown',
-      });
+export const parseTagLine = (line: TagLine): Either<Error, Tag[]> => {
+  const words = splitToWords(line.text);
+  const tags: Tag[] = [];
+  for (const word of words) {
+    // validation
+    if (!isValidTagText(word)) {
+      return left(new Error(`${word} is invalid`));
     }
 
-    return {
-      valid: true,
-      data: tags,
-    };
-  } catch (e) {
-    return {
-      valid: false,
-      error: e,
-    };
+    tags.push({
+      name: extractWord(word),
+      raw: word,
+      type: classifyTag(word),
+    });
   }
+
+  return right(tags);
 };

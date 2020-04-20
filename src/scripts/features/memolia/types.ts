@@ -47,15 +47,17 @@ export type Information = Phiable<{
 export type Link = {
   information: Information;
   // parent episode
-  from: Episode;
+  from: Episode['id'];
   // destination
-  to: (ideation: Name, information: Information) => () => Promise<Episode>;
+  to: Episode['id'];
 };
 
 // Episodic-Memory
 export type Episode = Phiable<{
+  // context + current memory name e.g. ["2020/04/20", "word"]
+  id: { of: Memory['symbol']; context: Context };
   // where episode belongs to
-  of: Memory;
+  of: Memory['symbol'];
   // have an array of tag
   context: Context;
   // all lines in episode block
@@ -69,8 +71,6 @@ export type Episode = Phiable<{
 // Semantic-Memory constructed by Episodic-Memories
 export type Semanteme = Phiable<{
   lines: Line[];
-  // time of last episode
-  lastUpdatedTime: Date;
 }>;
 
 // construct from scrapbox.Page

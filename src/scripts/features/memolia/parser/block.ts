@@ -1,13 +1,23 @@
 import { isTagLine } from '../../../../libs/scrapbox/public-api/scrapbox-object/line';
 import { Line } from '../../../../libs/scrapbox/types';
 
-/**
- * Block represent logical
- */
-type Block = {
-  type: 'title' | 'semanteme' | 'episode';
+export type TitleBlock = {
+  type: 'title';
   lines: Line[];
 };
+
+export type SemantemeBlock = {
+  type: 'semanteme';
+  lines: Line[];
+};
+
+export type EpisodeBlock = {
+  type: 'episode';
+  lines: Line[];
+};
+
+export type Block = TitleBlock | SemantemeBlock | EpisodeBlock;
+
 const getNewBlock = (type: Block['type']): Block => ({ type, lines: [] });
 
 // scrapbox.Page.lines.map((l) => ({ n: l.section.number, t: l.text }))
