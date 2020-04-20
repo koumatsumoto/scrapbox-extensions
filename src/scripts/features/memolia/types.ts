@@ -3,7 +3,8 @@ import { TextStartWithHash } from '../../../libs/scrapbox/types';
 
 // can integrate its information into Φ (ii)
 export type Phiable<A> = A & {
-  Φ: (
+  // TODO: not implemented yet
+  Φ?: (
     data: A,
   ) => {
     value: number;
@@ -16,7 +17,7 @@ export type Name = Brand<string, 'Name'>;
 
 // ii: differentiate by type
 export type Tag = Phiable<{
-  name: Name;
+  name: string;
   raw: TextStartWithHash;
   type: 'date' | 'time' | 'feeling' | 'activity' | 'ideation' | 'unknown';
 }>;

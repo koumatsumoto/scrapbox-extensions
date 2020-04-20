@@ -1,4 +1,4 @@
-import { extractWord, splitToWords, validateTagText } from './tag';
+import { extractWord, splitToWords, isValidTagText } from './tag';
 
 describe('tag parser', () => {
   test('parseTags', () => {
@@ -6,11 +6,11 @@ describe('tag parser', () => {
   });
 
   test('validateTagText', () => {
-    expect(validateTagText('#w')).toBeTruthy();
-    expect(validateTagText('#日本語')).toBeTruthy();
-    expect(validateTagText('#word_with_underscore')).toBeTruthy();
-    expect(validateTagText('#word with space')).toBeFalsy();
-    expect(validateTagText('non-hash')).toBeFalsy();
+    expect(isValidTagText('#w')).toBeTruthy();
+    expect(isValidTagText('#日本語')).toBeTruthy();
+    expect(isValidTagText('#word_with_underscore')).toBeTruthy();
+    expect(isValidTagText('#word with space')).toBeFalsy();
+    expect(isValidTagText('non-hash')).toBeFalsy();
   });
 
   test('extractWord', () => {
