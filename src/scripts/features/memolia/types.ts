@@ -1,5 +1,5 @@
 import { Brand } from '../../../libs/common';
-import { ID } from '../../../libs/scrapbox/public-api';
+import { TextStartWithHash } from '../../../libs/scrapbox/types';
 
 // can integrate its information into Φ (ii)
 export type Phiable<A> = A & {
@@ -17,7 +17,8 @@ export type Name = Brand<string, 'Name'>;
 // ii: differentiate by type
 export type Tag = Phiable<{
   name: Name;
-  type: 'date' | 'time' | 'feeling' | 'activity' | 'ideation';
+  raw: TextStartWithHash;
+  type: 'date' | 'time' | 'feeling' | 'activity' | 'ideation' | 'unknown';
 }>;
 
 // ii: integrate tags
@@ -30,7 +31,7 @@ export type Context = Phiable<{
 // - length of text
 // - count of bracketed words in text
 export type Line = Phiable<{
-  id: ID;
+  id: string;
   text: string;
 }>;
 
