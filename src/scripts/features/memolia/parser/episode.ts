@@ -56,6 +56,8 @@ export const parseChildEpisodes = (block: EpisodeBlock) => {
           context: [...oldContext],
           lines: [],
         };
+      } else {
+        record.lines.push(line);
       }
     } else {
       if (line.meta.type === 'episode-title') {
