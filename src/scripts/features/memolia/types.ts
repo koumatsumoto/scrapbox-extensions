@@ -47,11 +47,11 @@ export type Information = Phiable<{
 export type EpisodeId = [Episode['context'], Episode['of']];
 
 export type Link = {
-  information: Information;
   // parent episode
   from: EpisodeId;
   // destination
   to: EpisodeId;
+  information: Information;
 };
 
 // Episodic-Memory
@@ -62,11 +62,13 @@ export type Episode = Phiable<{
   context: Context;
   // all lines in episode block
   lines: Line[];
-  // null if root-episode
-  parent: Link | null;
+  // true if root-episode
+  root: boolean;
   // all references to linked to episode
   children: Link[];
 }>;
+
+export type RootEpisode = Episode & { root: true };
 
 // Semantic-Memory constructed by Episodic-Memories
 export type Semanteme = Phiable<{
