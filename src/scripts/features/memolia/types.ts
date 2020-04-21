@@ -22,6 +22,7 @@ export type Tag = Phiable<{
   type: 'date' | 'time' | 'feeling' | 'activity' | 'ideation' | 'unknown';
 }>;
 
+// TODO: arrange type
 // ii: integrate tags
 export type Context = Phiable<{
   tags: Tag[];
@@ -37,6 +38,7 @@ export type Line = Phiable<{
   nodes: ScrapboxLine['nodes'];
 }>;
 
+// TODO: arrange type
 // data passes to next episode;
 export type Information = Phiable<{
   // parent context + ideation name at current position
@@ -47,6 +49,7 @@ export type Information = Phiable<{
 
 export type EpisodeId = [Episode['context'], Episode['of']];
 
+// TODO: arrange type
 export type Link = {
   // parent episode
   from: EpisodeId;
@@ -54,6 +57,12 @@ export type Link = {
   to: EpisodeId;
   information: Information;
 };
+
+export type ChildEpisode = Phiable<{
+  for: string;
+  context: string[];
+  lines: Line[];
+}>;
 
 // Episodic-Memory
 export type Episode = Phiable<{
@@ -66,7 +75,7 @@ export type Episode = Phiable<{
   // true if root-episode
   root: boolean;
   // all references to linked to episode
-  children: Link[];
+  children: ChildEpisode[];
 }>;
 
 export type RootEpisode = Episode & { root: true };

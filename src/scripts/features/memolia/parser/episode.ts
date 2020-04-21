@@ -1,7 +1,7 @@
 import { fold, map as eitherMap } from 'fp-ts/es6/Either';
 import { pipe } from 'fp-ts/es6/pipeable';
 import { TagLine } from '../../../../libs/scrapbox/types';
-import { Context, Line } from '../types';
+import { ChildEpisode, Context } from '../types';
 import { EpisodeBlock } from './block';
 import { makeContext } from './context';
 import { makeLineWithMetadata } from './line';
@@ -15,12 +15,6 @@ export const isRoot = (context: Context) => {
   return context.tags[context.tags.length - 1].type === 'ideation';
 };
 
-type Record = {
-  name: string;
-  context: string[];
-  lines: Line[];
-};
-
 export const parseChildEpisodes = (block: EpisodeBlock) => {
   const header = block.lines[0] as TagLine;
   const lines = block.lines.slice(1); // remove header (a tag-line)
@@ -28,10 +22,10 @@ export const parseChildEpisodes = (block: EpisodeBlock) => {
     return;
   }
 
-  const baseContext = [...parseTag(header).map((t) => t.name), block.of];
-  const map = new Map<string, Record>();
-  const mergeSet = (v: Record) => {
-    const key = [...v.context, v.name].join();
+  const getBaseContext = () => [...parseTag(header).map((t) => t.name), block.of];
+  const map = new Map<string, ChildEpisode>();
+  const merge = (v: ChildEpisode) => {
+    const key = [...v.context, v.for].join();
     const exist = map.get(key);
     if (exist) {
       map.set(key, { ...exist, lines: [...exist.lines, ...v.lines] });
@@ -41,29 +35,29 @@ export const parseChildEpisodes = (block: EpisodeBlock) => {
   };
 
   const linesWithMeta = lines.map(makeLineWithMetadata);
-  let record: Record | null = null;
+  let ep: ChildEpisode | null = null;
 
   for (const line of linesWithMeta) {
-    if (record) {
+    if (ep) {
       if (line.meta.type === 'empty') {
-        mergeSet(record);
-        record = null;
+        merge(ep);
+        ep = null;
       } else if (line.meta.type === 'episode-title') {
-        mergeSet(record);
-        const oldContext = record.context as string[];
-        record = {
-          name: line.meta.name,
+        merge(ep);
+        const oldContext = ep.context as string[];
+        ep = {
+          for: line.meta.name,
           context: [...oldContext],
           lines: [],
         };
       } else {
-        record.lines.push(line);
+        ep.lines.push(line);
       }
     } else {
       if (line.meta.type === 'episode-title') {
-        record = {
-          name: line.meta.name,
-          context: [...baseContext],
+        ep = {
+          for: line.meta.name,
+          context: getBaseContext(),
           lines: [],
         };
       }
@@ -71,8 +65,8 @@ export const parseChildEpisodes = (block: EpisodeBlock) => {
   }
 
   // for lacking EOL
-  if (record) {
-    mergeSet(record);
+  if (ep) {
+    merge(ep);
   }
 
   return Array.from(map.values());
