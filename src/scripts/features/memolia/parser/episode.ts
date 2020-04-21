@@ -1,4 +1,4 @@
-import { getOrElse, map } from 'fp-ts/es6/Either';
+import { fold, map } from 'fp-ts/es6/Either';
 import { pipe } from 'fp-ts/es6/pipeable';
 import { TagLine } from '../../../../libs/scrapbox/types';
 import { Context } from '../types';
@@ -18,5 +18,8 @@ export const makeEpisode = (block: EpisodeBlock) =>
     getTagLine(block),
     makeContext,
     map((context: Context) => ({ of: block.of, context, lines: block.lines, root: isRoot(context) })),
-    getOrElse(() => null as any),
+    fold(
+      (a) => a,
+      (b) => b as any,
+    ),
   );
