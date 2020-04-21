@@ -98,4 +98,4 @@ export const getLineMetadata = (nodes: Line['nodes']): LineMetadata => {
 };
 
 export type LineWithMetadata = Line & { meta: LineMetadata };
-export const makeLineWithMetadata = (line: Line): LineWithMetadata => ({ ...line, mata: getLineMetadata(line) });
+export const makeLineWithMetadata = (line: Line): LineWithMetadata => ({ ...line, meta: getLineMetadata(line.nodes) });
