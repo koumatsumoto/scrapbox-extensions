@@ -1,36 +1,41 @@
 import { isTagLine } from '../../../../libs/scrapbox/public-api/scrapbox-object/line';
 import { Line } from '../../../../libs/scrapbox/types';
+import { Memory, Name } from '../types';
 
 export type TitleBlock = {
   type: 'title';
+  of: Memory['name'];
   lines: [Line];
 };
 
 export type SemantemeBlock = {
   type: 'semanteme';
+  of: Memory['name'];
   lines: Line[];
 };
 
 export type EpisodeBlock = {
   type: 'episode';
+  of: Memory['name'];
   lines: Line[];
 };
 
 export type Block = TitleBlock | SemantemeBlock | EpisodeBlock;
-
-const getNewBlock = (type: 'semanteme' | 'episode'): SemantemeBlock | EpisodeBlock => ({ type, lines: [] });
 
 // scrapbox.Page.lines.map((l) => ({ n: l.section.number, t: l.text }))
 export const makeBlocks = (lines: Line[]) => {
   const blocks: Block[] = [];
   // iteration point
   let cursor = 0;
+  // head is title-line
+  const titleLine = lines[cursor];
+  const getNewBlock = (type: 'semanteme' | 'episode'): SemantemeBlock | EpisodeBlock => ({ of: titleLine.text as Name, type, lines: [] });
 
   // title block
   blocks.push({
     type: 'title',
-    // head is title-line
-    lines: [lines[cursor]],
+    of: titleLine.text as Name,
+    lines: [titleLine],
   });
   if (cursor === lines.length) {
     return blocks;
