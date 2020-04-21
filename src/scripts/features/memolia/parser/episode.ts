@@ -36,7 +36,7 @@ export const parseChildEpisodes = (block: EpisodeBlock): ChildEpisode[] => {
 
   const linesWithMeta = lines.map(makeLineWithMetadata);
   let ep: ChildEpisode | null = null;
-  let indentLevel = 0;
+  let parentIndentLevel = 0;
 
   for (const line of linesWithMeta) {
     if (ep) {
@@ -44,7 +44,10 @@ export const parseChildEpisodes = (block: EpisodeBlock): ChildEpisode[] => {
         merge(ep);
         ep = null;
       } else if (line.meta.type === 'episode-title') {
-        if (indentLevel <= line.meta.indent) {
+        // if target-line indent-level is higher than parent, it's inter lines of parent
+        if (parentIndentLevel <= line.meta.indent) {
+          ep.lines.push(line);
+        } else {
           merge(ep);
           const extended: string[] = [...ep.context, ep.for];
           ep = {
@@ -52,16 +55,13 @@ export const parseChildEpisodes = (block: EpisodeBlock): ChildEpisode[] => {
             context: extended,
             lines: [],
           };
-        } else {
-          // if target-line indent-level is lower than current episode, regard as child line
-          ep.lines.push(line);
         }
       } else {
         ep.lines.push(line);
       }
     } else {
       if (line.meta.type === 'episode-title') {
-        indentLevel = line.meta.indent;
+        parentIndentLevel = line.meta.indent;
         ep = {
           for: line.meta.name,
           context: getBaseContext(),
