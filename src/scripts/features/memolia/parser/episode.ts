@@ -40,19 +40,24 @@ export const parseChildEpisodes = (block: EpisodeBlock): ChildEpisode[] => {
 
   for (const line of linesWithMeta) {
     if (ep) {
+      // not include empty-line as parent's lines
       if (line.meta.type === 'empty') {
         merge(ep);
         ep = null;
       } else if (line.meta.type === 'episode-title') {
-        // if target-line indent-level is higher than parent, it's inter lines of parent
-        if (parentIndentLevel <= line.meta.indent) {
+        // if target-line indent-level is higher than parent, it should be included in parent
+        //   e.g. "  [a]" <= "    [b]"
+        // else, start construction of new child-episode
+        //   e.g. "  [a]" == "  [b]"
+        //   e.g. "  [a]" >= "[b]"
+        if (parentIndentLevel < line.meta.indent) {
           ep.lines.push(line);
         } else {
           merge(ep);
-          const extended: string[] = [...ep.context, ep.for];
+          parentIndentLevel = line.meta.indent;
           ep = {
             for: line.meta.name,
-            context: extended,
+            context: getBaseContext(),
             lines: [],
           };
         }
@@ -60,6 +65,7 @@ export const parseChildEpisodes = (block: EpisodeBlock): ChildEpisode[] => {
         ep.lines.push(line);
       }
     } else {
+      // start construction of new child-episode
       if (line.meta.type === 'episode-title') {
         parentIndentLevel = line.meta.indent;
         ep = {
