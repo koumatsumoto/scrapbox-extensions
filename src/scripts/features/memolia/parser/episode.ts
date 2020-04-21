@@ -15,11 +15,11 @@ export const isRoot = (context: Context) => {
   return context.tags[context.tags.length - 1].type === 'ideation';
 };
 
-export const parseChildEpisodes = (block: EpisodeBlock) => {
+export const parseChildEpisodes = (block: EpisodeBlock): ChildEpisode[] => {
   const header = block.lines[0] as TagLine;
   const lines = block.lines.slice(1); // remove header (a tag-line)
   if (header == null || lines.length < 1) {
-    return;
+    return [];
   }
 
   const getBaseContext = () => [...parseTag(header).map((t) => t.name), block.of];
@@ -36,6 +36,7 @@ export const parseChildEpisodes = (block: EpisodeBlock) => {
 
   const linesWithMeta = lines.map(makeLineWithMetadata);
   let ep: ChildEpisode | null = null;
+  let indentLevel = 0;
 
   for (const line of linesWithMeta) {
     if (ep) {
@@ -43,18 +44,24 @@ export const parseChildEpisodes = (block: EpisodeBlock) => {
         merge(ep);
         ep = null;
       } else if (line.meta.type === 'episode-title') {
-        merge(ep);
-        const extended: string[] = [...ep.context, ep.for];
-        ep = {
-          for: line.meta.name,
-          context: extended,
-          lines: [],
-        };
+        if (indentLevel <= line.meta.indent) {
+          merge(ep);
+          const extended: string[] = [...ep.context, ep.for];
+          ep = {
+            for: line.meta.name,
+            context: extended,
+            lines: [],
+          };
+        } else {
+          // if target-line indent-level is lower than current episode, regard as child line
+          ep.lines.push(line);
+        }
       } else {
         ep.lines.push(line);
       }
     } else {
       if (line.meta.type === 'episode-title') {
+        indentLevel = line.meta.indent;
         ep = {
           for: line.meta.name,
           context: getBaseContext(),
