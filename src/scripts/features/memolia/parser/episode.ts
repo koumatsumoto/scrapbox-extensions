@@ -44,10 +44,10 @@ export const parseChildEpisodes = (block: EpisodeBlock) => {
         ep = null;
       } else if (line.meta.type === 'episode-title') {
         merge(ep);
-        const oldContext = ep.context as string[];
+        const extended: string[] = [...ep.context, ep.for];
         ep = {
           for: line.meta.name,
-          context: [...oldContext],
+          context: extended,
           lines: [],
         };
       } else {
