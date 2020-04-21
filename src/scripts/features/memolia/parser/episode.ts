@@ -28,7 +28,7 @@ export const parseChildEpisodes = (block: EpisodeBlock) => {
     return;
   }
 
-  const baseContext = parseTag(header).map((t) => t.name);
+  const baseContext = [...parseTag(header).map((t) => t.name), block.of];
   const map = new Map<string, Record>();
   const mergeSet = (v: Record) => {
     const key = [...v.context, v.name].join();
