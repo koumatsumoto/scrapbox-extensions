@@ -22,7 +22,6 @@ type Record = {
 };
 
 export const parseChildEpisodes = (block: EpisodeBlock) => {
-  const map = new Map<string, Record>();
   const header = block.lines[0] as TagLine;
   const lines = block.lines.slice(1); // remove header (a tag-line)
   if (header == null || lines.length < 1) {
@@ -30,11 +29,14 @@ export const parseChildEpisodes = (block: EpisodeBlock) => {
   }
 
   const baseContext = parseTag(header).map((t) => t.name);
+  const map = new Map<string, Record>();
   const mergeSet = (v: Record) => {
     const key = [...v.context, v.name].join();
     const exist = map.get(key);
     if (exist) {
       map.set(key, { ...exist, lines: [...exist.lines, ...v.lines] });
+    } else {
+      map.set(key, v);
     }
   };
 
