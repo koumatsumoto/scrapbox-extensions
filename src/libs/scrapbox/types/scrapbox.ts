@@ -1,4 +1,4 @@
-import { Line, TitleLine } from './page';
+import { ScrapboxLine, TitleLine } from './page';
 import { ScrapboxProject } from './project';
 
 export type ScrapboxLayout =
@@ -27,7 +27,7 @@ export type EmptyPage = {
 export type Page = {
   title: TitleLine['text'];
   // first item is title line
-  lines: Line[];
+  lines: ScrapboxLine[];
 };
 
 export type RawScrapbox = {

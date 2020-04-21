@@ -51,8 +51,6 @@ export type HashTagNode = {
   children: HashTagNodeUnit['content'];
 };
 
-export type HashTagAndSimpleTextNodes = [SimpleTextNode, HashTagNode];
-
 export type DecoFormulaNode = {
   type: 'deco-formula';
   unit: DecoFormulaNodeUnit;
@@ -76,4 +74,4 @@ export type IndentNode = {
   children: ScrapboxNode | ScrapboxNode[];
 };
 
-export type ScrapboxNode = SimpleTextNode | LinkNode | HashTagNode | HashTagAndSimpleTextNodes | DecoFormulaNode | IndentNode | GyazoNode;
+export type ScrapboxNode = SimpleTextNode | LinkNode | HashTagNode | DecoFormulaNode | IndentNode | GyazoNode;

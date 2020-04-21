@@ -19,6 +19,7 @@ type LineBase = {
 
 export type TitleLine = LineBase & {
   title: true;
+  nodes: undefined;
 };
 
 export type NonTitleLine = LineBase & {
@@ -32,4 +33,4 @@ export type TagLine = NonTitleLine & { text: TextStartWithHash };
 
 export type NonIndentedFormulaLine = NonTitleLine & { formulaLine: true };
 
-export type Line = TitleLine | NonTitleLine | TagLine | NonIndentedFormulaLine;
+export type ScrapboxLine = TitleLine | NonTitleLine | TagLine | NonIndentedFormulaLine;

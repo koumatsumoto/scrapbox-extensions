@@ -1,5 +1,5 @@
 import { Brand } from '../../../libs/common';
-import { TextStartWithHash } from '../../../libs/scrapbox/types';
+import { ScrapboxLine, TextStartWithHash } from '../../../libs/scrapbox/types';
 
 // can integrate its information into Φ (ii)
 export type Phiable<A> = A & {
@@ -34,6 +34,7 @@ export type Context = Phiable<{
 export type Line = Phiable<{
   id: string;
   text: string;
+  nodes: ScrapboxLine['nodes'];
 }>;
 
 // data passes to next episode;
