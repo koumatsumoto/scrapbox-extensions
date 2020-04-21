@@ -62,12 +62,11 @@ export const makeBlocks = (lines: ScrapboxLine[]) => {
   for (; cursor < lines.length; cursor++) {
     const line = lines[cursor];
     if (isTagLine(line)) {
-      block.lines.push(lines[cursor]);
       blocks.push(block);
       block = getNewBlock('episode');
-    } else {
-      block.lines.push(line);
     }
+
+    block.lines.push(line);
   }
 
   blocks.push(block);

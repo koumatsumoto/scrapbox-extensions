@@ -25,13 +25,19 @@ type SimpleTextLineMetadata = {
   name?: never;
   indent: number;
 };
+type UnTypedLineMetadata = {
+  type: 'untyped';
+  name?: never;
+  indent: number;
+};
 
 export type LineMetadata =
   | PageTitleLineMetadata
   | EpisodeTitleLineMetadata
   | WithInlineLinksLineMetadata
   | EmptyLineMetadata
-  | SimpleTextLineMetadata;
+  | SimpleTextLineMetadata
+  | UnTypedLineMetadata;
 
 const isLinkableLine = (v: LineMetadata): v is EpisodeTitleLineMetadata | WithInlineLinksLineMetadata => {
   return v.type === 'episode-title' || v.type === 'with-inline-links';
@@ -93,8 +99,10 @@ export const getLineMetadata = (nodes: Line['nodes']): LineMetadata => {
     }
   }
 
-  console.error(nodes);
-  throw new Error('Bad Implements: unreachable code');
+  return {
+    type: 'untyped',
+    indent: 0,
+  };
 };
 
 export type LineWithMetadata = Line & { meta: LineMetadata };
