@@ -93,6 +93,7 @@ export const getLineMetadata = (nodes: Line['nodes']): LineMetadata => {
     }
   }
 
+  console.error(nodes);
   throw new Error('Bad Implements: unreachable code');
 };
 
