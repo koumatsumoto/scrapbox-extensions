@@ -15,6 +15,8 @@ export const classifyTag = (word: string) => {
   return allTagWords.includes(word) ? 'unknown' : 'ideation';
 };
 
+// 2020/04/20
+// TODO: use parseTag and remove this
 export const parseTagLine = (line: TagLine): Either<Error, Tag[]> => {
   const words = splitToWords(line.text);
   const tags: Tag[] = [];
@@ -32,4 +34,23 @@ export const parseTagLine = (line: TagLine): Either<Error, Tag[]> => {
   }
 
   return right(tags);
+};
+
+export const parseTag = (line: TagLine): Tag[] => {
+  const words = splitToWords(line.text);
+  const tags: Tag[] = [];
+  for (const word of words) {
+    // validation
+    if (isValidTagText(word)) {
+      tags.push({
+        name: extractWord(word),
+        raw: word,
+        type: classifyTag(word),
+      });
+    }
+
+    new Error(`"${word}" is invalid`);
+  }
+
+  return tags;
 };

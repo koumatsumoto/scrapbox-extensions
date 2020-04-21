@@ -1,10 +1,11 @@
 import { fold, map as eitherMap } from 'fp-ts/es6/Either';
 import { pipe } from 'fp-ts/es6/pipeable';
 import { TagLine } from '../../../../libs/scrapbox/types';
-import { Context, Episode, Line } from '../types';
+import { Context, Line } from '../types';
 import { EpisodeBlock } from './block';
 import { makeContext } from './context';
-import { LineWithMetadata, makeLineWithMetadata } from './line';
+import { makeLineWithMetadata } from './line';
+import { parseTag } from './tag';
 
 export const getTagLine = (block: EpisodeBlock) => {
   return block.lines[0] as TagLine;
@@ -14,40 +15,63 @@ export const isRoot = (context: Context) => {
   return context.tags[context.tags.length - 1].type === 'ideation';
 };
 
-export const getEpisodeGlobalStringId = (ep: Pick<Episode, 'of' | 'context'>) => {
-  return [...ep.context.tags, ep.of].join('');
+type Record = {
+  name: string;
+  context: string[];
+  lines: Line[];
 };
 
 export const parseChildEpisodes = (block: EpisodeBlock) => {
-  const map = new Map<string, Line[]>();
+  const map = new Map<string, Record>();
+  const header = block.lines[0] as TagLine;
   const lines = block.lines.slice(1); // remove header (a tag-line)
-  const linesWithMeta = lines.map(makeLineWithMetadata);
+  if (header == null || lines.length < 1) {
+    return;
+  }
 
-  let constructing: string | null = null;
-  let aggregating: LineWithMetadata[] = [];
+  const baseContext = parseTag(header).map((t) => t.name);
+  const mergeSet = (v: Record) => {
+    const key = [...v.context, v.name].join();
+    const exist = map.get(key);
+    if (exist) {
+      map.set(key, { ...exist, lines: [...exist.lines, ...v.lines] });
+    }
+  };
+
+  const linesWithMeta = lines.map(makeLineWithMetadata);
+  let record: Record | null = null;
+
   for (const line of linesWithMeta) {
-    if (constructing) {
+    if (record) {
       if (line.meta.type === 'empty') {
-        aggregating.push(line);
-        map.set(constructing, aggregating);
-        constructing = null;
-        aggregating = [];
+        mergeSet(record);
+        record = null;
       } else if (line.meta.type === 'episode-title') {
-        map.set(constructing, aggregating);
-        constructing = line.meta.name;
-        aggregating = [];
+        mergeSet(record);
+        const oldContext = record.context as string[];
+        record = {
+          name: line.meta.name,
+          context: [...oldContext],
+          lines: [],
+        };
       }
     } else {
       if (line.meta.type === 'episode-title') {
-        constructing = line.meta.name;
+        record = {
+          name: line.meta.name,
+          context: [...baseContext],
+          lines: [],
+        };
       }
     }
   }
 
-  return Array.from(map.entries()).map(([name, lines]) => ({
-    name,
-    lines,
-  }));
+  // for lacking EOL
+  if (record) {
+    mergeSet(record);
+  }
+
+  return Array.from(map.values());
 };
 
 export const makeEpisode = (block: EpisodeBlock) =>
