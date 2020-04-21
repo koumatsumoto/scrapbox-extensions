@@ -21,7 +21,7 @@ export const parseTagLine = (line: TagLine): Either<Error, Tag[]> => {
   for (const word of words) {
     // validation
     if (!isValidTagText(word)) {
-      return left(new Error(`${word} is invalid`));
+      return left(new Error(`"${word}" is invalid`));
     }
 
     tags.push({

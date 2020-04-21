@@ -62,6 +62,7 @@ export const makeBlocks = (lines: Line[]) => {
   for (; cursor < lines.length; cursor++) {
     const line = lines[cursor];
     if (isTagLine(line)) {
+      block.lines.push(lines[cursor]);
       blocks.push(block);
       block = getNewBlock('episode');
     } else {
