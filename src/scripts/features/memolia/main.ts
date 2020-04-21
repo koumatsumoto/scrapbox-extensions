@@ -10,7 +10,11 @@ export const useMemolia = () => {
         const blocks = makeBlocks(window.scrapbox.Page.lines);
         console.log('[dev] memolia', window.scrapbox.Page.title, blocks);
         console.log(
-          '[dev] memolia episodes',
+          '[dev] memolia episode blocks',
+          blocks.filter((b) => b.type === 'episode'),
+        );
+        console.log(
+          '[dev] memolia episode parsed',
           blocks.filter((b) => b.type === 'episode').map((b) => makeEpisode(b as EpisodeBlock)),
         );
       }
