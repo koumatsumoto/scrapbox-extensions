@@ -72,11 +72,18 @@ export const getLineMetadata = (nodes: Line['nodes']): LineMetadata => {
   // "links [a] and [b]" => ["links ", {}, " and ", {}]
   if (Array.isArray(nodes)) {
     const inners = nodes.map((node) => getLineMetadata(node)).filter(isLinkableLine);
-    return {
-      type: 'with-inline-links',
-      name: inners.flatMap((i) => i.name),
-      indent: 0,
-    };
+    if (0 < inners.length) {
+      return {
+        type: 'with-inline-links',
+        name: inners.flatMap((i) => i.name),
+        indent: 0,
+      };
+    } else {
+      return {
+        type: 'untyped',
+        indent: 0,
+      };
+    }
   }
 
   // non-indented link-only-line e.g. "[link only]"
