@@ -3,7 +3,7 @@ import { Line } from '../../../../libs/scrapbox/types';
 
 export type TitleBlock = {
   type: 'title';
-  lines: Line[];
+  lines: [Line];
 };
 
 export type SemantemeBlock = {
@@ -18,7 +18,7 @@ export type EpisodeBlock = {
 
 export type Block = TitleBlock | SemantemeBlock | EpisodeBlock;
 
-const getNewBlock = (type: Block['type']): Block => ({ type, lines: [] });
+const getNewBlock = (type: 'semanteme' | 'episode'): SemantemeBlock | EpisodeBlock => ({ type, lines: [] });
 
 // scrapbox.Page.lines.map((l) => ({ n: l.section.number, t: l.text }))
 export const makeBlocks = (lines: Line[]) => {
