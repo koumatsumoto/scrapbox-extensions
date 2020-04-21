@@ -1,19 +1,10 @@
-import { fold, map as eitherMap } from 'fp-ts/es6/Either';
-import { pipe } from 'fp-ts/es6/pipeable';
 import { TagLine } from '../../../../libs/scrapbox/types';
-import { ChildEpisode, Context } from '../types';
+import { ChildEpisode } from '../types';
 import { EpisodeBlock } from './block';
-import { makeContext } from './context';
 import { makeLineWithMetadata } from './line';
 import { parseTag } from './tag';
 
-export const getTagLine = (block: EpisodeBlock) => {
-  return block.lines[0] as TagLine;
-};
-
-export const isRoot = (context: Context) => {
-  return context.tags[context.tags.length - 1].type === 'ideation';
-};
+export const getContext = (line: TagLine) => parseTag(line).map((t) => t.name);
 
 export const parseChildEpisodes = (block: EpisodeBlock): ChildEpisode[] => {
   const header = block.lines[0] as TagLine;
@@ -22,15 +13,15 @@ export const parseChildEpisodes = (block: EpisodeBlock): ChildEpisode[] => {
     return [];
   }
 
-  const getBaseContext = () => [...parseTag(header).map((t) => t.name), block.of];
-  const map = new Map<string, ChildEpisode>();
+  const getBaseContext = () => [...getContext(header), block.of];
+  const episodes = new Map<string, ChildEpisode>();
   const merge = (v: ChildEpisode) => {
     const key = [...v.context, v.for].join();
-    const exist = map.get(key);
+    const exist = episodes.get(key);
     if (exist) {
-      map.set(key, { ...exist, lines: [...exist.lines, ...v.lines] });
+      episodes.set(key, { ...exist, lines: [...exist.lines, ...v.lines] });
     } else {
-      map.set(key, v);
+      episodes.set(key, v);
     }
   };
 
@@ -82,16 +73,12 @@ export const parseChildEpisodes = (block: EpisodeBlock): ChildEpisode[] => {
     merge(ep);
   }
 
-  return Array.from(map.values());
+  return Array.from(episodes.values());
 };
 
-export const makeEpisode = (block: EpisodeBlock) =>
-  pipe(
-    getTagLine(block),
-    makeContext,
-    eitherMap((context: Context) => ({ of: block.of, context, lines: block.lines, root: isRoot(context) })),
-    fold(
-      (a) => a,
-      (b) => parseChildEpisodes(b as any) as any,
-    ),
-  );
+export const makeEpisode = (block: EpisodeBlock) => ({
+  of: block.of,
+  context: getContext(block.lines[0] as TagLine),
+  lines: block.lines,
+  children: parseChildEpisodes(block),
+});

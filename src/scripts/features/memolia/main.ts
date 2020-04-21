@@ -9,10 +9,7 @@ export const useMemolia = () => {
         prevCount = window.scrapbox.Page.lines.length;
         const blocks = makeBlocks(window.scrapbox.Page.lines);
         console.log('[dev] memolia', window.scrapbox.Page.title, blocks);
-        console.log(
-          '[dev] memolia episode blocks',
-          blocks.filter((b) => b.type === 'episode'),
-        );
+        console.log('[dev] memolia blocks', blocks);
         console.log(
           '[dev] memolia episode parsed',
           blocks.filter((b) => b.type === 'episode').map((b) => makeEpisode(b as EpisodeBlock)),
