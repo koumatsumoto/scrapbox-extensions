@@ -1,20 +1,20 @@
 import {
-  CommitErrorResponse,
-  CommitResponse,
-  JoinRoomErrorResponse,
-  JoinRoomResponse,
-  WebsocketSendResponse,
-} from '../websocket-client-types';
+  CommitErrorResponsePayload,
+  CommitResponsePayload,
+  DeprecatedWebsocketSendResponsePayload,
+  JoinRoomErrorResponsePayload,
+  JoinRoomResponsePayload,
+} from '../types/response';
 
-const isCommitErrorResponse = (response: CommitResponse | JoinRoomResponse): response is CommitErrorResponse => {
+const isCommitErrorResponse = (response: CommitResponsePayload | JoinRoomResponsePayload): response is CommitErrorResponsePayload => {
   return !!response.error && !Array.isArray(response.error.errors);
 };
 
-const isJoinRoomErrorResponse = (response: CommitResponse | JoinRoomResponse): response is JoinRoomErrorResponse => {
+const isJoinRoomErrorResponse = (response: CommitResponsePayload | JoinRoomResponsePayload): response is JoinRoomErrorResponsePayload => {
   return !!response.error && Array.isArray(response.error.errors);
 };
 
-export const validateResponse = (response: WebsocketSendResponse) => {
+export const validateResponse = (response: DeprecatedWebsocketSendResponsePayload) => {
   for (const res of response) {
     if (isCommitErrorResponse(res)) {
       throw new Error(res.error.message);

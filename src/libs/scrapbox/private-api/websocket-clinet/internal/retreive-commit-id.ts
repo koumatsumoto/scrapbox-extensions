@@ -1,6 +1,6 @@
-import { ExternalCommitResponse, ExternalResponse } from '../websocket-client-types';
+import { ExternalCommitResponsePayload, ExternalResponsePayload } from '../types/response';
 
-const isExternalCommitResponse = (response: ExternalResponse): response is ExternalCommitResponse => response[0] === 'commit';
-export const tryRetrieveCommitData = (response: ExternalResponse) => {
+const isExternalCommitResponse = (response: ExternalResponsePayload): response is ExternalCommitResponsePayload => response[0] === 'commit';
+export const tryRetrieveCommitData = (response: ExternalResponsePayload) => {
   return isExternalCommitResponse(response) ? response[1] : null;
 };

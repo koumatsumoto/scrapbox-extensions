@@ -1,43 +1,81 @@
-import { getRx } from '../../../common';
 import { ID } from '../../public-api';
 import { CommitChangeParam, createChanges } from './internal/commit-change-param';
-import { tryRetrieveCommitData } from './internal/retreive-commit-id';
-import { validateResponse } from './internal/validate-response';
-import { extractMessage } from './websocket-client-internal-functions';
-import {
-  CommitPayload,
-  CommitSuccessResponse,
-  ConnectionOpenResponse,
-  ExternalCommitData,
-  ExternalResponse,
-  JoinRoomPayload,
-  JoinRoomSuccessResponse,
-  WebsocketPayload,
-  WebsocketSendResponse,
-} from './websocket-client-types';
+import { parseMessage } from './internal/parse-message';
+import { WebsocketRequestPayload, ConnectionOpenResponsePayload, WebsocketResponsePayload } from './types';
 
 const endpoint = 'wss://scrapbox.io/socket.io/?EIO=3&transport=websocket';
-const sendProtocol = '42';
-const receiveProtocol = '43';
-// own impl
-type ResponseEmission = { senderId: string; data: WebsocketSendResponse };
+const headers = {
+  initialize: '0',
+  ping: '2',
+  pong: '3',
+  connected: '40',
+  // e.g.
+  //   * 42: 'cursor'
+  //   * 42X: user custom request (X is arbitrary natural number to specify response)
+  send: '42',
+  // e.g.
+  //   * 43X: response to user custom request (X is number used for request)
+  receive: '43',
+};
+
+type InternalMessage = { senderId: string | null; data: WebsocketResponsePayload };
+
+class WebsocketEventTarget extends EventTarget {
+  // when websocket connection established
+  dispatchConnectionOpened(event: Event) {
+    this.dispatchEvent(new CustomEvent('connection-opened', { detail: event }));
+  }
+  // when websocket connection closed
+  dispatchConnectionClosed(event: CloseEvent) {
+    this.dispatchEvent(new CustomEvent('connection-closed', { detail: event }));
+  }
+  // when websocket connection closed
+  dispatchConnectionErrored(event: Event) {
+    this.dispatchEvent(new CustomEvent('connection-errored', { detail: event }));
+  }
+  dispatchResponse(data: InternalMessage) {
+    this.dispatchEvent(new CustomEvent('message-received', { detail: data }));
+  }
+
+  subscribe(type: 'message-received', listener: (e: CustomEvent<InternalMessage>) => void): void;
+  subscribe(type: string, listener: (e: CustomEvent) => void): void {
+    super.addEventListener(type, listener as any);
+  }
+
+  unsubscribe(type: 'message-received', listener: (e: CustomEvent<InternalMessage>) => void): void;
+  unsubscribe(type: string, listener: (e: CustomEvent) => void): void {
+    super.removeEventListener(type, listener as any);
+  }
+}
+
+const awaitResponse = (emitter: WebsocketEventTarget, id: string) =>
+  new Promise<WebsocketResponsePayload>((resolve, reject) => {
+    const handle = (e: CustomEvent<InternalMessage>) => {
+      if (e.detail.senderId === id) {
+        resolve(e.detail.data);
+        emitter.unsubscribe('message-received', handle);
+      }
+    };
+
+    emitter.subscribe('message-received', handle);
+    // timeout for memory leak
+    setTimeout(() => {
+      emitter.unsubscribe('message-received', handle);
+      reject(new Error('[websocket-client] timeout for response'));
+    }, 1000 * 30);
+  });
 
 export class WebsocketClient {
   private readonly socket: WebSocket;
-  // need buffer if try to send until connection opened
-  private sendBuffer: Function[] = [];
-  private senderId = 0;
-  private readonly _externalCommit$ = new (getRx().Subject)<ExternalCommitData | null>();
-  readonly response$ = new (getRx().Subject)<ResponseEmission>();
-  readonly open$ = new (getRx().Subject)<Event>();
-  readonly close$ = new (getRx().Subject)<CloseEvent>();
-  readonly error$ = new (getRx().Subject)<Event>();
-  readonly commitIdUpdate$ = this._externalCommit$
-    .asObservable()
-    .pipe(getRx().operators.filter(((v) => v !== null) as (v: ExternalCommitData | null) => v is ExternalCommitData));
+  private readonly event: WebsocketEventTarget;
 
-  constructor(private readonly userId: ID) {
-    this.socket = new WebSocket(endpoint);
+  // wait request until connection opened
+  private pendingRequests: Function[] = [];
+  private senderId = 0;
+
+  constructor(socket?: WebSocket, event?: WebsocketEventTarget) {
+    this.socket = socket || new WebSocket(endpoint);
+    this.event = event || new WebsocketEventTarget();
     this.initialize();
   }
 
@@ -46,7 +84,7 @@ export class WebsocketClient {
       method: 'commit',
       data: {
         kind: 'page',
-        userId: this.userId,
+        userId: param.userId,
         projectId: param.projectId,
         pageId: param.pageId,
         parentId: param.parentId,
@@ -68,84 +106,69 @@ export class WebsocketClient {
     });
   }
 
-  private async send(payload: CommitPayload): Promise<CommitSuccessResponse[]>;
-  private async send(payload: JoinRoomPayload): Promise<JoinRoomSuccessResponse[]>;
-  private async send(payload: WebsocketPayload): Promise<any> {
+  // unsubscribe is not implemented, no need currently
+  subscribe(callback: (v: WebsocketResponsePayload) => unknown) {
+    const fn = (e: CustomEvent<InternalMessage>) => callback(e.detail.data);
+    this.event.subscribe('message-received', fn);
+  }
+
+  private async send(payload: WebsocketRequestPayload): Promise<WebsocketResponsePayload> {
     const body = JSON.stringify(['socket.io-request', payload]);
     const sid = `${this.senderId++}`;
-    const data = `${sendProtocol}${sid}${body}`;
+    const data = `${headers.send}${sid}${body}`;
 
     if (this.socket.readyState !== WebSocket.OPEN) {
-      this.sendBuffer.push(() => this.socket.send(data));
+      this.pendingRequests.push(() => this.socket.send(data));
     } else {
       this.socket.send(data);
     }
 
-    const response = await this.response$
-      .pipe(
-        getRx().operators.first(({ senderId }) => senderId === sid),
-        getRx().operators.map((res) => res.data),
-      )
-      .toPromise<WebsocketSendResponse>();
-    // throw if error
-    validateResponse(response);
-
-    return response;
+    return awaitResponse(this.event, sid);
   }
 
   /**
    * Connect to websocket and register events.
    */
   private initialize() {
-    this.socket.addEventListener('open', (event: Event) => {
-      console.log('[websocket-client] connection opened ', event);
-      this.open$.next(event);
-    });
-
-    this.socket.addEventListener('message', (event: MessageEvent) => {
-      if (typeof event.data !== 'string') {
-        throw new Error('unexpected data received');
-      }
-
-      const message = event.data;
-      const [header, data] = extractMessage(message);
-
-      // message just after connection opened
-      if (header === '0') {
-        this.setPingAndConsumeBuffer(data as ConnectionOpenResponse);
-      }
-      // updation by other user
-      if (header === '42') {
-        this._externalCommit$.next(tryRetrieveCommitData(data as ExternalResponse));
-      }
-      // for own send() result
-      if (header.startsWith(receiveProtocol)) {
-        const senderId = header.slice(receiveProtocol.length);
-        this.response$.next({ senderId, data: data as WebsocketSendResponse });
-      }
-    });
-
-    this.socket.addEventListener('close', (event: CloseEvent) => {
-      // maybe closed by server
-      console.error('[websocket-client] connection closed ', event);
-      this.close$.next(event);
-    });
-
-    this.socket.addEventListener('error', (event: Event) => {
-      console.error('[websocket-client] connection errored ', event);
-      this.error$.next(event);
-      this.socket.close();
-    });
+    this.socket.addEventListener('open', (ev) => this.event.dispatchConnectionOpened(ev));
+    this.socket.addEventListener('close', (ev) => this.event.dispatchConnectionClosed(ev));
+    this.socket.addEventListener('error', (ev) => this.event.dispatchConnectionErrored(ev));
+    this.socket.addEventListener('message', (ev: MessageEvent) => this.handleMessage(ev));
   }
 
-  private setPingAndConsumeBuffer(data: ConnectionOpenResponse) {
-    // setup ping
-    setInterval(() => {
-      this.socket.send('2');
-    }, data.pingInterval);
+  // for incoming messages
+  private handleMessage(event: MessageEvent) {
+    if (typeof event.data !== 'string') {
+      throw new Error('unexpected data received');
+    }
+
+    const message = event.data;
+    const [header, data] = parseMessage(message);
+
+    // message just after connection opened
+    if (header === headers.initialize) {
+      this.setPingAndConsumeBuffer(data as ConnectionOpenResponsePayload);
+      return;
+    }
+    // for own send() result
+    if (header.startsWith(headers.receive)) {
+      const senderId = header.slice(headers.receive.length);
+      this.event.dispatchResponse({ senderId, data: data });
+      return;
+    }
+    // for updation by other users
+    if (header === headers.send) {
+      this.event.dispatchResponse({ senderId: null, data: data });
+      return;
+    }
+  }
+
+  private setPingAndConsumeBuffer(data: ConnectionOpenResponsePayload) {
+    // ping interval is specified from server
+    setInterval(() => this.socket.send('2'), data.pingInterval);
 
     // consume buffer
-    this.sendBuffer.forEach((f) => f());
-    this.sendBuffer = [];
+    this.pendingRequests.forEach((f) => f());
+    this.pendingRequests = [];
   }
 }

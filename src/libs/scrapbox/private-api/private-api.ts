@@ -3,7 +3,7 @@ import { getCurrentPageName, ID } from '../public-api';
 import { Router } from '../router';
 import { ApiClient } from './api-client/api-client';
 import { MeResponse, PageResponse } from './api-client/api-client-types';
-import { CommitChangeParam, WebsocketClient } from './websocket-clinet';
+import { CommitChangeParam, DeprecatedWebsocketClient } from './websocket-clinet';
 
 interface PageData extends PageResponse {
   // will mutate
@@ -20,7 +20,7 @@ export class PrivateApi {
     getRx().operators.switchMap((title) => (title === null ? getRx().of(null) : this.apiClient.getPage(title))),
     getRx().operators.shareReplay(1),
   );
-  private websocketClient!: WebsocketClient;
+  private websocketClient!: DeprecatedWebsocketClient;
 
   constructor(private readonly userId: ID, private readonly projectId: string, private readonly apiClient: ApiClient) {
     this.setupWebsocket();
@@ -60,7 +60,7 @@ export class PrivateApi {
    * for websocket reconnect handling
    */
   private setupWebsocket() {
-    this.websocketClient = new WebsocketClient(this.userId);
+    this.websocketClient = new DeprecatedWebsocketClient(this.userId);
 
     // handle update by other user
     const subscription = this.websocketClient.commitIdUpdate$.subscribe((data) => {
