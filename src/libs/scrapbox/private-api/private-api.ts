@@ -25,7 +25,14 @@ export class PrivateApi {
   private websocketClient!: WebsocketClient;
 
   constructor(private readonly userId: ID, private readonly projectId: string, private readonly apiClient: ApiClient) {
-    this.setupWebsocket();
+    this.websocketClient = new WebsocketClient();
+
+    // handle update by other user
+    this.websocketClient.onCommitIdUpdated((data) => {
+      if (this.pageData && this.pageData.id === data.pageId) {
+        this.pageData.commitId = data.commitId;
+      }
+    });
 
     // register page change handling
     this.pageResponse$.subscribe((page) => {
@@ -60,20 +67,6 @@ export class PrivateApi {
       projectId: this.projectId,
       pageId: this.pageData.id,
       commitId: this.pageData.commitId,
-    });
-  }
-
-  /**
-   * for websocket reconnect handling
-   */
-  private setupWebsocket() {
-    this.websocketClient = new WebsocketClient();
-
-    // handle update by other user
-    this.websocketClient.onCommitIdUpdated((data) => {
-      if (this.pageData && this.pageData.id === data.pageId) {
-        this.pageData.commitId = data.commitId;
-      }
     });
   }
 
@@ -121,6 +114,8 @@ const preparePrivateApi = async () => {
 
   const api = new PrivateApi(user.id, project.id, apiClient);
   await api.initialize();
+  // for debug purpose
+  (window as any).api = api;
 
   return api;
 };
