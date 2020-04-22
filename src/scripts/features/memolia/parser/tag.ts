@@ -1,4 +1,3 @@
-import { Either, left, right } from 'fp-ts/es6/Either';
 import { TagLine, TextStartWithHash } from '../../../../libs/scrapbox/types';
 import { allTagWords } from '../../add-episode-button/config';
 import { Tag } from '../types';
@@ -13,27 +12,6 @@ export const extractWord = (word: TextStartWithHash) => word.slice(1);
 // TODO: implement more types
 export const classifyTag = (word: string) => {
   return allTagWords.includes(word) ? 'unknown' : 'ideation';
-};
-
-// 2020/04/20
-// TODO: use parseTag and remove this
-export const parseTagLine = (line: TagLine): Either<Error, Tag[]> => {
-  const words = splitToWords(line.text);
-  const tags: Tag[] = [];
-  for (const word of words) {
-    // validation
-    if (!isValidTagText(word)) {
-      return left(new Error(`"${word}" is invalid`));
-    }
-
-    tags.push({
-      name: extractWord(word),
-      raw: word,
-      type: classifyTag(word),
-    });
-  }
-
-  return right(tags);
 };
 
 export const parseTag = (line: TagLine): Tag[] => {

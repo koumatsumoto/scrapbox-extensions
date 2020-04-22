@@ -1,5 +1,4 @@
-import { makeBlocks } from './parser/block';
-import { makeEpisode } from './parser/episode';
+import { makeMemory } from './parser/memory';
 
 export const useMemolia = () => {
   let prevCount = 0;
@@ -7,9 +6,7 @@ export const useMemolia = () => {
     if (window.scrapbox.Page.lines) {
       if (prevCount !== window.scrapbox.Page.lines.length) {
         prevCount = window.scrapbox.Page.lines.length;
-        const blocks = makeBlocks(window.scrapbox.Page.lines);
-        console.log('[dev] memolia blocks', blocks);
-        console.log('[dev] memolia episode parsed', blocks.episodes.map(makeEpisode));
+        console.log('[dev] memolia', makeMemory(window.scrapbox.Page.lines));
       }
     }
   };

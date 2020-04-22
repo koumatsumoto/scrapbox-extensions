@@ -24,7 +24,7 @@ export type BlockParseResult = {
 };
 
 // scrapbox.Page.lines.map((l) => ({ n: l.section.number, t: l.text }))
-export const makeBlocks = (lines: ScrapboxLine[]): BlockParseResult => {
+export const parseToBlock = (lines: ScrapboxLine[]): BlockParseResult => {
   // iteration point
   let cursor = 0;
   // head is title-line
