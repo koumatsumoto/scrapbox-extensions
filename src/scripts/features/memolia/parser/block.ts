@@ -1,75 +1,89 @@
 import { isTagLine } from '../../../../libs/scrapbox/public-api/scrapbox-object/line';
-import { ScrapboxLine } from '../../../../libs/scrapbox/types';
+import { ScrapboxLine, TagLine } from '../../../../libs/scrapbox/types';
 import { Memory, Name } from '../types';
 
 export type TitleBlock = {
-  type: 'title';
   of: Memory['name'];
   lines: [ScrapboxLine];
 };
 
 export type SemantemeBlock = {
-  type: 'semanteme';
   of: Memory['name'];
   lines: ScrapboxLine[];
 };
 
 export type EpisodeBlock = {
-  type: 'episode';
   of: Memory['name'];
-  lines: ScrapboxLine[];
+  lines: { 0: TagLine } & ScrapboxLine[];
 };
 
-export type Block = TitleBlock | SemantemeBlock | EpisodeBlock;
+export type BlockParseResult = {
+  title: TitleBlock;
+  semanteme: SemantemeBlock | null;
+  episodes: EpisodeBlock[];
+};
 
 // scrapbox.Page.lines.map((l) => ({ n: l.section.number, t: l.text }))
-export const makeBlocks = (lines: ScrapboxLine[]) => {
-  const blocks: Block[] = [];
+export const makeBlocks = (lines: ScrapboxLine[]): BlockParseResult => {
   // iteration point
   let cursor = 0;
   // head is title-line
   const titleLine = lines[cursor];
-  const getNewBlock = (type: 'semanteme' | 'episode'): SemantemeBlock | EpisodeBlock => ({ of: titleLine.text as Name, type, lines: [] });
+  const getSemantemeBlock = (): SemantemeBlock => ({ of: titleLine.text as Name, lines: [] });
+  const getEpisodeBlock = (first: TagLine): EpisodeBlock => ({ of: titleLine.text as Name, lines: [first] });
 
   // title block
-  blocks.push({
-    type: 'title',
+  const titleBlock: TitleBlock = {
     of: titleLine.text as Name,
     lines: [titleLine],
-  });
+  };
+  // case: page has only title-line
   if (cursor === lines.length) {
-    return blocks;
+    return {
+      title: titleBlock,
+      semanteme: null,
+      episodes: [],
+    };
   }
 
   // semanteme block
-  const semantemeBlock = getNewBlock('semanteme');
+  const semantemeBlock = getSemantemeBlock();
   for (cursor = 1; cursor < lines.length; cursor++) {
     const line = lines[cursor];
     if (isTagLine(line)) {
       break;
     } else {
-      blocks.push(semantemeBlock);
+      semantemeBlock.lines.push(line);
     }
   }
+  // case: page not have episodes
   if (cursor === lines.length) {
-    return blocks;
+    return {
+      title: titleBlock,
+      semanteme: semantemeBlock,
+      episodes: [],
+    };
   }
 
-  let block = getNewBlock('episode');
-  // this line is specified as tag-line above
-  block.lines.push(lines[cursor++]);
-
-  for (; cursor < lines.length; cursor++) {
+  // construct episode-block
+  // first line is specified as tag-line above
+  let block = getEpisodeBlock(lines[cursor] as TagLine);
+  const blocks: EpisodeBlock[] = [];
+  for (cursor++; cursor < lines.length; cursor++) {
     const line = lines[cursor];
     if (isTagLine(line)) {
       blocks.push(block);
-      block = getNewBlock('episode');
+      block = getEpisodeBlock(line);
+    } else {
+      block.lines.push(line);
     }
-
-    block.lines.push(line);
   }
 
   blocks.push(block);
 
-  return blocks;
+  return {
+    title: titleBlock,
+    semanteme: semantemeBlock,
+    episodes: blocks,
+  };
 };

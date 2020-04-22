@@ -1,5 +1,5 @@
 import { TagLine } from '../../../../libs/scrapbox/types';
-import { ChildEpisode } from '../types';
+import { ChildEpisode, Episode } from '../types';
 import { EpisodeBlock } from './block';
 import { makeLineWithMetadata } from './line';
 import { parseTag } from './tag';
@@ -76,9 +76,9 @@ export const parseChildEpisodes = (block: EpisodeBlock): ChildEpisode[] => {
   return Array.from(episodes.values());
 };
 
-export const makeEpisode = (block: EpisodeBlock) => ({
+export const makeEpisode = (block: EpisodeBlock): Episode => ({
   of: block.of,
-  context: getContext(block.lines[0] as TagLine),
+  context: getContext(block.lines[0]),
   lines: block.lines,
   children: parseChildEpisodes(block),
 });

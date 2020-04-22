@@ -69,7 +69,7 @@ export type Episode = Phiable<{
   // where episode belongs to
   of: Memory['name'];
   // have an array of tag
-  context: Context;
+  context: string[];
   // all lines in episode block
   lines: Line[];
   // all references to linked to episode

@@ -1,4 +1,4 @@
-import { EpisodeBlock, makeBlocks } from './parser/block';
+import { makeBlocks } from './parser/block';
 import { makeEpisode } from './parser/episode';
 
 export const useMemolia = () => {
@@ -9,10 +9,7 @@ export const useMemolia = () => {
         prevCount = window.scrapbox.Page.lines.length;
         const blocks = makeBlocks(window.scrapbox.Page.lines);
         console.log('[dev] memolia blocks', blocks);
-        console.log(
-          '[dev] memolia episode parsed',
-          blocks.filter((b) => b.type === 'episode').map((b) => makeEpisode(b as EpisodeBlock)),
-        );
+        console.log('[dev] memolia episode parsed', blocks.episodes.map(makeEpisode));
       }
     }
   };
