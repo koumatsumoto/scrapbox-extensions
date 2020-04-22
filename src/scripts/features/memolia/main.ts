@@ -1,4 +1,4 @@
-import { makeMemory } from './parser/memory';
+import { makeMemory } from './internal/memory';
 
 export const useMemolia = () => {
   let prevCount = 0;
