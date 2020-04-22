@@ -26,4 +26,3 @@ export const useHighlightedTagLine = () => {
   highlightTagLines();
   setInterval(highlightTagLines, 1000);
 };
-
