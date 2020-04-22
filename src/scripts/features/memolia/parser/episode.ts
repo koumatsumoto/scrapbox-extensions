@@ -1,7 +1,7 @@
 import { TagLine } from '../../../../libs/scrapbox/types';
 import { ChildEpisode, Episode } from '../types';
 import { EpisodeBlock } from './block';
-import { makeLineWithMetadata } from './line';
+import { EpisodeTitleLineMetadata, makeLineWithMetadata } from './line';
 import { parseTag } from './tag';
 
 export const getContext = (line: TagLine) => parseTag(line).map((t) => t.name);
@@ -31,29 +31,45 @@ export const parseChildEpisodes = (block: EpisodeBlock): ChildEpisode[] => {
 
   for (const line of linesWithMeta) {
     if (ep) {
-      // not include empty-line as parent's lines
-      if (line.meta.type === 'empty') {
-        merge(ep);
-        ep = null;
-      } else if (line.meta.type === 'episode-title') {
-        // if target-line indent-level is higher than parent, it should be included in parent
-        //   e.g. "  [a]" <= "    [b]"
-        // else, start construction of new child-episode
-        //   e.g. "  [a]" == "  [b]"
-        //   e.g. "  [a]" >= "[b]"
-        if (parentIndentLevel < line.meta.indent) {
-          ep.lines.push(line);
-        } else {
+      switch (line.meta.type) {
+        case 'empty': {
           merge(ep);
-          parentIndentLevel = line.meta.indent;
-          ep = {
-            for: line.meta.name,
-            context: getBaseContext(),
-            lines: [],
-          };
+          ep = null;
+          break;
         }
-      } else {
-        ep.lines.push(line);
+        case 'episode-title': {
+          // include line
+          //   "  [a]" <= "    [b]"
+          // end current episode and start new
+          //   "  [a]" == "  [b]"
+          //   "  [a]" >= "[b]"
+          if (parentIndentLevel < line.meta.indent) {
+            ep.lines.push(line);
+          } else {
+            merge(ep);
+            parentIndentLevel = line.meta.indent;
+            ep = {
+              // refined by case condition
+              for: (line.meta as EpisodeTitleLineMetadata).name,
+              context: getBaseContext(),
+              lines: [],
+            };
+          }
+          break;
+        }
+        default: {
+          // include
+          //   "  [a]" <= "    b"
+          // not include, end episode
+          //   "  [a]" == "  b"
+          //   "  [a]" >= "b"
+          if (parentIndentLevel < line.meta.indent) {
+            ep.lines.push(line);
+          } else {
+            merge(ep);
+            ep = null;
+          }
+        }
       }
     } else {
       // start construction of new child-episode

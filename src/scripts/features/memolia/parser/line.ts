@@ -5,7 +5,7 @@ type PageTitleLineMetadata = {
   name?: never;
   indent: 0;
 };
-type EpisodeTitleLineMetadata = {
+export type EpisodeTitleLineMetadata = {
   type: 'episode-title';
   name: string;
   indent: number;
