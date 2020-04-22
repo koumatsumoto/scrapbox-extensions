@@ -1,7 +1,14 @@
 import { ID } from '../../public-api';
 import { CommitChangeParam, createChanges } from './internal/commit-change-param';
 import { parseMessage } from './internal/parse-message';
-import { WebsocketRequestPayload, ConnectionOpenResponsePayload, WebsocketResponsePayload } from './types';
+import { isCommitResponsePayload, isCommitSuccessResponsePayload } from './internal/response';
+import {
+  WebsocketRequestPayload,
+  ConnectionOpenResponsePayload,
+  WebsocketResponsePayload,
+  CommitResponsePayload,
+  JoinRoomResponsePayload,
+} from './types';
 
 const endpoint = 'wss://scrapbox.io/socket.io/?EIO=3&transport=websocket';
 const headers = {
@@ -20,35 +27,21 @@ const headers = {
 
 type InternalMessage = { senderId: string | null; data: WebsocketResponsePayload };
 
-class WebsocketEventTarget extends EventTarget {
-  // when websocket connection established
-  dispatchConnectionOpened(event: Event) {
-    this.dispatchEvent(new CustomEvent('connection-opened', { detail: event }));
-  }
-  // when websocket connection closed
-  dispatchConnectionClosed(event: CloseEvent) {
-    this.dispatchEvent(new CustomEvent('connection-closed', { detail: event }));
-  }
-  // when websocket connection closed
-  dispatchConnectionErrored(event: Event) {
-    this.dispatchEvent(new CustomEvent('connection-errored', { detail: event }));
-  }
-  dispatchResponse(data: InternalMessage) {
+class WebsocketMessageEvent extends EventTarget {
+  dispatch(data: InternalMessage) {
     this.dispatchEvent(new CustomEvent('message-received', { detail: data }));
   }
 
-  subscribe(type: 'message-received', listener: (e: CustomEvent<InternalMessage>) => void): void;
-  subscribe(type: string, listener: (e: CustomEvent) => void): void {
+  subscribe(type: 'message-received', listener: (e: CustomEvent<InternalMessage>) => void) {
     super.addEventListener(type, listener as any);
   }
 
-  unsubscribe(type: 'message-received', listener: (e: CustomEvent<InternalMessage>) => void): void;
-  unsubscribe(type: string, listener: (e: CustomEvent) => void): void {
+  unsubscribe(type: 'message-received', listener: (e: CustomEvent<InternalMessage>) => void) {
     super.removeEventListener(type, listener as any);
   }
 }
 
-const awaitResponse = (emitter: WebsocketEventTarget, id: string) =>
+const awaitResponse = (emitter: WebsocketMessageEvent, id: string) =>
   new Promise<WebsocketResponsePayload>((resolve, reject) => {
     const handle = (e: CustomEvent<InternalMessage>) => {
       if (e.detail.senderId === id) {
@@ -66,21 +59,23 @@ const awaitResponse = (emitter: WebsocketEventTarget, id: string) =>
   });
 
 export class WebsocketClient {
-  private readonly socket: WebSocket;
-  private readonly event: WebsocketEventTarget;
+  private socket!: WebSocket;
+  private readonly event: WebsocketMessageEvent;
+  // to re-join on reconnect
+  private joinedRoom: { projectId: string; pageId: string } | null = null;
 
   // wait request until connection opened
   private pendingRequests: Function[] = [];
   private senderId = 0;
 
-  constructor(socket?: WebSocket, event?: WebsocketEventTarget) {
-    this.socket = socket || new WebSocket(endpoint);
-    this.event = event || new WebsocketEventTarget();
-    this.initialize();
+  // DI for testing
+  constructor(socket = new WebSocket(endpoint), event = new WebsocketMessageEvent()) {
+    this.event = event;
+    this.initialize(socket);
   }
 
   commit(param: { projectId: string; userId: ID; pageId: string; parentId: string; changes: CommitChangeParam[] }) {
-    return this.send({
+    return this.send<CommitResponsePayload[]>({
       method: 'commit',
       data: {
         kind: 'page',
@@ -95,8 +90,9 @@ export class WebsocketClient {
     });
   }
 
-  joinRoom(param: { projectId: string; pageId: string | null }) {
-    return this.send({
+  joinRoom(param: { projectId: string; pageId: string }) {
+    this.joinedRoom = param;
+    return this.send<JoinRoomResponsePayload[]>({
       method: 'room:join',
       data: {
         pageId: param.pageId,
@@ -106,13 +102,47 @@ export class WebsocketClient {
     });
   }
 
+  disjoinRoom() {
+    if (!this.joinedRoom) {
+      return;
+    }
+
+    const projectId = this.joinedRoom.projectId;
+    this.joinedRoom = null;
+    return this.send<JoinRoomResponsePayload[]>({
+      method: 'room:join',
+      data: {
+        pageId: null,
+        projectId,
+        projectUpdatesStream: false,
+      },
+    });
+  }
+
   // unsubscribe is not implemented, no need currently
-  subscribe(callback: (v: WebsocketResponsePayload) => unknown) {
+  onIncomingMessage(callback: (v: WebsocketResponsePayload) => unknown) {
     const fn = (e: CustomEvent<InternalMessage>) => callback(e.detail.data);
     this.event.subscribe('message-received', fn);
   }
 
-  private async send(payload: WebsocketRequestPayload): Promise<WebsocketResponsePayload> {
+  onCommitIdUpdated(callback: (v: { pageId: string; commitId: string }) => unknown) {
+    const fn = (e: CustomEvent<InternalMessage>) => {
+      if (isCommitResponsePayload(e.detail.data)) {
+        e.detail.data
+          .filter(isCommitSuccessResponsePayload)
+          .map((i) => i.data.commitId)
+          .forEach((commitId) => {
+            if (!this.joinedRoom) {
+              return;
+            }
+            callback({ commitId, pageId: this.joinedRoom.pageId });
+          });
+      }
+    };
+    this.event.subscribe('message-received', fn);
+  }
+
+  private async send<T extends WebsocketResponsePayload = WebsocketResponsePayload>(payload: WebsocketRequestPayload): Promise<T> {
     const body = JSON.stringify(['socket.io-request', payload]);
     const sid = `${this.senderId++}`;
     const data = `${headers.send}${sid}${body}`;
@@ -123,17 +153,34 @@ export class WebsocketClient {
       this.socket.send(data);
     }
 
-    return awaitResponse(this.event, sid);
+    return awaitResponse(this.event, sid) as Promise<T>;
   }
 
   /**
    * Connect to websocket and register events.
    */
-  private initialize() {
-    this.socket.addEventListener('open', (ev) => this.event.dispatchConnectionOpened(ev));
-    this.socket.addEventListener('close', (ev) => this.event.dispatchConnectionClosed(ev));
-    this.socket.addEventListener('error', (ev) => this.event.dispatchConnectionErrored(ev));
+  private initialize(socket = new WebSocket(endpoint)) {
+    if (this.socket) {
+      this.socket.close();
+    }
+
+    this.socket = socket;
+    this.socket.addEventListener(
+      'open',
+      () => {
+        /* noop */
+      },
+      { once: true },
+    );
+    // reconnect on error and close
+    this.socket.addEventListener('close', () => this.initialize(), { once: true });
+    this.socket.addEventListener('error', () => this.socket.close(), { once: true });
     this.socket.addEventListener('message', (ev: MessageEvent) => this.handleMessage(ev));
+
+    // for re-initialize
+    if (this.joinedRoom) {
+      this.joinRoom(this.joinedRoom);
+    }
   }
 
   // for incoming messages
@@ -153,12 +200,12 @@ export class WebsocketClient {
     // for own send() result
     if (header.startsWith(headers.receive)) {
       const senderId = header.slice(headers.receive.length);
-      this.event.dispatchResponse({ senderId, data: data });
+      this.event.dispatch({ senderId, data: data });
       return;
     }
     // for updation by other users
     if (header === headers.send) {
-      this.event.dispatchResponse({ senderId: null, data: data });
+      this.event.dispatch({ senderId: null, data: data });
       return;
     }
   }

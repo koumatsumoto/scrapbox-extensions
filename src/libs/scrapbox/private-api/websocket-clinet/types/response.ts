@@ -1,13 +1,6 @@
 import { ID } from '../../../public-api';
 import { CommitChange } from '../internal/commit-change';
 
-export type ConnectionOpenResponsePayload = {
-  sid: string;
-  upgrades: [];
-  pingInterval: number;
-  pingTimeout: number;
-};
-
 export type CommitError = {
   message: string;
   name: string;
@@ -33,13 +26,7 @@ export type JoinRoomError = {
   stack: string;
 };
 
-export type CommitSuccessResponsePayload = {
-  data: { commitId: string };
-  error: undefined;
-};
-
 export type CommitErrorResponsePayload = {
-  data: undefined;
   error: {
     name: string;
     message: string;
@@ -50,7 +37,26 @@ export type CommitErrorResponsePayload = {
   };
 };
 
-export type CommitResponsePayload = CommitSuccessResponsePayload | CommitErrorResponsePayload;
+export type JoinRoomErrorResponsePayload = {
+  error: {
+    errors: JoinRoomError[];
+  };
+};
+
+export type ErrorResponsePayload = CommitErrorResponsePayload | JoinRoomErrorResponsePayload;
+
+export type ConnectionOpenResponsePayload = {
+  sid: string;
+  upgrades: [];
+  pingInterval: number;
+  pingTimeout: number;
+};
+
+export type CommitSuccessResponsePayload = {
+  data: { commitId: string };
+};
+
+export type CommitResponsePayload = CommitSuccessResponsePayload | ErrorResponsePayload;
 
 export type JoinRoomSuccessResponsePayload = {
   data: {
@@ -58,17 +64,9 @@ export type JoinRoomSuccessResponsePayload = {
     pageId: string;
     projectId: string;
   };
-  error: undefined;
 };
 
-export type JoinRoomErrorResponsePayload = {
-  data: undefined;
-  error: {
-    errors: JoinRoomError[];
-  };
-};
-
-export type JoinRoomResponsePayload = JoinRoomSuccessResponsePayload | JoinRoomErrorResponsePayload;
+export type JoinRoomResponsePayload = JoinRoomSuccessResponsePayload | ErrorResponsePayload;
 
 export type DeprecatedWebsocketSendResponsePayload = CommitResponsePayload[] | JoinRoomResponsePayload[];
 
@@ -108,4 +106,10 @@ export type ExternalCommitResponsePayload = ['commit', ExternalCommitData];
 export type ExternalResponsePayload = CursorResponsePayload | ExternalCommitResponsePayload;
 
 // include response by ping, onopen, updation by other user
-export type WebsocketResponsePayload = ConnectionOpenResponsePayload | CursorResponsePayload | ExternalCommitResponsePayload | undefined;
+export type WebsocketResponsePayload =
+  | ConnectionOpenResponsePayload
+  | CursorResponsePayload
+  | ExternalCommitResponsePayload
+  | CommitResponsePayload[]
+  | JoinRoomResponsePayload[]
+  | undefined;

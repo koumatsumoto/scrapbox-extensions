@@ -3,7 +3,9 @@ import { getCurrentPageName, ID } from '../public-api';
 import { Router } from '../router';
 import { ApiClient } from './api-client/api-client';
 import { MeResponse, PageResponse } from './api-client/api-client-types';
-import { CommitChangeParam, DeprecatedWebsocketClient } from './websocket-clinet';
+import { CommitChangeParam } from './websocket-clinet';
+import { isCommitSuccessResponsePayload } from './websocket-clinet/internal/response';
+import { WebsocketClient } from './websocket-clinet/websocket-client';
 
 interface PageData extends PageResponse {
   // will mutate
@@ -20,7 +22,7 @@ export class PrivateApi {
     getRx().operators.switchMap((title) => (title === null ? getRx().of(null) : this.apiClient.getPage(title))),
     getRx().operators.shareReplay(1),
   );
-  private websocketClient!: DeprecatedWebsocketClient;
+  private websocketClient!: WebsocketClient;
 
   constructor(private readonly userId: ID, private readonly projectId: string, private readonly apiClient: ApiClient) {
     this.setupWebsocket();
@@ -28,7 +30,12 @@ export class PrivateApi {
     // register page change handling
     this.pageResponse$.subscribe((page) => {
       this.pageData = page;
-      this.websocketClient.joinRoom({ projectId: this.projectId, pageId: page === null ? null : page.id });
+      if (page) {
+        this.websocketClient.disjoinRoom();
+        this.websocketClient.joinRoom({ projectId: this.projectId, pageId: page.id });
+      } else {
+        this.websocketClient.disjoinRoom();
+      }
     });
     Router.onPageChange((t) => this.pageRequest$.next(t));
   }
@@ -60,19 +67,13 @@ export class PrivateApi {
    * for websocket reconnect handling
    */
   private setupWebsocket() {
-    this.websocketClient = new DeprecatedWebsocketClient(this.userId);
+    this.websocketClient = new WebsocketClient();
 
     // handle update by other user
-    const subscription = this.websocketClient.commitIdUpdate$.subscribe((data) => {
+    this.websocketClient.onCommitIdUpdated((data) => {
       if (this.pageData && this.pageData.id === data.pageId) {
-        this.pageData.commitId = data.id;
+        this.pageData.commitId = data.commitId;
       }
-    });
-
-    // auto reconnect
-    this.websocketClient.close$.pipe(getRx().operators.first()).subscribe(() => {
-      subscription.unsubscribe();
-      this.setupWebsocket();
     });
   }
 
@@ -87,9 +88,11 @@ export class PrivateApi {
       changes: param.changes,
     });
 
-    // update last commit id
-    if (this.pageData) {
-      this.pageData.commitId = response[0].data.commitId;
+    if (isCommitSuccessResponsePayload(response[0])) {
+      // update last commit id
+      if (this.pageData) {
+        this.pageData.commitId = response[0].data.commitId;
+      }
     }
 
     this.requestStatus$.next('request end');
