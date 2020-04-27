@@ -34,11 +34,14 @@ const getColorTypeGen = () => {
 const colorDatasetKey = 'sxChildEpisodeLine';
 
 export const colorChildEpisodeLines = (memory: Memory) => {
-  const getColorType = getColorTypeGen();
+  const colorTypeGen = getColorTypeGen();
   memory.episodes
     .filter((ep) => ep.children.length)
     .forEach((ep) => {
-      const colorType = getColorType();
-      ep.children.forEach((child) => colorLines(child.lines, colorDatasetKey, colorType));
+      ep.children.forEach((child) => {
+        // change color type by child episode
+        const colorType = colorTypeGen();
+        colorLines(child.lines, colorDatasetKey, colorType);
+      });
     });
 };

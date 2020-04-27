@@ -1,32 +1,5 @@
 @import '../../../styles/variables';
 
-[data-sx-child-episode-line='type-0'] {
-  background-color: #ffcbad;
-}
-[data-sx-child-episode-line='type-1'] {
-  background-color: #ffcbad;
-}
-[data-sx-child-episode-line='type-2'] {
-  background-color: #ffcbad;
-}
-[data-sx-child-episode-line='type-3'] {
-  background-color: #ffcbad;
-}
-[data-sx-child-episode-line='type-4'] {
-  background-color: #ffcbad;
-}
-[data-sx-child-episode-line='type-5'] {
-  background-color: #ffcbad;
-}
-[data-sx-child-episode-line='type-6'] {
-  background-color: #ffcbad;
-}
-[data-sx-child-episode-line='type-7'] {
-  background-color: #ffcbad;
-}
-[data-sx-child-episode-line='type-8'] {
-  background-color: #ffcbad;
-}
-[data-sx-child-episode-line='type-9'] {
-  background-color: #ffcbad;
+[data-sx-child-episode-line] {
+  background-color: map_get($COLORS, 'child-episode-background');
 }
