@@ -1,18 +1,21 @@
-import { chain, compact, map } from 'fp-ts/es6/Array';
+import { compact, map } from 'fp-ts/es6/Array';
 import { pipe } from 'fp-ts/es6/pipeable';
 import { addClass, findElementById } from '../../../../libs/common/dom';
 import { Line, Memory } from '../types';
 
+// id to dom starts with 'L' char because raw line-id can start with number char (it's invalid for dom)
+const toDOMId = (lineId: string) => `L` + lineId;
+
 export const colorLines = (lines: Line[], className: string[]) =>
   pipe(
+    // Line object
     lines,
-    // to elements that exists
+    // ID strings to specify dom
+    map((line) => toDOMId(line.id)),
+    // Elements optional
     map((line) => findElementById(line.id)),
+    // Elements existing
     compact,
-    chain((v) => {
-      console.log('[dev] chain', v);
-      return v;
-    }),
     // side-effect
     // TODO(2020-04027): use function to execute side-effect rather than map
     map((elem) => addClass(elem, className)),
