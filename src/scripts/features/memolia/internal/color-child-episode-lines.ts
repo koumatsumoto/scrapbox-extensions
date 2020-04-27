@@ -30,7 +30,7 @@ const getColorTypeGen = () => {
   };
 };
 
-// data[sx-child-episode-line]
+// [data-sx-child-episode-line]
 const colorDatasetKey = 'sxChildEpisodeLine';
 
 export const colorChildEpisodeLines = (memory: Memory) => {
