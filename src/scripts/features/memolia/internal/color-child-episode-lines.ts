@@ -1,4 +1,4 @@
-import { compact, map } from 'fp-ts/es6/Array';
+import { chain, compact, map } from 'fp-ts/es6/Array';
 import { pipe } from 'fp-ts/es6/pipeable';
 import { addClass, findElementById } from '../../../../libs/common/dom';
 import { Line, Memory } from '../types';
@@ -9,6 +9,10 @@ export const colorLines = (lines: Line[], className: string[]) =>
     // to elements that exists
     map((line) => findElementById(line.id)),
     compact,
+    chain((v) => {
+      console.log('[dev] chain', v);
+      return v;
+    }),
     // side-effect
     // TODO(2020-04027): use function to execute side-effect rather than map
     map((elem) => addClass(elem, className)),
@@ -30,6 +34,7 @@ export const colorChildEpisodeLines = (memory: Memory) => {
     .forEach((ep) => {
       // use random class
       const colorCSSClass = 'sx-child-episode-line';
+      console.log('[dev] children foreach', ep.children);
       ep.children.forEach((child) => colorLines(child.lines, [colorCSSClass, generator()]));
     });
 };
