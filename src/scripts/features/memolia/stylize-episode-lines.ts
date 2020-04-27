@@ -31,7 +31,7 @@ const getColorTypeGen = () => {
 };
 
 // [data-sx-child-episode-line]
-const episodeHeadlineDataKey = 'sxEpisodeHeadLine';
+const episodeHeadlineDataKey = 'sxEpisodeHeadline';
 // [data-sx-child-episode-line]
 const childEpisodeLineDataKey = 'sxChildEpisodeLine';
 
