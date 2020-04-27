@@ -1,4 +1,4 @@
-import { chain, Either, fromPredicate, getOrElse, left, map, parseJSON, right, tryCatch } from 'fp-ts/es6/Either';
+import { chain, Either, fromPredicate, left, map, parseJSON, right, tryCatch } from 'fp-ts/es6/Either';
 import { pipe } from 'fp-ts/es6/pipeable';
 import { ApiClient } from '../../../libs/scrapbox/private-api/api-client/api-client';
 import { ApiResultPageLine, PageResponse } from '../../../libs/scrapbox/private-api/api-client/api-client-types';
@@ -58,17 +58,6 @@ export const constructCodeStringsOrEmptyStrings = (lines: ApiResultPageLine[]) =
   return totalCodeStrings;
 };
 
-export const handleConfigObject = () =>
-  pipe(
-    map((response) => constructCodeStringsOrEmptyStrings(response.lines)),
-    fromPredicate(
-      (json) => json !== '',
-      (json) => new Error(errors.pageNotContainingCodeBlock + json),
-    ),
-    chain((json) => parseJSON<ConfigObject>(json, (e) => new Error(errors.invalidPageContents + e))),
-    chain((obj) => storeToStorage(obj)),
-  );
-
 export const storeToStorage = (data: ConfigObject, w = window) =>
   tryCatch(
     () => {
@@ -83,12 +72,10 @@ export const storeToStorage = (data: ConfigObject, w = window) =>
     (e) => e,
   );
 
-export const main = async () => {
-  const ma = await fetchConfigPage();
-
+export const useDynamicConfig = async () =>
   pipe(
-    ma,
-    getOrElse((e) => e),
+    await fetchConfigPage(),
+    chain((v) => v),
     map((response) => constructCodeStringsOrEmptyStrings(response.lines)),
     fromPredicate(
       (json) => json !== '',
@@ -97,4 +84,3 @@ export const main = async () => {
     chain((json) => parseJSON<ConfigObject>(json, (e) => new Error(errors.invalidPageContents + e))),
     chain((obj) => storeToStorage(obj)),
   );
-};
