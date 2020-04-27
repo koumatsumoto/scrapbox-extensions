@@ -4,7 +4,7 @@ import { version } from '../../../../version';
 const storageKey = 'sx-user-script-version';
 
 const showVersion = (storage: Storage): void => {
-  const currentVersion = storage.getItem(storageKey) ?? 'empty';
+  const currentVersion = storage.getItem(storageKey);
   if (version !== currentVersion) {
     alert('New UserScript Loaded: ' + version);
     storage.setItem(storageKey, version);
