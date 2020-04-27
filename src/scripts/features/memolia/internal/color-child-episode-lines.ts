@@ -22,7 +22,7 @@ export const colorLines = (lines: Line[], key: string, colorType: string) =>
   );
 
 // for background color for each child episode block
-const getNextCSSClassGen = () => {
+const getColorTypeGen = () => {
   let idx = 0;
 
   return () => {
@@ -30,15 +30,15 @@ const getNextCSSClassGen = () => {
   };
 };
 
+// data[sx-child-episode-line]
+const colorDatasetKey = 'sxChildEpisodeLine';
+
 export const colorChildEpisodeLines = (memory: Memory) => {
-  const generator = getNextCSSClassGen();
+  const getColorType = getColorTypeGen();
   memory.episodes
     .filter((ep) => ep.children.length)
     .forEach((ep) => {
-      // data[sx-child-episode-line]
-      const colorDatasetKey = 'sxChildEpisodeLine';
-      const colorType = generator();
-      console.log('[dev] children foreach', ep.children);
+      const colorType = getColorType();
       ep.children.forEach((child) => colorLines(child.lines, colorDatasetKey, colorType));
     });
 };
