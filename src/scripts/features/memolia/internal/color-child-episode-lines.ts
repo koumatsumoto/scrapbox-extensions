@@ -41,7 +41,7 @@ export const colorChildEpisodeLines = (memory: Memory) => {
       ep.children.forEach((child) => {
         // change color type by child episode
         const colorType = colorTypeGen();
-        colorLines(child.lines, colorDatasetKey, colorType);
+        colorLines([child.headline, ...child.lines], colorDatasetKey, colorType);
       });
     });
 };
