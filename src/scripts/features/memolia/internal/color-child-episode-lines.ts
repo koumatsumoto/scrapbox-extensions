@@ -13,7 +13,7 @@ export const colorLines = (lines: Line[], className: string[]) =>
     // ID strings to specify dom
     map((line) => toDOMId(line.id)),
     // Elements optional
-    map((line) => findElementById(line.id)),
+    map((id) => findElementById(id)),
     // Elements existing
     compact,
     // side-effect
