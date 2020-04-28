@@ -1,0 +1,12 @@
+@import '../variables';
+
+// indent dot
+.line .indent-mark .dot {
+  position: absolute;
+  top: 14px;
+  right: 8px;
+  width: 6px;
+  height: 2px;
+  background-color: map_get($COLORS, 'line-indent-dot-color');
+  border-radius: 50%;
+}
