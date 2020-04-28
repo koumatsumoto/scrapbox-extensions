@@ -19,3 +19,11 @@
 [data-sx-child-episode-line] {
   background-color: map_get($COLORS, 'child-episode-lines-background');
 }
+
+[data-sx-child-episode-start-line] {
+  margin-top: 8px;
+}
+
+[data-sx-child-episode-end-line] {
+  margin-bottom: 8px;
+}
