@@ -1,8 +1,8 @@
 import { tryCatch } from 'fp-ts/es6/Option';
-import { isValid, PersistedConfig, storageKey, syncAndPersist } from './internal';
+import { ConfigObject, isValid, storageKey, syncAndPersist } from './internal';
 
-let dynamicConfigByStorage: PersistedConfig | null;
-let dynamicConfigByServer: PersistedConfig | null;
+let dynamicConfigByStorage: ConfigObject | null;
+let dynamicConfigByServer: ConfigObject | null;
 
 export const setupByStorage = (w = window) =>
   tryCatch(() => {
@@ -31,7 +31,7 @@ export const setupByServer = async () => {
 };
 
 export const getDynamicConfig = async () => {
-  let loading: Promise<PersistedConfig> | null = null;
+  let loading: Promise<ConfigObject> | null = null;
   if (!dynamicConfigByServer) {
     loading = setupByServer().catch();
   } else if (!dynamicConfigByStorage) {

@@ -5,16 +5,11 @@ import { pipe } from 'fp-ts/es6/pipeable';
 import { ApiClient } from '../../../libs/scrapbox/private-api/api-client/api-client';
 import { ApiResultPageLine, PageResponse } from '../../../libs/scrapbox/private-api/api-client/api-client-types';
 
-type ConfigObject = {
+// stored in localStorage
+export type ConfigObject = {
   tagOptions: {
     value: string;
   }[][];
-};
-
-// in localStorage
-export type PersistedConfig = {
-  data: ConfigObject;
-  time: string; // Date.
 };
 
 export const storageKey = '[sx/dynamic-config] config';
@@ -47,15 +42,10 @@ export const parsePageLines = (lines: ApiResultPageLine[]): string => {
   return totalCodeStrings;
 };
 
-export const storeToStorage = (data: ConfigObject, w = window): TaskEither<Error, PersistedConfig> => {
+export const storeToStorage = (data: ConfigObject, w = window): TaskEither<Error, ConfigObject> => {
   try {
-    const config = {
-      data,
-      time: new Date().toISOString(),
-    };
-    w.localStorage.setItem(storageKey, JSON.stringify(config));
-
-    return right(config);
+    w.localStorage.setItem(storageKey, JSON.stringify(data));
+    return right(data);
   } catch (e) {
     return left(e);
   }
@@ -63,21 +53,21 @@ export const storeToStorage = (data: ConfigObject, w = window): TaskEither<Error
 
 const fetchConfigPage: Lazy<Promise<PageResponse>> = () => new ApiClient().getPage('config');
 
-const fromThunk = <A>(thunk: Lazy<Promise<A>>): TaskEither<Error, A> => {
+const fromThunk = (thunk: Lazy<Promise<PageResponse>>): TaskEither<Error, PageResponse> => {
   return tryCatch(thunk, toError);
 };
 
-const toJsonStrings = map((res: PageResponse) => parsePageLines(res.lines))
+const toJsonStrings = map((res: PageResponse) => parsePageLines(res.lines));
 
 export const isObject = (v: unknown): v is object => {
   return v != null && typeof v === 'object';
 };
 
-export const isValid = (v: unknown): v is PersistedConfig => {
-  return isObject(v) && 'tagOptions' in v;
+export const isValid = (v: unknown): v is ConfigObject => {
+  return isObject(v) && 'data' in v;
 };
 
-const makeConfig = (json: string): TaskEither<Error, PersistedConfig> => {
+const makeConfig = (json: string): TaskEither<Error, ConfigObject> => {
   if (json === '') {
     return left(new Error('json string is empty, check contents in config page, it can be errored if an empty line not existed'));
   }
@@ -102,7 +92,7 @@ export const syncAndPersist = pipe(
   chain(makeConfig),
   chain(storeToStorage),
   fold(
-    (error) => () => Promise.resolve<Error | PersistedConfig>(error),
-    (config) => () => Promise.resolve<Error | PersistedConfig>(config),
+    (error) => () => Promise.resolve<Error | ConfigObject>(error),
+    (config) => () => Promise.resolve<Error | ConfigObject>(config),
   ),
 );
