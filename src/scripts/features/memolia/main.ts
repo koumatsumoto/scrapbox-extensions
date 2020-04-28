@@ -1,4 +1,4 @@
-import { makeMemory } from './internal/memory';
+import { makeMemory } from './memory/memory';
 import { stylizeEpisodeLines } from './stylize-episode-lines';
 
 export const useMemolia = () => {
