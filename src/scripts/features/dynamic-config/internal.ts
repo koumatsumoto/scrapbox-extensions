@@ -63,8 +63,9 @@ export const isObject = (v: unknown): v is object => {
   return v != null && typeof v === 'object';
 };
 
+// TODO: add property key assertions
 export const isValid = (v: unknown): v is ConfigObject => {
-  return isObject(v) && 'data' in v;
+  return isObject(v);
 };
 
 const makeConfig = (json: string): TaskEither<Error, ConfigObject> => {
