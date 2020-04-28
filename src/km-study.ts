@@ -1,7 +1,6 @@
 /**
  * Common variables and functions (Scrapbox loads each scripts into global environment)
  */
-import { importRxJS } from './libs/common';
 import { getApiManager } from './libs/scrapbox/private-api';
 import { runOnScrapboxReady } from './libs/scrapbox/public-api';
 import {
@@ -17,8 +16,6 @@ import {
 
 const main = () => {
   runOnScrapboxReady(async () => {
-    await importRxJS();
-
     // connect to websocket, fetch initial data from api
     getApiManager().catch();
 
