@@ -10,9 +10,9 @@ import {
   enableCustomListItem,
   registerUpdatingNewButton,
   useAddEpisodeButton,
-  useDynamicConfig,
   useMemolia,
   useVersionNotificator,
+  getDynamicConfig,
 } from './scripts';
 
 const main = () => {
@@ -38,7 +38,7 @@ const main = () => {
     // since 2020/04/27
     useVersionNotificator();
     // since 2020-04-28
-    useDynamicConfig()().catch();
+    getDynamicConfig().catch();
   });
 };
 
