@@ -59,7 +59,10 @@ export const storeToStorage = (data: ConfigObject, w = window): TaskEither<Error
   }
 };
 
-const fetchConfigPage: Lazy<Promise<PageResponse>> = () => new ApiClient().getPage('config');
+const fetchConfigPage: Lazy<Promise<PageResponse>> = () => {
+  console.log('[dev] fetchConfigPage');
+  return new ApiClient().getPage('config');
+};
 
 const fromThunk = <A>(thunk: Lazy<Promise<A>>): TaskEither<Error, A> => {
   return tryCatch(thunk, toError);
