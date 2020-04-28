@@ -1,10 +1,9 @@
+import { toError } from 'fp-ts/es6/Either';
+import { left, right, chain, map, TaskEither, tryCatch, mapLeft } from 'fp-ts/es6/TaskEither';
+import { Lazy } from 'fp-ts/es6/function';
 import { pipe } from 'fp-ts/es6/pipeable';
 import { ApiClient } from '../../../libs/scrapbox/private-api/api-client/api-client';
 import { ApiResultPageLine, PageResponse } from '../../../libs/scrapbox/private-api/api-client/api-client-types';
-import { map, tryCatch } from 'fp-ts/es6/TaskEither';
-import { tryCatch as tc } from 'fp-ts/es6/Either';
-import { toError } from 'fp-ts/es6/Either';
-import { Lazy } from 'fp-ts/es6/function';
 
 type ConfigObject = {
   // 2020-04-28
@@ -16,18 +15,12 @@ type ConfigInLocalStorage = {
   time: string; // Date.
 };
 
-const errors = {
-  pageNotFound: '[sx/dynamic-config] error to request config page, create /config page to use this feature.',
-  pageNotContainingCodeBlock: '[sx/dynamic-config] page not containing line that text including "code:".',
-  invalidPageContents: '[sx/dynamic-config] invalid json, check contents in config page, it can be errored if an empty line not existed.',
-};
-
 const storageKey = '[sx/dynamic-config] config';
 
 const isCodeBlockStartLine = (line: ApiResultPageLine) => line.text.includes('code:');
 const isCodeBlockEndLine = (line: ApiResultPageLine) => line.text === '';
 
-export const constructCodeStringsOrEmptyStrings = (lines: ApiResultPageLine[]) => {
+export const parsePageLines = (lines: ApiResultPageLine[]) => {
   // code:filename.json
   let codeBlockHeadLineFound = false;
   let totalCodeStrings = '';
@@ -52,34 +45,48 @@ export const constructCodeStringsOrEmptyStrings = (lines: ApiResultPageLine[]) =
   return totalCodeStrings;
 };
 
-export const constructConfig = (json: string) => {
-  if (json === '') {
-    throw new Error(errors.invalidPageContents + json);
-  }
-
-  const config = JSON.parse(json) as ConfigInLocalStorage;
-  // TODO: validate config object here
-
-  return config;
-};
-
-export const storeToStorage = (data: ConfigObject, w = window) => {
-  w.localStorage.setItem(
-    storageKey,
-    JSON.stringify({
+export const storeToStorage = (data: ConfigObject, w = window): TaskEither<Error, ConfigInLocalStorage> => {
+  try {
+    const config = {
       data,
       time: new Date().toISOString(),
-    }),
-  );
+    };
+    w.localStorage.setItem(storageKey, JSON.stringify(config));
+
+    return right(config);
+  } catch (e) {
+    return left(e);
+  }
+};
+
+const fetchConfigPage: Lazy<Promise<PageResponse>> = () => new ApiClient().getPage('config');
+
+const fromThunk = <A>(thunk: Lazy<Promise<A>>): TaskEither<Error, A> => {
+  return tryCatch(thunk, toError);
+};
+
+const makeConfig = (json: string): TaskEither<Error, ConfigInLocalStorage> => {
+  if (json === '') {
+    return left(new Error('invalid json, check contents in config page, it can be errored if an empty line not existed'));
+  }
+
+  try {
+    const config = JSON.parse(json) as ConfigInLocalStorage;
+
+    return right(config);
+  } catch (e) {
+    return left(e);
+  }
 };
 
 // see https://dev.to/ksaaskil/using-fp-ts-for-http-requests-and-validation-131c
-export const useDynamicConfig = async () =>
+export const useDynamicConfig = () =>
   pipe(
-    () => new ApiClient().getPage('config'),
-    (task: Lazy<Promise<PageResponse>>) => tryCatch(task, toError),
-    map((res: PageResponse) => res.lines),
-    map(constructCodeStringsOrEmptyStrings),
-    map(constructConfig),
-    (task) => tryCatch(task, toError),
+    fetchConfigPage,
+    fromThunk,
+    map((res) => parsePageLines(res.lines)),
+    chain(makeConfig),
+    chain(storeToStorage),
+    // debug
+    mapLeft((e) => console.error('[sx/dynamic-config]', e)),
   );
