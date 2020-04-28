@@ -73,6 +73,7 @@ export const storeToStorage = (data: ConfigObject, w = window) => {
   );
 };
 
+// see https://dev.to/ksaaskil/using-fp-ts-for-http-requests-and-validation-131c
 export const useDynamicConfig = async () =>
   pipe(
     () => new ApiClient().getPage('config'),
