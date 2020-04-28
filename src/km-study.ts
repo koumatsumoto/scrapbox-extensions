@@ -2,17 +2,17 @@
  * Common variables and functions (Scrapbox loads each scripts into global environment)
  */
 import { importRxJS } from './libs/common';
-import { getPrivateApi } from './libs/scrapbox/private-api';
+import { getApiManager } from './libs/scrapbox/private-api';
 import { runOnScrapboxReady } from './libs/scrapbox/public-api';
 import {
   addDatetimeOnListItem,
   applyLoginCSSClass,
   enableCustomListItem,
+  getDynamicConfig,
   registerUpdatingNewButton,
   useAddEpisodeButton,
   useMemolia,
   useVersionNotificator,
-  getDynamicConfig,
 } from './scripts';
 
 const main = () => {
@@ -20,7 +20,7 @@ const main = () => {
     await importRxJS();
 
     // connect to websocket, fetch initial data from api
-    await getPrivateApi();
+    getApiManager().catch();
 
     enableCustomListItem();
 
