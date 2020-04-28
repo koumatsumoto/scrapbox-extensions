@@ -27,3 +27,8 @@
 [data-sx-child-episode-end-line] {
   margin-bottom: 8px;
 }
+
+// in case one line child episodes continue
+[data-sx-child-episode-start-line] + [data-sx-child-episode-start-line] {
+  margin-top: -8px;
+}
