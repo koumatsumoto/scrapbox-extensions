@@ -25,7 +25,7 @@ export const setupByServer = async () => {
     console.error('[sx/dynamic-config] Error: ', result);
     throw result;
   } else {
-    console.log('[sx/dynamic-config] DynamicConfig is loaded from server', dynamicConfigByServer);
+    console.log('[sx/dynamic-config] DynamicConfig is loaded from server', result);
     return (dynamicConfigByServer = result);
   }
 };
