@@ -38,7 +38,7 @@ const main = () => {
     // since 2020/04/27
     useVersionNotificator();
     // since 2020-04-28
-    useDynamicConfig();
+    useDynamicConfig()().catch();
   });
 };
 
