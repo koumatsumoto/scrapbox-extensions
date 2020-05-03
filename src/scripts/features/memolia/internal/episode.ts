@@ -57,10 +57,10 @@ export const parseChildEpisodes = (block: EpisodeBlock): ChildEpisode[] => {
         default: {
           // include
           //   "  [a]" <= "    b"
-          // not include, end episode
           //   "  [a]" == "  b"
+          // not include, end episode
           //   "  [a]" >= "b"
-          if (parentIndentLevel < line.meta.indent) {
+          if (parentIndentLevel <= line.meta.indent) {
             ep.lines.push(line);
           } else {
             store(ep);
