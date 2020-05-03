@@ -1,10 +1,8 @@
 import { none, Option, some } from 'fp-ts/es6/Option';
 import { removeElement } from '../../common/dom';
 
-// used in css also
-export const name = 'sx-dialog';
-
 export class SxDialog<V> extends HTMLElement {
+  static elementName = 'sx-dialog';
   // whether form submitted or canceled
   private readonly result: Promise<Option<V>>;
   private readonly dialog: HTMLDialogElement;
@@ -26,6 +24,7 @@ export class SxDialog<V> extends HTMLElement {
 
   ok(value: V) {
     this.resolve(some(value));
+    this.close();
   }
 
   cancel() {
@@ -33,7 +32,7 @@ export class SxDialog<V> extends HTMLElement {
     this.close();
   }
 
-  attach(element: HTMLElement) {
+  setContent(element: HTMLElement) {
     this.dialog.innerHTML = ''; // reset
     this.dialog.appendChild(element);
   }
