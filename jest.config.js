@@ -18,7 +18,6 @@ module.exports = {
   transformIgnorePatterns: ['node_modules/(?!(fp-ts)/)'],
   testURL: 'http://localhost/',
   testMatch: ['<rootDir>/deploy/**/*.spec.ts', '<rootDir>/src/**/*.spec.ts'],
-  testEnvironment: 'jest-environment-happy-dom',
   collectCoverageFrom: [
     '<rootDir>/src/components/**/*.ts',
     '<rootDir>/src/libs/**/*.ts',

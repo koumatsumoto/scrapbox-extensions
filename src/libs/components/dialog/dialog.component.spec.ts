@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jest-environment-happy-dom
+ */
+
 import { none, some } from 'fp-ts/es6/Option';
 import { getPromiseStatus } from '../../common/test-helpers/async';
 import { SxDialog } from './dialog.component';
