@@ -1,5 +1,5 @@
 import { removeHead } from '../../../../libs/common/string';
-import { makeMemory } from '../parser/memory';
+import { makeMemory } from '../parse/memory';
 import { getTranscript } from './get-transcript';
 import { toClipboard } from './to-clipboard';
 
