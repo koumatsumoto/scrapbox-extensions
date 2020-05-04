@@ -1,3 +1,7 @@
+import { removeHead } from '../../../../libs/common/string';
+import { makeMemory } from '../parser/memory';
+import { getTranscript } from './get-transcript';
+
 // [data-sx-transcript-link]
 const key = 'sxTranscriptLink';
 
@@ -16,8 +20,12 @@ export const registerOnClick = () => {
   links.forEach((link) => {
     link.dataset[key] = '';
     link.addEventListener('click', (e) => {
+      const memory = makeMemory(window.scrapbox.Page.lines!);
       const id = getLineId(e.target as HTMLElement);
-      console.log('[dev] id', id);
+      const lineId = removeHead(id);
+
+      const transcript = getTranscript(lineId, memory);
+      console.log('[dev] transcript', transcript);
     });
   });
 };
