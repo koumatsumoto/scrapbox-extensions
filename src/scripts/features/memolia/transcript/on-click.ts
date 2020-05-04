@@ -1,6 +1,7 @@
 import { removeHead } from '../../../../libs/common/string';
 import { makeMemory } from '../parser/memory';
 import { getTranscript } from './get-transcript';
+import { toClipboard } from './to-clipboard';
 
 // [data-sx-transcript-link]
 const key = 'sxTranscriptLink';
@@ -25,7 +26,8 @@ export const registerOnClick = () => {
       const lineId = removeHead(id);
 
       const transcript = getTranscript(lineId, memory);
-      console.log('[dev] transcript', transcript);
+      console.log('[sx/memolia] transcript', transcript);
+      toClipboard(transcript);
     });
   });
 };

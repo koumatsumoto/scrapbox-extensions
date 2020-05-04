@@ -1,7 +1,7 @@
 import { tail } from '../../../../libs/common/array';
 import { Line, Memory } from '../types';
 
-type Transcript = {
+export type Transcript = {
   context: string[];
   contents: Line[];
 };
