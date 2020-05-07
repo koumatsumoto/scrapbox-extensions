@@ -15,7 +15,7 @@ export class SxDialog extends HTMLElement {
   }
 
   open() {
-    if (this.parentNode !== null) {
+    if (this.parentNode === null) {
       document.body.appendChild(this);
     }
 
