@@ -212,7 +212,7 @@ sx-add-episode-form {
 }
 
 sx-loading-indicator {
-  @include position-center();
+  display: flex;
   align-items: center;
   justify-content: center;
   min-width: $loading-indicator-container-width;
