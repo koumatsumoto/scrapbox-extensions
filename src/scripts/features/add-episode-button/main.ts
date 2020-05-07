@@ -1,7 +1,7 @@
 import { createElement } from '../../../libs/common/dom';
 import { alertOnFail } from '../../../libs/common/process';
 import { DomManipulator } from '../../../libs/scrapbox/dom/dom-manipulator';
-import { handleFormAndDialog } from './form-dialog/handle-form-and-dialog';
+import { handleFormAndDialog } from './handle-form-and-dialog';
 
 const createAddEpisodeButton = () => {
   return createElement({

@@ -2,7 +2,7 @@ import { DynamicConfig } from '../../../config';
 import { makeCheckboxesHTML } from './make-checkbox-html';
 import { addWord, removeWord, splitWords } from './textarea-operation';
 
-const html = require('./form-dialog.component.html');
+const html = require('./form.component.html');
 
 // null if form canceled
 type FormResult = string[] | null;

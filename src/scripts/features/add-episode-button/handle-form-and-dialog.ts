@@ -1,10 +1,10 @@
-import { SxDialog } from '../../../../libs/components/dialog';
-import { getApiManager } from '../../../../libs/scrapbox/private-api';
-import { getFirstLineOrFail, isEmptyPage, isTitleOnlyPage, loadPage } from '../../../../libs/scrapbox/public-api';
-import { makeInsertParams } from '../make-insert-params/make-insert-params';
-import { defineElementsIfNeeded } from './define-elements-if-needed';
-import { SxAddEpisodeFormComponent } from './form.component';
-import { getConfigOrFail } from './get-config-or-fail';
+import { SxDialog } from '../../../libs/components/dialog';
+import { getApiManager } from '../../../libs/scrapbox/private-api';
+import { getFirstLineOrFail, isEmptyPage, isTitleOnlyPage, loadPage } from '../../../libs/scrapbox/public-api';
+import { defineElementsIfNeeded } from './form-dialog/define-elements-if-needed';
+import { SxAddEpisodeFormComponent } from './form-dialog/form.component';
+import { getConfigOrFail } from './form-dialog/get-config-or-fail';
+import { makeInsertParams } from './make-insert-params/make-insert-params';
 
 export const handleFormAndDialog = async () => {
   defineElementsIfNeeded();
