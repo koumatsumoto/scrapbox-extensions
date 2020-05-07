@@ -1,34 +1,28 @@
-import { removeElement } from '../../../../libs/common/dom';
 import { DynamicConfig } from '../../../config';
 import { makeCheckboxesHTML } from './make-checkbox-html';
 import { addWord, removeWord, splitWords } from './textarea-operation';
 
 const html = require('./form-dialog.component.html');
 
-type CustomDialogResult<T> = { ok: false } | { ok: true; data: T };
+// null if form canceled
+type FormResult = string[] | null;
 
-const showingIndicatorCSS = '-showing-indicator'; // used in css
-
-export class MyTagFormDialog extends HTMLElement {
+export class SxAddEpisodeFormComponent extends HTMLElement {
   // whether form submitted or canceled
-  readonly result: Promise<CustomDialogResult<string[]>>;
+  readonly result: Promise<FormResult>;
 
   // used in css also
   static readonly elementName = 'add-episode-form-dialog';
-  private dialog: HTMLDialogElement;
   private form: HTMLFormElement;
   private checkboxContainer: HTMLDivElement;
   private textInput: HTMLInputElement;
-  private loadingIndicatorContainer: HTMLDivElement;
 
   constructor(tagOptions: DynamicConfig['tags'] = []) {
     super();
 
     this.innerHTML = `${html}`;
-    this.dialog = this.querySelector<HTMLDialogElement>('dialog')!;
     this.form = this.querySelector<HTMLFormElement>('form')!;
     this.textInput = this.querySelector<HTMLInputElement>('input[type=text]')!;
-    this.loadingIndicatorContainer = this.querySelector<HTMLDivElement>('.loading-indicator-container')!;
 
     // construct DOM of checkboxes
     this.checkboxContainer = this.querySelector<HTMLDivElement>('#checkboxContainer')!;
@@ -47,12 +41,12 @@ export class MyTagFormDialog extends HTMLElement {
     // button handling
     const cancelButton = this.querySelector<HTMLButtonElement>('button[value=cancel]')!;
     const submitButton = this.querySelector<HTMLButtonElement>('button[value=default]')!;
-    this.result = new Promise<CustomDialogResult<string[]>>((resolve) => {
+    this.result = new Promise<FormResult>((resolve) => {
       submitButton.addEventListener(
         'click',
         (ev) => {
           ev.preventDefault();
-          resolve({ ok: true, data: splitWords(this.textInput.value) });
+          resolve(splitWords(this.textInput.value));
         },
         { once: true },
       );
@@ -60,26 +54,10 @@ export class MyTagFormDialog extends HTMLElement {
         'click',
         (ev) => {
           ev.preventDefault();
-          resolve({ ok: false });
+          resolve(null);
         },
         { once: true },
       );
     });
-  }
-
-  open() {
-    this.dialog.showModal();
-
-    return this.result;
-  }
-
-  close() {
-    this.dialog.close();
-    removeElement(this);
-  }
-
-  // call before api request
-  showLoadingIndicator() {
-    this.classList.add(showingIndicatorCSS);
   }
 }
