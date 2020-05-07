@@ -12,7 +12,7 @@ export class SxAddEpisodeFormComponent extends HTMLElement {
   readonly result: Promise<FormResult>;
 
   // used in css also
-  static readonly elementName = 'add-episode-form-dialog';
+  static readonly elementName = 'sx-add-episode-form';
   private form: HTMLFormElement;
   private checkboxContainer: HTMLDivElement;
   private textInput: HTMLInputElement;
