@@ -1,4 +1,4 @@
-import { SxDialog } from '../../../../libs/components/dialog';
+import { SxDialogComponent } from '../../../../libs/components/dialog';
 import { SxAddEpisodeFormComponent } from './form.component';
 
 // TODO: use decorator to management customElements.define
@@ -8,7 +8,7 @@ const getDefineElementsFn = () => {
 
   return () => {
     if (!dialogDefined) {
-      customElements.define(SxDialog.elementName, SxDialog);
+      customElements.define(SxDialogComponent.elementName, SxDialogComponent);
       dialogDefined = true;
     }
     if (!formDefined) {

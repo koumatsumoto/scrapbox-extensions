@@ -1,4 +1,4 @@
-import { SxDialog } from '../../../libs/components/dialog';
+import { SxDialogComponent } from '../../../libs/components/dialog';
 import { getApiManager } from '../../../libs/scrapbox/private-api';
 import { getFirstLineOrFail, isEmptyPage, isTitleOnlyPage, loadPage } from '../../../libs/scrapbox/public-api';
 import { defineElementsIfNeeded } from './form-dialog/define-elements-if-needed';
@@ -10,7 +10,7 @@ export const handleFormAndDialog = async () => {
   defineElementsIfNeeded();
   const tags = await getConfigOrFail();
   const api = await getApiManager();
-  const dialog = new SxDialog();
+  const dialog = new SxDialogComponent();
   const form = new SxAddEpisodeFormComponent(tags);
 
   dialog.setContent(form);

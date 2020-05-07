@@ -1,6 +1,6 @@
 import { removeElement } from '../../common/dom';
 
-export class SxDialog extends HTMLElement {
+export class SxDialogComponent extends HTMLElement {
   static elementName = 'sx-dialog';
   private readonly dialog: HTMLDialogElement;
 
@@ -15,6 +15,10 @@ export class SxDialog extends HTMLElement {
   }
 
   open() {
+    if (this.dialog.open) {
+      return;
+    }
+
     if (this.parentNode === null) {
       document.body.appendChild(this);
     }
@@ -23,7 +27,9 @@ export class SxDialog extends HTMLElement {
   }
 
   close() {
-    this.dialog.close();
+    if (this.dialog.open) {
+      this.dialog.close();
+    }
   }
 
   setContent(element: HTMLElement) {

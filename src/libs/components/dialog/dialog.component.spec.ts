@@ -2,13 +2,13 @@
  * @jest-environment jest-environment-happy-dom
  */
 
-import { SxDialog } from './dialog.component';
+import { SxDialogComponent } from './dialog.component';
 
-describe('DialogComponent', () => {
-  let elem: SxDialog;
+describe('SxDialogComponent', () => {
+  let elem: SxDialogComponent;
 
   beforeEach(() => {
-    elem = new SxDialog();
+    elem = new SxDialogComponent();
   });
 
   test('can set content element', () => {
