@@ -213,7 +213,6 @@ sx-add-episode-form {
 
 sx-loading-indicator {
   @include position-center();
-  display: none; // will change to flex by .-showing-indicator
   align-items: center;
   justify-content: center;
   min-width: $loading-indicator-container-width;
