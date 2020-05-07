@@ -1,16 +1,16 @@
 import { groupBy } from 'fp-ts/es6/NonEmptyArray';
 import { removeElement } from '../../../../libs/common/dom';
-import { DynamicConfig } from '../../../config';
+import { DynamicConfig, DynamicConfigTag } from '../../../config';
 import { addWord, removeWord, splitWords } from './textarea-operation';
 
 const html = require('./form-dialog.component.html');
 
 type CustomDialogResult<T> = { ok: false } | { ok: true; data: T };
 
-const groupByType = groupBy((tag: DynamicConfig['tags'][number]) => tag.type);
-const toRecordByType = (tags: DynamicConfig['tags']) => groupByType(tags);
+const groupByType = groupBy((tag: DynamicConfigTag) => tag.type);
+const toRecordByType = (tags: DynamicConfigTag[]) => groupByType(tags);
 
-const makeCheckboxesHTML = (tags: DynamicConfig['tags']) => {
+const makeCheckboxesHTML = (tags: DynamicConfigTag[]) => {
   let labelId = 0;
 
   let html = '';
