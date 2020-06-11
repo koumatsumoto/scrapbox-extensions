@@ -1,11 +1,7 @@
 import { ID } from '../../public-api';
 import { CommitChangeParam, createChanges } from './internal/commit-change-param';
 import { parseMessage } from './internal/parse-message';
-import {
-  getIsomorphicWebsocketConstructor,
-  IsomorphicWebsocket,
-  registerIsomorphicEventHandling,
-} from './isomorphic-websocket';
+import { getIsomorphicWebsocketConstructor, IsomorphicWebsocket, registerIsomorphicEventHandling } from './isomorphic-websocket';
 import {
   CommitResponsePayload,
   ConnectionOpenResponsePayload,
