@@ -2,12 +2,13 @@ import { ID } from '../../public-api';
 import { CommitChangeParam, createChanges } from './internal/commit-change-param';
 import { parseMessage } from './internal/parse-message';
 import { isCommitResponsePayload, isCommitSuccessResponsePayload } from './internal/response';
+import { getIsomorphicWebsocketConstructor, IsomorphicWebsocket, registerIsomorphicEventHandling } from './isomorphic-websocket';
 import {
-  WebsocketRequestPayload,
-  ConnectionOpenResponsePayload,
-  WebsocketResponsePayload,
   CommitResponsePayload,
+  ConnectionOpenResponsePayload,
   JoinRoomResponsePayload,
+  WebsocketRequestPayload,
+  WebsocketResponsePayload,
 } from './types';
 
 const endpoint = 'wss://scrapbox.io/socket.io/?EIO=3&transport=websocket';
@@ -23,6 +24,12 @@ const headers = {
   // e.g.
   //   * 43X: response to user custom request (X is number used for request)
   receive: '43',
+};
+
+export const scrapboxIsomorphicWebsocketGetterFn = () => {
+  const WebsocketConstructor = getIsomorphicWebsocketConstructor();
+
+  return new WebsocketConstructor(endpoint);
 };
 
 type InternalMessage = { senderId: string | null; data: WebsocketResponsePayload };
@@ -59,7 +66,8 @@ const awaitResponse = (emitter: WebsocketMessageEvent, id: string) =>
   });
 
 export class WebsocketClient {
-  private socket!: WebSocket;
+  private readonly websocketGetterFn: typeof scrapboxIsomorphicWebsocketGetterFn;
+  private socket!: IsomorphicWebsocket;
   private readonly event: WebsocketMessageEvent;
   // to re-join on reconnect
   private joinedRoom: { projectId: string; pageId: string } | null = null;
@@ -68,10 +76,13 @@ export class WebsocketClient {
   private pendingRequests: Function[] = [];
   private senderId = 0;
 
-  // DI for testing
-  constructor(socket = new WebSocket(endpoint), event = new WebsocketMessageEvent()) {
+  constructor(
+    websocketGetterFn = scrapboxIsomorphicWebsocketGetterFn, // for testing param
+    event = new WebsocketMessageEvent(),
+  ) {
+    this.websocketGetterFn = websocketGetterFn;
     this.event = event;
-    this.initialize(socket);
+    this.initialize();
   }
 
   commit(param: { projectId: string; userId: ID; pageId: string; parentId: string; changes: CommitChangeParam[] }) {
@@ -159,32 +170,26 @@ export class WebsocketClient {
   /**
    * Connect to websocket and register events.
    */
-  private initialize(socket = new WebSocket(endpoint)) {
+  private initialize() {
     if (this.socket) {
       this.socket.close();
     }
 
+    const socket = this.websocketGetterFn();
     this.socket = socket;
-    this.socket.addEventListener(
-      'open',
-      () => {
-        /* noop */
-      },
-      { once: true },
-    );
-    // reconnect on error and close
-    this.socket.addEventListener('close', () => this.initialize(), { once: true });
-    this.socket.addEventListener('error', () => this.socket.close(), { once: true });
-    this.socket.addEventListener('message', (ev: MessageEvent) => this.handleMessage(ev));
+    registerIsomorphicEventHandling(socket, {
+      onMessage: () => (ev: MessageEvent) => this.handleMessage(ev),
+      onErrorOrClose: () => this.initialize(), // do reconnect
+    });
 
-    // for re-initialize
+    // on reconnect
     if (this.joinedRoom) {
       this.joinRoom(this.joinedRoom);
     }
   }
 
   // for incoming messages
-  private handleMessage(event: MessageEvent) {
+  private handleMessage(event: { data: unknown }) {
     if (typeof event.data !== 'string') {
       throw new Error('unexpected data received');
     }
