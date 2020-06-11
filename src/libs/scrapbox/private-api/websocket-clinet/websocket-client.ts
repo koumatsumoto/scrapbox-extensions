@@ -194,7 +194,7 @@ export class WebsocketClient {
     const socket = this.websocketGetterFn();
     this.socket = socket;
     registerIsomorphicEventHandling(socket, {
-      onMessage: () => (ev: MessageEvent) => this.handleMessage(ev),
+      onMessage: () => (ev: MessageEvent) => this.handleMessage.call(this, ev),
       onErrorOrClose: () => this.initialize(), // do reconnect
     });
 

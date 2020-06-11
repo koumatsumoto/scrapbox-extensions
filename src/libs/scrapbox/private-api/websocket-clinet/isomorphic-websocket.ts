@@ -22,7 +22,7 @@ export const registerIsomorphicEventHandling = (
   // eslint-disable-next-line
   const onOpen = () => {};
   const onError = () => socket.close();
-  const onMessage = (ev: { data: unknown }) => handlers.onMessage.call(socket, ev);
+  const onMessage = (ev: { data: unknown }) => handlers.onMessage(ev);
   const onClose = () => {
     // @ts-ignore
     socket.removeEventListener('open', onOpen);
