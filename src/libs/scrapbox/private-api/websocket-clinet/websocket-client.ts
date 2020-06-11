@@ -167,7 +167,15 @@ export class WebsocketClient {
       this.socket.send(data);
     }
 
-    return awaitResponse(this.event, sid) as Promise<T>;
+    try {
+      return (await awaitResponse(this.event, sid)) as T;
+    } catch (e) {
+      console.error('[websocket-client] send error', {
+        readyState: this.socket.readyState,
+        pendingRequestCount: this.pendingRequests.length,
+      });
+      throw e;
+    }
   }
 
   /**
