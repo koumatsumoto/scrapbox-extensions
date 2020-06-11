@@ -1,8 +1,11 @@
 import { ID } from '../../public-api';
 import { CommitChangeParam, createChanges } from './internal/commit-change-param';
 import { parseMessage } from './internal/parse-message';
-import { isCommitResponsePayload, isCommitSuccessResponsePayload } from './internal/response';
-import { getIsomorphicWebsocketConstructor, IsomorphicWebsocket, registerIsomorphicEventHandling } from './isomorphic-websocket';
+import {
+  getIsomorphicWebsocketConstructor,
+  IsomorphicWebsocket,
+  registerIsomorphicEventHandling,
+} from './isomorphic-websocket';
 import {
   CommitResponsePayload,
   ConnectionOpenResponsePayload,
@@ -50,9 +53,7 @@ class WebsocketMessageEvent extends EventTarget {
 
 const awaitResponse = (emitter: WebsocketMessageEvent, id: string) =>
   new Promise<WebsocketResponsePayload>((resolve, reject) => {
-    console.log('[dev] awaitResponse', emitter, id);
     const handle = (e: CustomEvent<InternalMessage>) => {
-      console.log('[dev] awaitResponse.handle: ', JSON.stringify(e, null, 2));
       if (e.detail.senderId === id) {
         resolve(e.detail.data);
         emitter.unsubscribe('message-received', handle);
@@ -132,29 +133,6 @@ export class WebsocketClient {
     });
   }
 
-  // unsubscribe is not implemented, no need currently
-  onIncomingMessage(callback: (v: WebsocketResponsePayload) => unknown) {
-    const fn = (e: CustomEvent<InternalMessage>) => callback(e.detail.data);
-    this.event.subscribe('message-received', fn);
-  }
-
-  onCommitIdUpdated(callback: (v: { pageId: string; commitId: string }) => unknown) {
-    const fn = (e: CustomEvent<InternalMessage>) => {
-      if (isCommitResponsePayload(e.detail.data)) {
-        e.detail.data
-          .filter(isCommitSuccessResponsePayload)
-          .map((i) => i.data.commitId)
-          .forEach((commitId) => {
-            if (!this.joinedRoom) {
-              return;
-            }
-            callback({ commitId, pageId: this.joinedRoom.pageId });
-          });
-      }
-    };
-    this.event.subscribe('message-received', fn);
-  }
-
   private async send<T extends WebsocketResponsePayload = WebsocketResponsePayload>(payload: WebsocketRequestPayload): Promise<T> {
     console.log('[websocket-client] send message: ', JSON.stringify(payload, null, 2));
     const body = JSON.stringify(['socket.io-request', payload]);
@@ -194,7 +172,7 @@ export class WebsocketClient {
     const socket = this.websocketGetterFn();
     this.socket = socket;
     registerIsomorphicEventHandling(socket, {
-      onMessage: () => (ev: MessageEvent) => this.handleMessage.call(this, ev),
+      onMessage: (ev: { data: unknown }) => this.handleMessage.call(this, ev),
       onErrorOrClose: () => this.initialize(), // do reconnect
     });
 
