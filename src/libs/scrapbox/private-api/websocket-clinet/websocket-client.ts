@@ -209,9 +209,7 @@ export class WebsocketClient {
     if (typeof event.data !== 'string') {
       throw new Error('unexpected data received');
     }
-
-    const message = event.data;
-    const [header, data] = parseMessage(message);
+    const [header, data] = parseMessage(event.data);
 
     // message just after connection opened
     if (header === headers.initialize) {
