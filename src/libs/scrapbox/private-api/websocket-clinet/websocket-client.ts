@@ -154,6 +154,7 @@ export class WebsocketClient {
   }
 
   private async send<T extends WebsocketResponsePayload = WebsocketResponsePayload>(payload: WebsocketRequestPayload): Promise<T> {
+    console.log('[websocket-client] send message: ', JSON.stringify(payload, null, 2));
     const body = JSON.stringify(['socket.io-request', payload]);
     const sid = `${this.senderId++}`;
     const data = `${headers.send}${sid}${body}`;
