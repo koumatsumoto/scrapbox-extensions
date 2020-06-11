@@ -170,10 +170,15 @@ export class WebsocketClient {
     try {
       return (await awaitResponse(this.event, sid)) as T;
     } catch (e) {
-      console.error('[websocket-client] send error', {
-        readyState: this.socket.readyState,
-        pendingRequestCount: this.pendingRequests.length,
-      });
+      console.error(
+        '[websocket-client] send error',
+        JSON.stringify({
+          readyState: this.socket.readyState,
+          pendingRequestCount: this.pendingRequests.length,
+        }),
+        null,
+        2,
+      );
       throw e;
     }
   }
