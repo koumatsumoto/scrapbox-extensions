@@ -50,7 +50,9 @@ class WebsocketMessageEvent extends EventTarget {
 
 const awaitResponse = (emitter: WebsocketMessageEvent, id: string) =>
   new Promise<WebsocketResponsePayload>((resolve, reject) => {
+    console.log('[dev] awaitResponse', emitter, id);
     const handle = (e: CustomEvent<InternalMessage>) => {
+      console.log('[dev] awaitResponse.handle: ', JSON.stringify(e, null, 2));
       if (e.detail.senderId === id) {
         resolve(e.detail.data);
         emitter.unsubscribe('message-received', handle);
