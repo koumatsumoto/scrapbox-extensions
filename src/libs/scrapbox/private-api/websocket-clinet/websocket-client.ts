@@ -26,8 +26,8 @@ export const scrapboxIsomorphicWebsocketGetterFn = () => {
 
 export class WebsocketClient {
   // messages from server
-  private readonly response$ = new Subject<{ senderId: string | null; data: WebsocketResponsePayload }>();
-  private socket!: IsomorphicWebsocket;
+  private readonly response$ = new Subject<{ sid: string | null; data: WebsocketResponsePayload }>();
+  private socket: IsomorphicWebsocket;
   // currently joined-room, need cache to re-join on reconnect
   private room: { projectId: string; pageId: string } | null = null;
 
@@ -35,9 +35,8 @@ export class WebsocketClient {
   private pendingRequests: Function[] = [];
   private sid = 0;
 
-  constructor(
-    private readonly websocketGetterFn = scrapboxIsomorphicWebsocketGetterFn, // for testing param
-  ) {
+  constructor(socket?: IsomorphicWebsocket) {
+    this.socket = socket || scrapboxIsomorphicWebsocketGetterFn();
     this.initialize();
   }
 
@@ -85,7 +84,7 @@ export class WebsocketClient {
           this.joinRoom(this.room);
         }
       },
-      onMessage: (ev) => this.handleMessage(ev),
+      onMessage: (ev) => this.handleResponse(ev),
       onErrorOrClose: () => this.initialize(), // do reconnect
     });
   }
@@ -104,14 +103,14 @@ export class WebsocketClient {
     return this.response$
       .pipe(
         timeout(websocketResponseTimeout),
-        first((response) => response.senderId === sid),
+        first((response) => response.sid === sid),
         map((response) => response.data),
       )
       .toPromise() as Promise<T>;
   }
 
   // for incoming messages
-  private handleMessage(event: { data: unknown }) {
+  private handleResponse(event: { data: unknown }) {
     if (typeof event.data !== 'string') {
       throw new Error('unexpected data received');
     }
@@ -122,11 +121,11 @@ export class WebsocketClient {
       this.setPingAndConsumeBuffer(data as ConnectionOpenResponsePayload);
     } else if (header.startsWith(headers.receive)) {
       // for own send() result
-      const senderId = header.slice(headers.receive.length);
-      this.response$.next({ senderId, data: data });
+      const sid = header.slice(headers.receive.length);
+      this.response$.next({ sid, data });
     } else if (header === headers.send) {
       // for updation by other users
-      this.response$.next({ senderId: null, data: data });
+      this.response$.next({ sid: null, data });
     }
   }
 
