@@ -21,13 +21,13 @@ export const main = async () => {
   for (const project of config.projects) {
     try {
       console.log('[sx/deploy] start update project: ', project.name);
-      const api = await getGlobalScrapboxApi(project.name);
+      const api = await getGlobalScrapboxApi(project.name, config.token);
 
       if (project.userScript) {
         await updateCode(api, project.user, userScriptCodeTitle, await loadSourceCode(project.userScript));
       }
       if (project.userCSS) {
-        await updateCode(api, settingsPageName, userCssCodeTitle, await loadSourceCode(project.userScript));
+        await updateCode(api, settingsPageName, userCssCodeTitle, await loadSourceCode(project.userCSS));
       }
     } catch (e) {
       console.error('[sx/deploy] failed to update project: ', project.name, e);
@@ -36,5 +36,11 @@ export const main = async () => {
 };
 
 main()
-  .then(() => console.log('[sx/deploy] completed'))
-  .catch((e) => console.error(e));
+  .then(() => {
+    console.log('[sx/deploy] completed');
+    process.exit();
+  })
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
