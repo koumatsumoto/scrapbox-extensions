@@ -41,12 +41,15 @@
     "yarn": ">=1.19.0"
   },
   "dependencies": {
+    "cookie": "^0.4.1",
     "fp-ts": "^2.5.4",
+    "node-fetch": "^2.6.0",
     "rxjs": "^7.0.0-beta.0",
     "ws": "^7.3.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.9.5",
+    "@types/cookie": "^0.4.0",
     "@types/jest": "^25.2.1",
     "@types/node": "^13.13.4",
     "@types/puppeteer": "^2.0.1",
