@@ -1,7 +1,7 @@
 import { Subject } from 'rxjs';
 import { first, map, timeout } from 'rxjs/operators';
 import { ID } from '../../browser-api';
-import { endpoint, headers, websocketResponseTimeout } from './constants';
+import { endpoint, headers, origin, websocketResponseTimeout } from './constants';
 import { CommitChangeParam, createChanges } from './internal/commit-change-param';
 import { parseMessage } from './internal/parse-message';
 import { IsomorphicWebsocket, registerIsomorphicWebsocketEventHandling } from './isomorphic-websocket';
@@ -19,6 +19,7 @@ export const scrapboxIsomorphicWebsocketGetterFn = (token?: string) => {
   const options = token
     ? {
         headers: {
+          Origin: origin,
           Cookie: `connect.sid=${token}`,
         },
       }
