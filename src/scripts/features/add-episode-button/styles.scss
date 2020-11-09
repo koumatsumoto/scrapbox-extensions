@@ -34,11 +34,6 @@ sx-add-episode-form {
   form {
     display: flex; // will change to none by .-showing-indicator
     flex-direction: column;
-    min-width: $dialog-min-width;
-    max-width: $dialog-max-width;
-    min-height: $dialog-min-height;
-    max-height: $dialog-max-height;
-    padding: 24px 8px 8px 24px;
     overflow: auto;
     border: none;
   }
@@ -51,7 +46,7 @@ sx-add-episode-form {
   .input-container {
     position: relative; // for border under input
     flex: 0 1 auto;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
   }
 
   /* buttons layout */
@@ -60,6 +55,8 @@ sx-add-episode-form {
     flex: 0 1 auto;
     align-items: center;
     justify-content: flex-end;
+    padding-bottom: 2px;
+    margin: 0;
   }
 
   label {
@@ -138,9 +135,8 @@ sx-add-episode-form {
     margin: 0;
     overflow: visible;
     font-family: Roboto, 'Helvetica Neue', sans-serif;
-    font-size: 14px;
     font-weight: 500;
-    line-height: 36px;
+    line-height: 34px;
     text-align: center;
     text-decoration: none;
     white-space: nowrap;

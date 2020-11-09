@@ -1,7 +1,12 @@
 sx-dialog {
   dialog {
     position: relative;
-    overflow: hidden;
+    min-width: 12vw;
+    max-width: 88vw;
+    min-height: 12vh;
+    max-height: 88vh;
+    padding: 16px;
+    overflow: auto;
     border: none;
     border-radius: 4px;
   }
