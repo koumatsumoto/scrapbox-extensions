@@ -10,6 +10,7 @@ import {
   useAddEpisodeButton,
   useMemolia,
   useVersionNotificator,
+  defaultDiaryPage,
 } from './scripts';
 
 const main = () => {
@@ -30,6 +31,8 @@ const main = () => {
     useVersionNotificator();
     // since 2020-04-28
     getDynamicConfig().catch();
+    // since 2020-11-09
+    defaultDiaryPage();
   });
 };
 
