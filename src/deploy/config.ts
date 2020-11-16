@@ -9,7 +9,6 @@ export const config = {
       targetPageName: 'kou',
       codeBlockLabel: 'script.js',
       sourceFilePath: getDistDirPath('km-study.min.js'),
-      userCSS: getDistDirPath('km-study.min.css'),
     },
     {
       projectName: 'km-study',
@@ -18,4 +17,4 @@ export const config = {
       sourceFilePath: getDistDirPath('km-study.min.css'),
     },
   ],
-} as const;
+};
