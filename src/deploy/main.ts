@@ -1,38 +1,31 @@
 // load .env file for development in local
 require('dotenv').config();
 
-import { getGlobalScrapboxApi, ScrapboxApi } from '../libs/scrapbox/api';
-import { findNextLineId } from '../libs/scrapbox/util';
-import { config, settingsPageName, userCssCodeTitle, userScriptCodeTitle } from './config';
-import { loadSourceCode } from './file-loaders';
+import { deploy } from 'scrapbox-tools';
+import { config } from './config';
 
-export const updateCode = async (api: ScrapboxApi, pageName: string, targetCodeBlockName: string, newCode: string) => {
-  console.log('[sx/deploy] start update page ', pageName);
-
-  const page = await api.getPage(pageName);
-  const lineId = findNextLineId(targetCodeBlockName, page.lines);
-  if (!lineId) {
-    throw new Error('Line not found');
+// value of auth cookie
+export const isValidToken = (val: unknown): val is string => typeof val === 'string' && 0 < val.length;
+export const getValidEnv = (env: typeof process.env) => {
+  if (!isValidToken(env.TOKEN)) {
+    throw new Error('process.env.TOKEN is invalid');
   }
-  await api.changeLine(pageName, { type: 'update', id: lineId, text: newCode });
+
+  return {
+    token: env.TOKEN,
+  } as const;
 };
 
 export const main = async () => {
-  for (const project of config.projects) {
-    try {
-      console.log('[sx/deploy] start update project: ', project.name);
-      const api = await getGlobalScrapboxApi(project.name, config.token);
+  const env = getValidEnv(process.env);
+  const deployTasks = config.deployTargets.map((data) =>
+    deploy({
+      ...data,
+      token: env.token,
+    }),
+  );
 
-      if (project.userScript) {
-        await updateCode(api, project.user, userScriptCodeTitle, await loadSourceCode(project.userScript));
-      }
-      if (project.userCSS) {
-        await updateCode(api, settingsPageName, userCssCodeTitle, await loadSourceCode(project.userCSS));
-      }
-    } catch (e) {
-      console.error('[sx/deploy] failed to update project: ', project.name, e);
-    }
-  }
+  await Promise.all(deployTasks);
 };
 
 main()
