@@ -18,12 +18,21 @@ export const getValidEnv = (env: typeof process.env) => {
 
 export const main = async () => {
   const env = getValidEnv(process.env);
-  const deployTasks = config.deployTargets.map((data) =>
-    deploy({
+  const deployTasks = config.deployTargets.map((data) => {
+    const taskName = `${data.projectName}/${data.targetPageName}/${data.codeBlockLabel}`;
+    console.log(`[sx/deploy] start: ${taskName}`);
+
+    return deploy({
       ...data,
       token: env.token,
-    }),
-  );
+    })
+      .then(() => {
+        console.log(`[sx/deploy] completed: ${taskName}`);
+      })
+      .catch((e) => {
+        console.error(`[sx/deploy] errored: ${taskName}`);
+      });
+  });
 
   await Promise.all(deployTasks);
 };
