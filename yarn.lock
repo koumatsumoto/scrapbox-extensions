@@ -7912,9 +7912,9 @@ schema-utils@^2.6.5:
     ajv "^6.12.0"
     ajv-keywords "^3.4.1"
 
-scrapbox-tools@kouMatsumoto/scrapbox-tools#dev2:
+scrapbox-tools@kouMatsumoto/scrapbox-tools#master:
   version "0.0.1"
-  resolved "https://codeload.github.com/kouMatsumoto/scrapbox-tools/tar.gz/3e07a4d33f3a6143422e3620f92a76feac784c0b"
+  resolved "https://codeload.github.com/kouMatsumoto/scrapbox-tools/tar.gz/392c3620aa5622dde1bf275de09da26601b494ec"
   dependencies:
     fp-ts "^2.8.1"
     node-fetch "^2.6.0"
