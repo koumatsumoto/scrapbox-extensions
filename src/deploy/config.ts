@@ -1,21 +1,21 @@
 import * as path from 'path';
-import { getEnv } from './environments';
 
 const getDistDirPath = (file: string) => path.join(process.cwd(), 'dist', file);
 
-const env = getEnv();
 export const config = {
-  token: env.token,
-  projects: [
+  deployTargets: [
     {
-      name: 'km-study',
-      user: 'kou',
+      projectName: 'km-study',
+      targetPageName: 'kou',
+      codeBlockLabel: 'script.js',
+      sourceFilePath: getDistDirPath('km-study.min.js'),
       userCSS: getDistDirPath('km-study.min.css'),
-      userScript: getDistDirPath('km-study.min.js'),
+    },
+    {
+      projectName: 'km-study',
+      targetPageName: 'settings',
+      codeBlockLabel: 'style.css',
+      sourceFilePath: getDistDirPath('km-study.min.css'),
     },
   ],
 } as const;
-
-export const settingsPageName = 'settings';
-export const userScriptCodeTitle = 'script.js';
-export const userCssCodeTitle = 'style.css';
