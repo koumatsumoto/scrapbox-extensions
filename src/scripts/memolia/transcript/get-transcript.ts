@@ -1,4 +1,5 @@
-import { tail } from '../../../libs/common/array';
+import { tail } from 'fp-ts/es6/Array';
+import { getOrElse } from 'fp-ts/es6/Option';
 import { Line, Memory } from '../types';
 
 export type Transcript = {
@@ -6,14 +7,16 @@ export type Transcript = {
   contents: Line[];
 };
 
+const getOrEmpty = getOrElse(() => [] as Transcript['contents']);
 export const getTranscript = (lineId: string, memory: Memory): Transcript => {
   for (const ep of memory.episodes) {
     for (const cep of ep.children) {
       // child-episode
       if (cep.lines[0].id === lineId) {
+        const retains = tail(cep.lines);
         return {
           context: cep.context,
-          contents: tail(cep.lines),
+          contents: getOrEmpty(retains),
         };
       }
       // internal in child-episode
