@@ -1,22 +1,21 @@
 /**
  * Common variables and functions (Scrapbox loads each scripts into global environment)
  */
-import { getGlobalScrapboxApi } from './libs/scrapbox/api';
-import { getCurrentProjectName, runOnScrapboxReady } from './libs/scrapbox/browser-api';
+import { runOnScrapboxReady } from './libs/scrapbox/browser-api';
 import {
   applyLoginCSSClass,
+  defaultDiaryPage,
   enableCustomListItem,
   getDynamicConfig,
+  setupGlobalHelpers,
   useAddEpisodeButton,
   useMemolia,
   useVersionNotificator,
-  defaultDiaryPage,
 } from './scripts';
 
 const main = () => {
   runOnScrapboxReady(async () => {
-    // connect to websocket, fetch initial data from api
-    getGlobalScrapboxApi(getCurrentProjectName()).catch();
+    setupGlobalHelpers();
 
     enableCustomListItem();
 

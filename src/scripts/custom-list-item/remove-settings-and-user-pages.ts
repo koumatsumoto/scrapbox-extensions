@@ -1,4 +1,4 @@
-import { getGlobalScrapboxApi, getCurrentProjectName } from '../../libs/scrapbox';
+import { getGlobalHelpers } from '../global-helpers';
 import { listItemSelectorFn } from './config';
 
 const settingsPageName = 'settings';
@@ -12,8 +12,8 @@ const retrieveTitle = (e: HTMLElement) => {
  * Remove settings and user pages from first loaded list items
  */
 export const removeSettingsAndUserPages = async () => {
-  const api = await getGlobalScrapboxApi(getCurrentProjectName());
-  const userName = api.user.name;
+  const { scrapboxClient } = await getGlobalHelpers();
+  const userName = scrapboxClient.getCurrentUser().name;
 
   for (const e of listItemSelectorFn()) {
     const title = retrieveTitle(e);
