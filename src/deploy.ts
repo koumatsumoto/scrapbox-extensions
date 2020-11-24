@@ -1,4 +1,9 @@
+// load .env file for development in local
+require('dotenv').config();
+
 import * as path from 'path';
+
+import { runDeployScript } from 'scrapbox-tools';
 
 const getDistDirPath = (file: string) => path.join(process.cwd(), 'dist', file);
 
@@ -22,3 +27,7 @@ export const config = {
     },
   ],
 };
+
+runDeployScript(process.env.TOKEN || '', config.deployTargets).finally(() => {
+  console.log('deploy completed');
+});
