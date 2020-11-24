@@ -1,11 +1,10 @@
 import { Brand } from '../../common';
-import { ID } from '../util';
 import { DecoFormulaNode, IndentNode, ScrapboxNode } from './node';
 
 export type TextStartWithHash = Brand<string, 'TextStartWithHash'>;
 
 type GeneralLine = {
-  id: ID;
+  id: string;
   text: string;
   userId?: string;
   created: number;

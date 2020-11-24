@@ -1,6 +1,7 @@
 import { ScrapboxLine } from '../../types';
-import { getTitleLine } from '../../util';
 import { getLines } from './scrapbox';
+
+export const getTitleLine = (lines: ScrapboxLine[]): ScrapboxLine => lines[0]!;
 
 export const isEmptyPage = (lines: ScrapboxLine[] = getLines()) => {
   const title = getTitleLine(lines);

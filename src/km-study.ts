@@ -1,37 +1,28 @@
+// NOTE: webpack use this file as entry file to build
+
 /**
  * Common variables and functions (Scrapbox loads each scripts into global environment)
  */
 import { runOnScrapboxReady } from './libs/scrapbox/browser-api';
 import {
-  applyLoginCSSClass,
   defaultDiaryPage,
-  enableCustomListItem,
-  getDynamicConfig,
+  episodeButton,
+  listViewCustomization,
+  loggedInCss,
+  setupDynamicConfig,
   setupGlobalHelpers,
-  useAddEpisodeButton,
-  useMemolia,
-  useVersionNotificator,
+  memolia,
 } from './scripts';
 
 const main = () => {
   runOnScrapboxReady(async () => {
     setupGlobalHelpers();
-
-    enableCustomListItem();
-
-    // add custom css class to body tag
-    applyLoginCSSClass();
-
-    // since 2020/04/20
-    useAddEpisodeButton();
-    // since 2020/04/20
-    useMemolia();
-    // since 2020/04/27
-    useVersionNotificator();
-    // since 2020-04-28
-    getDynamicConfig().catch();
-    // since 2020-11-09
+    setupDynamicConfig();
+    listViewCustomization();
+    loggedInCss();
     defaultDiaryPage();
+    episodeButton();
+    memolia();
   });
 };
 
