@@ -1,5 +1,5 @@
 import { createElement } from '../../libs/common/dom';
-import { alertOnFail } from '../../libs/common/process';
+import { openAlert } from '../../libs/common/logger';
 import { DomManipulator } from '../../libs/scrapbox/dom/dom-manipulator';
 import { handleFormAndDialog } from './handle-form-and-dialog';
 
@@ -10,7 +10,7 @@ const createAddEpisodeButton = () => {
     class: 'sx-add-episode-button',
     onClick: (ev) => {
       ev.stopPropagation();
-      alertOnFail(handleFormAndDialog);
+      handleFormAndDialog().catch(openAlert);
     },
   });
 };

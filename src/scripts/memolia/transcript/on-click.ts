@@ -1,4 +1,4 @@
-import { removeHead } from '../../../libs/common/string';
+import { removeHead } from '../../../libs/common/util';
 import { makeMemory } from '../parse/memory';
 import { getTranscript } from './get-transcript';
 import { toClipboard } from './to-clipboard';
