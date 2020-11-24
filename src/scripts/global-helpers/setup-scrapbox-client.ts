@@ -1,4 +1,4 @@
-import { getScrapboxClient, ScrapboxClient } from 'scrapbox-tools';
+import { getScrapboxClient, ScrapboxClient } from 'scrapbox-tools/scrapbox-client';
 import { getCurrentProjectName } from '../../libs/scrapbox/browser-api';
 
 let gettingClient: Promise<ScrapboxClient>;

@@ -1,4 +1,4 @@
-import { ChangeRequestCreateParams } from 'scrapbox-tools/dist/libs/api-client/websocket-clinet/internal/request';
+import { ChangeRequestCreateParams } from 'scrapbox-tools/scrapbox-client';
 import { getDateText, getLastLineId, getTimeText, isDiaryPageTitle, isEmptyPage, makeTag } from '../../../../libs/scrapbox';
 import { endWithEmptyLine, getLines } from '../../../../libs/scrapbox/browser-api';
 import { ScrapboxLine } from '../../../../libs/scrapbox/types';

@@ -19,7 +19,7 @@
     "ci:check:lint": "yarn format && yarn check:diff",
     "ci:check:test": "yarn test:unit --ci --silent --detectOpenHandles --forceExit",
     "ci:deploy": "yarn deploy",
-    "deploy": "yarn build:prod && yarn ts-node src/deploy.ts",
+    "deploy": "yarn build:prod && yarn ts-node deploy.ts --project tsconfig.deploy.json",
     "format": "yarn lint:scss --fix && yarn lint:ts --fix && prettier --config .prettierrc --write '{deploy,src,.circleci}/**/*.{ts,js,scss,html,md,yml}' ./*.{js,json}",
     "lint:scss": "stylelint 'src/{libs,scripts,styles}/**/*.scss'",
     "lint:ts": "eslint 'src/**/*.ts'",
@@ -27,7 +27,7 @@
     "jest": "node --max_old_space_size=4096 ./node_modules/.bin/jest",
     "start:dev": "yarn build:dev && concurrently 'yarn :build:dev:scss:watch' 'yarn :build:dev:ts:watch' 'browser-sync start --config bs-config.js'",
     "test:unit": "yarn jest -c jest.config.js",
-    "ts-node": "node --max-old-space-size=8000 node_modules/.bin/ts-node --project tsconfig.json",
+    "ts-node": "node --max-old-space-size=8000 node_modules/.bin/ts-node",
     ":build:dev:scss": "node-sass src/styles/km-study.scss dist/style.css",
     ":build:dev:scss:watch": "yarn :build:dev:scss && yarn :build:dev:scss -w",
     ":build:dev:ts": "webpack --config webpack.config.dev.js",
@@ -44,7 +44,7 @@
     "fp-ts": "^2.5.4",
     "node-fetch": "^2.6.1",
     "rxjs": "^7.0.0-beta.0",
-    "scrapbox-tools": "kouMatsumoto/scrapbox-tools#dev",
+    "scrapbox-tools": "kouMatsumoto/scrapbox-tools#master",
     "ws": "^7.3.0"
   },
   "devDependencies": {
