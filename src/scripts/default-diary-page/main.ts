@@ -1,7 +1,7 @@
 import { findElements } from '../../libs/common/dom';
+import { logOnly } from '../../libs/common/logger';
 import { getDateText } from '../../libs/scrapbox';
 import { getGlobalHelpers } from '../global-helpers';
-import { logOnly } from '../../libs/common/logger';
 
 export const selectNewButtons = () => findElements<HTMLAnchorElement>('a.new-button');
 export const replaceText = (source: string, word: string) => source.replace('new', encodeURIComponent(word));
