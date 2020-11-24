@@ -3,24 +3,18 @@ require('dotenv').config();
 
 import * as path from 'path';
 
-import { runDeployScript } from 'scrapbox-tools';
+import { Deployer } from 'scrapbox-tools';
 
 const getDistDirPath = (file: string) => path.join(process.cwd(), 'dist', file);
 
 export const config = {
   deployTargets: [
     {
-      userId: '5dc685a50fc39d0017e27558',
-      projectId: '5dc685a50fc39d0017e27559',
-      projectName: 'km-study',
       targetPageName: 'kou',
       codeBlockLabel: 'script.js',
       sourceFilePath: getDistDirPath('km-study.min.js'),
     },
     {
-      userId: '5dc685a50fc39d0017e27558',
-      projectId: '5dc685a50fc39d0017e27559',
-      projectName: 'km-study',
       targetPageName: 'settings',
       codeBlockLabel: 'style.css',
       sourceFilePath: getDistDirPath('km-study.min.css'),
@@ -28,6 +22,19 @@ export const config = {
   ],
 };
 
-runDeployScript(process.env.TOKEN || '', config.deployTargets).finally(() => {
-  console.log('deploy completed');
-});
+const main = async () => {
+  const deployer = new Deployer('km-study', process.env.TOKEN);
+  const deployTasks = config.deployTargets.map((data) => deployer.deploy(data));
+
+  return Promise.all(deployTasks);
+};
+
+main()
+  .then(() => {
+    console.log('deploy completed');
+    process.exit(0);
+  })
+  .catch((e) => {
+    console.error('deploy errored', e);
+    process.exit(1);
+  });

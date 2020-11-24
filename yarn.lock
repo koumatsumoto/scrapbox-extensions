@@ -7914,7 +7914,7 @@ schema-utils@^2.6.5:
 
 scrapbox-tools@kouMatsumoto/scrapbox-tools#dev:
   version "0.0.1"
-  resolved "https://codeload.github.com/kouMatsumoto/scrapbox-tools/tar.gz/3a072654241aefa4fad09949276b41c382f06af3"
+  resolved "https://codeload.github.com/kouMatsumoto/scrapbox-tools/tar.gz/9d677e00f8e87c8ca7c5c690ded261d3e25342af"
   dependencies:
     fp-ts "^2.8.1"
     node-fetch "^2.6.0"
