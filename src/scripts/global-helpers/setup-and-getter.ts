@@ -9,8 +9,10 @@ export const setupGlobalHelpers = () => {
   router = new Router({ debug: true });
 };
 
+const isSetupCompleted = () => !gettingClient || !router;
+
 export const getGlobalHelpers = async () => {
-  if (!gettingClient || !router) {
+  if (!isSetupCompleted()) {
     setupGlobalHelpers();
   }
 
