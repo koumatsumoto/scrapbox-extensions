@@ -26,7 +26,7 @@ const main = async () => {
   const deployer = new Deployer('km-study', process.env.TOKEN);
   const deployTasks = config.deployTargets.map((data) => deployer.deploy(data));
 
-  return Promise.all(deployTasks);
+  await Promise.all(deployTasks);
 };
 
 main()
