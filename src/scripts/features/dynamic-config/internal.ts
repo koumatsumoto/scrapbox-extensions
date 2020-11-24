@@ -1,18 +1,20 @@
 import { toError } from 'fp-ts/es6/Either';
-import { left, right, chain, map, TaskEither, tryCatch, fold } from 'fp-ts/es6/TaskEither';
+import { chain, fold, left, map, right, TaskEither, tryCatch } from 'fp-ts/es6/TaskEither';
 import { Lazy } from 'fp-ts/es6/function';
 import { pipe } from 'fp-ts/es6/pipeable';
-import { RestApiClient } from '../../../libs/scrapbox/api/rest-api-client/rest-api-client';
-import { ApiResultPageLine, PageResponse } from '../../../libs/scrapbox/api/rest-api-client/rest-api-client-types';
-import { getCurrentProjectName } from '../../../libs/scrapbox/browser-api';
+import { Page } from 'scrapbox-tools/scrapbox-client';
 import { DynamicConfig } from '../../config';
+import { getGlobalHelpers } from '../../global-helpers';
 
 export const storageKey = '[sx/dynamic-config] config';
+type Line = {
+  text: string;
+};
 
-const isCodeBlockStartLine = (line: ApiResultPageLine) => line.text.includes('code:');
-const isCodeBlockEndLine = (line: ApiResultPageLine) => line.text === '';
+const isCodeBlockStartLine = (line: Line) => line.text.includes('code:');
+const isCodeBlockEndLine = (line: Line) => line.text === '';
 
-export const parsePageLines = (lines: ApiResultPageLine[]): string => {
+export const parsePageLines = (lines: Line[]): string => {
   // code:filename.json
   let codeBlockHeadLineFound = false;
   let totalCodeStrings = '';
@@ -46,13 +48,13 @@ export const storeToStorage = (data: DynamicConfig, w = window): TaskEither<Erro
   }
 };
 
-const fetchConfigPage: Lazy<Promise<PageResponse>> = () => new RestApiClient().getPage(getCurrentProjectName(), 'config');
+const fetchConfigPage: Lazy<Promise<Page>> = () => getGlobalHelpers().then(({ scrapboxClient }) => scrapboxClient.getPage('config'));
 
-const fromThunk = (thunk: Lazy<Promise<PageResponse>>): TaskEither<Error, PageResponse> => {
+const fromThunk = (thunk: Lazy<Promise<Page>>): TaskEither<Error, Page> => {
   return tryCatch(thunk, toError);
 };
 
-const toJsonStrings = map((res: PageResponse) => parsePageLines(res.lines));
+const toJsonStrings = map((res: Page) => parsePageLines(res.lines));
 
 export const isObject = (v: unknown): v is object => {
   return v != null && typeof v === 'object';

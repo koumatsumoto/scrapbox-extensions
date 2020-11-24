@@ -3,7 +3,7 @@ require('dotenv').config();
 
 import * as path from 'path';
 
-import { Deployer } from 'scrapbox-tools';
+import { Deployer } from 'scrapbox-tools/deploy';
 
 const getDistDirPath = (file: string) => path.join(process.cwd(), 'dist', file);
 

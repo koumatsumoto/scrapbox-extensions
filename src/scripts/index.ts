@@ -8,3 +8,4 @@ export * from './features/dynamic-config/get-dynamic-config';
 export * from './features/memolia/main';
 export * from './features/versioin-notificator/main';
 export { main as defaultDiaryPage } from './features/default-diary-page/main';
+export * from './global-helpers';
