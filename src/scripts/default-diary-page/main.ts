@@ -1,5 +1,7 @@
 import { findElements } from '../../libs/common/dom';
-import { getDateText, Router } from '../../libs/scrapbox';
+import { getDateText } from '../../libs/scrapbox';
+import { getGlobalHelpers } from '../global-helpers';
+import { logOnly } from '../../libs/common/logger';
 
 export const selectNewButtons = () => findElements<HTMLAnchorElement>('a.new-button');
 export const replaceText = (source: string, word: string) => source.replace('new', encodeURIComponent(word));
@@ -12,6 +14,9 @@ export const replaceNewButtonLink = () => {
 export const main = () => {
   // initial
   replaceNewButtonLink();
-  // on route change
-  Router.onPageChange(replaceNewButtonLink);
+
+  // on url change
+  getGlobalHelpers()
+    .then(({ router }) => router.urlChange.subscribe(() => replaceNewButtonLink()))
+    .catch(logOnly);
 };
