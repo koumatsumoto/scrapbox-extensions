@@ -4,7 +4,6 @@ module.exports = {
   mode: 'development',
   entry: {
     'km-study': path.join(__dirname, 'src/km-study.ts'),
-    'km-public': path.join(__dirname, 'src/km-public.ts'),
   },
   output: {
     path: path.join(__dirname, 'dist'),

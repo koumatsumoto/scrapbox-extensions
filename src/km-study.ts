@@ -1,3 +1,5 @@
+// NOTE: webpack use this file as entry file to build
+
 /**
  * Common variables and functions (Scrapbox loads each scripts into global environment)
  */
