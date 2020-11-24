@@ -3,12 +3,14 @@ import { getScrapboxClient, ScrapboxClient } from 'scrapbox-tools/scrapbox-clien
 import { getCurrentProjectName } from '../../libs/scrapbox/browser-api';
 
 let gettingClient: Promise<ScrapboxClient>;
+let router: Router;
 export const setupGlobalHelpers = () => {
   gettingClient = getScrapboxClient({ projectName: getCurrentProjectName() });
+  router = new Router();
 };
 
 export const getGlobalHelpers = async () => {
-  if (!gettingClient) {
+  if (!gettingClient || !router) {
     setupGlobalHelpers();
   }
 
@@ -16,6 +18,6 @@ export const getGlobalHelpers = async () => {
 
   return {
     scrapboxClient,
-    router: new Router(),
+    router,
   };
 };
