@@ -1,1 +1,1 @@
-export { setupGlobalHelpers, getGlobalHelpers } from './setup-scrapbox-client';
+export { setupGlobalHelpers, getGlobalHelpers } from './setup-and-getter';

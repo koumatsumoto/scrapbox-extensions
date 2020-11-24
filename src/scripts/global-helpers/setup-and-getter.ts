@@ -6,7 +6,7 @@ let gettingClient: Promise<ScrapboxClient>;
 let router: Router;
 export const setupGlobalHelpers = () => {
   gettingClient = getScrapboxClient({ projectName: getCurrentProjectName() });
-  router = new Router();
+  router = new Router({ debug: true });
 };
 
 export const getGlobalHelpers = async () => {
