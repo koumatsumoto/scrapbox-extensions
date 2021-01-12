@@ -21,8 +21,8 @@ describe('makeInsertParams', () => {
   const words = ['tag1', 'tag2'];
   const date = getFakeJSTDate('2020-02-09T03:28:38.036Z');
   const emptyPage = [{ text: '', id: 'id' }] as any;
-  const dailyTitleOnly = [{ text: '2020-02-08', id: 'id' }] as any;
-  const dailyTitleEOF = [{ text: '2020-02-08' }, { text: '' }] as any;
+  const dailyTitleOnly = [{ text: '#2020-02-08', id: 'id' }] as any;
+  const dailyTitleWithAnEmptyLine = [{ text: '#2020-02-09' }, { text: '' }] as any;
   const symbolTitleOnly = [{ text: 'Symbol', id: 'id' }] as any;
   const symbolTitleEOF = [{ text: 'Symbol' }, { text: '' }] as any;
   const hasPreviousTags = [{ text: 'Symbol' }, { text: '#tag' }] as any;
@@ -38,11 +38,11 @@ describe('makeInsertParams', () => {
     ]);
     expect(makeInsertParams(words, date, dailyTitleOnly)).toEqual([
       { type: 'title', title: '#2020-02-08' },
-      { type: 'insert', text: '##2020-02-08 #tag1 #tag2' },
+      { type: 'insert', text: '##2020-02-09 #tag1 #tag2' },
       { type: 'insert', text: '' },
-      { type: 'description', text: '##2020-02-08 #tag1 #tag2' },
+      { type: 'description', text: '##2020-02-09 #tag1 #tag2' },
     ]);
-    expect(makeInsertParams(words, date, dailyTitleEOF)).toEqual([
+    expect(makeInsertParams(words, date, dailyTitleWithAnEmptyLine)).toEqual([
       { type: 'insert', text: '##2020-02-09 #tag1 #tag2' },
       { type: 'insert', text: '' },
     ]);
@@ -50,10 +50,10 @@ describe('makeInsertParams', () => {
       { type: 'title', title: 'Symbol' },
       { type: 'insert', text: '##2020-02-09 #tag1 #tag2' },
       { type: 'insert', text: '' },
-      { type: 'description', text: '##2020-02-09 #12:00 #tag1 #tag2' },
+      { type: 'description', text: '##2020-02-09 #tag1 #tag2' },
     ]);
     expect(makeInsertParams(words, date, symbolTitleEOF)).toEqual([
-      { type: 'insert', text: '##2020-02-09 #12:00 #tag1 #tag2' },
+      { type: 'insert', text: '##2020-02-09 #tag1 #tag2' },
       { type: 'insert', text: '' },
     ]);
     expect(makeInsertParams(words, date, hasPreviousTags)).toEqual([
