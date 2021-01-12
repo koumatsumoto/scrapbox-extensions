@@ -1,9 +1,10 @@
 import { ChangeRequestCreateParams } from 'scrapbox-tools/scrapbox-client';
-import { getDateText, getTimeText, isDiaryPageTitle, isEmptyPage, makeTag } from '../../../libs/scrapbox';
+import { getDiaryPageTitle, makeTag } from '../../../libs/scrapbox';
 import { endWithEmptyLine, getLines } from '../../../libs/scrapbox/browser-api';
 import { ScrapboxLine } from '../../../libs/scrapbox/types';
 
 export const getLastLineId = (lines: ScrapboxLine[]): string => lines[lines.length - 1]!.id;
+const EMPTY_LINE = '';
 
 /**
  *
@@ -17,27 +18,17 @@ export const makeInsertParams = (words: string[], date: Date = new Date(), lines
 
   const changes: ChangeRequestCreateParams[] = [];
   const titleLine = lines[0];
-
-  // construct a tag of date or time.
-  // if diary page, use time (e.g. "24:00")
-  // if other page, use date and time (e.g. "2020/02/16", "24:00")
-  let tagLineText: string;
-  if (isEmptyPage(lines) || isDiaryPageTitle(lines[0].text)) {
-    tagLineText = [getTimeText(date), ...words].map(makeTag).join(' ');
-  } else {
-    tagLineText = [getDateText(date), getTimeText(date), ...words].map(makeTag).join(' ');
-  }
+  const diaryTitle = getDiaryPageTitle(date);
+  const tags = [`#${diaryTitle}`, ...words].map(makeTag).join(' ');
 
   switch (lines.length) {
     // an empty or title-only page
     // if empty page, need update title with date string
     case 1: {
-      // if empty, use date to title.
-      const title = titleLine.text === '' ? getDateText(date) : titleLine.text;
-      changes.push({ type: 'title', title });
-      changes.push({ type: 'insert', text: tagLineText });
-      changes.push({ type: 'insert', text: '' });
-      changes.push({ type: 'description', text: tagLineText });
+      changes.push({ type: 'title', title: titleLine.text || diaryTitle });
+      changes.push({ type: 'insert', text: tags });
+      changes.push({ type: 'insert', text: EMPTY_LINE });
+      changes.push({ type: 'description', text: tags });
 
       break;
     }
@@ -45,23 +36,24 @@ export const makeInsertParams = (words: string[], date: Date = new Date(), lines
     // if empty line, replace it with tag line
     case 2: {
       if (endWithEmptyLine(lines)) {
-        changes.push({ type: 'insert', text: tagLineText, position: getLastLineId(lines) });
-        changes.push({ type: 'insert', text: '' });
+        changes.push({ type: 'insert', text: tags, position: getLastLineId(lines) });
+        changes.push({ type: 'insert', text: EMPTY_LINE });
       } else {
-        changes.push({ type: 'insert', text: '' });
-        changes.push({ type: 'insert', text: tagLineText });
-        changes.push({ type: 'insert', text: '' });
+        changes.push({ type: 'insert', text: EMPTY_LINE });
+        changes.push({ type: 'insert', text: tags });
+        changes.push({ type: 'insert', text: EMPTY_LINE });
       }
 
       break;
     }
     default: {
       if (!endWithEmptyLine(lines)) {
-        changes.push({ type: 'insert', text: '' });
+        // insert a line break
+        changes.push({ type: 'insert', text: EMPTY_LINE });
       }
 
-      changes.push({ type: 'insert', text: tagLineText });
-      changes.push({ type: 'insert', text: '' });
+      changes.push({ type: 'insert', text: tags });
+      changes.push({ type: 'insert', text: EMPTY_LINE });
     }
   }
 
