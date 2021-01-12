@@ -16,9 +16,9 @@ describe('datetime-operations', () => {
 
   describe('isDiaryPageTitle', () => {
     it('should work', () => {
-      expect(isDiaryPageTitle('2020-02-09')).toBe(true);
-      expect(isDiaryPageTitle('a2020-02-28')).toBe(false);
-      expect(isDiaryPageTitle('2020-02-09a')).toBe(false);
+      expect(isDiaryPageTitle('#2020-02-09')).toBe(true);
+      expect(isDiaryPageTitle('a#2020-02-28')).toBe(false);
+      expect(isDiaryPageTitle('#2020-02-09a')).toBe(false);
       expect(isDiaryPageTitle('else')).toBe(false);
     });
   });
