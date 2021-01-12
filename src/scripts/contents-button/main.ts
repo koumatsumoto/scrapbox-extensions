@@ -6,7 +6,7 @@ import { handleFormAndDialog } from './handle-form-and-dialog';
 const createAddEpisodeButton = () => {
   return createElement({
     tag: 'button',
-    contents: 'Add Episode',
+    contents: 'Add Contents',
     class: 'sx-add-episode-button',
     onClick: (ev) => {
       ev.stopPropagation();
