@@ -1,5 +1,5 @@
 import { ChangeRequestCreateParams } from 'scrapbox-tools/scrapbox-client';
-import { getDateText, getTimeText, isDiaryPageTitle, isEmptyPage, makeTag } from '../../../libs/scrapbox';
+import { getDiaryPageTitle, makeTag } from '../../../libs/scrapbox';
 import { endWithEmptyLine, getLines } from '../../../libs/scrapbox/browser-api';
 import { ScrapboxLine } from '../../../libs/scrapbox/types';
 
@@ -19,21 +19,14 @@ export const makeInsertParams = (words: string[], date: Date = new Date(), lines
   const titleLine = lines[0];
 
   // construct a tag of date or time.
-  // if diary page, use time (e.g. "24:00")
-  // if other page, use date and time (e.g. "2020/02/16", "24:00")
-  let tagLineText: string;
-  if (isEmptyPage(lines) || isDiaryPageTitle(lines[0].text)) {
-    tagLineText = [getTimeText(date), ...words].map(makeTag).join(' ');
-  } else {
-    tagLineText = [getDateText(date), getTimeText(date), ...words].map(makeTag).join(' ');
-  }
+  const tagLineText = [getDiaryPageTitle(date), ...words].map(makeTag).join(' ');
 
   switch (lines.length) {
     // an empty or title-only page
     // if empty page, need update title with date string
     case 1: {
       // if empty, use date to title.
-      const title = titleLine.text === '' ? getDateText(date) : titleLine.text;
+      const title = titleLine.text === '' ? getDiaryPageTitle(date) : titleLine.text;
       changes.push({ type: 'title', title });
       changes.push({ type: 'insert', text: tagLineText });
       changes.push({ type: 'insert', text: '' });
