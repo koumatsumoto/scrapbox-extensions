@@ -16,19 +16,20 @@ export const makeInsertParams = (words: string[], date: Date = new Date(), lines
   }
 
   const changes: ChangeRequestCreateParams[] = [];
-  const titleLine = lines[0];
 
   // construct a tag of date or time.
   const diaryTitle = getDiaryPageTitle(date);
   const diaryTitleWithHash = `#${diaryTitle}`;
   const tagLineText = [diaryTitleWithHash, ...words].map(makeTag).join(' ');
 
+  const titleLine = lines[0];
+  const title = titleLine.text === '' ? diaryTitle : titleLine.text;
+
   switch (lines.length) {
     // an empty or title-only page
     // if empty page, need update title with date string
     case 1: {
       // if empty, use date to title.
-      const title = titleLine.text === '' ? diaryTitleWithHash : titleLine.text;
       changes.push({ type: 'title', title });
       changes.push({ type: 'insert', text: tagLineText });
       changes.push({ type: 'insert', text: '' });
