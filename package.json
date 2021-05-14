@@ -1,6 +1,6 @@
 {
   "name": "scrapbox-extensions",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "dist/main.js",
   "repository": "git@github.com:kouMatsumoto/scrapbox-extensions.git",
   "author": "kou.matsumoto <matsumoto@bitcoinbank.co.jp>",
@@ -44,7 +44,7 @@
     "fp-ts": "^2.5.4",
     "node-fetch": "^2.6.1",
     "rxjs": "^7.0.0-beta.0",
-    "scrapbox-tools": "git+ssh://git@github.com/kouMatsumoto/scrapbox-tools#master",
+    "scrapbox-tools": "0.0.3",
     "ws": "^7.3.0"
   },
   "devDependencies": {
@@ -79,7 +79,7 @@
     "ts-loader": "^7.0.1",
     "ts-node": "^8.9.1",
     "tslib": "^1.11.1",
-    "typescript": "^3.8.3",
+    "typescript": "4.3.1-rc",
     "uglifycss": "^0.0.29",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11"

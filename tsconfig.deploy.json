@@ -2,7 +2,7 @@
   "extends": "tsconfig.json",
   "include": ["deploy.ts"],
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es2020",
     "module": "commonjs",
     "moduleResolution": "node",
     "types": ["node", "jest"],
