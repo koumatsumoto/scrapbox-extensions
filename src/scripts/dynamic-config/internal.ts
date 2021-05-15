@@ -56,7 +56,7 @@ const fromThunk = (thunk: Lazy<Promise<Page>>): TaskEither<Error, Page> => {
 
 const toJsonStrings = map((res: Page) => parsePageLines(res.lines));
 
-export const isObject = (v: unknown): v is object => {
+export const isObject = (v: unknown): v is Record<string, unknown> => {
   return v != null && typeof v === 'object';
 };
 
