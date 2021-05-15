@@ -3,7 +3,7 @@ import { isScrapboxReady } from './scrapbox';
 
 const reactBootstrapCheckInterval = 20;
 
-export const runOnScrapboxReady = (fn: Function) => {
+export const runOnScrapboxReady = (fn: () => void) => {
   runOnDocumentReady(() => {
     const id = window.setInterval(() => {
       if (isScrapboxReady()) {

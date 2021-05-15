@@ -1,4 +1,4 @@
-import { ScrapboxLine, TitleLine } from './line';
+import { ScrapboxLine } from './line';
 import { ScrapboxProject } from './project';
 
 export type ScrapboxLayout =
@@ -25,7 +25,7 @@ export type EmptyPage = {
 };
 
 export type Page = {
-  title: TitleLine['text'];
+  title: string;
   // first item is title line
   lines: ScrapboxLine[];
 };
@@ -36,8 +36,8 @@ export type RawScrapbox = {
   PageMenu: {
     addItem: (param: { title: string; onClick: () => void }) => void;
     addMenu: (param: { title: string; image: string; onClick: () => void }) => void;
-    addSeparator: Function;
-    removeAllItems: Function;
+    addSeparator: () => unknown;
+    removeAllItems: () => unknown;
   };
   PopupMenu: {
     addButton: (param: { title: string; onClick: (selectedText: string) => string }) => void;
