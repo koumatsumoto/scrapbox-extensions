@@ -16,6 +16,7 @@ module.exports = {
   },
   testURL: 'http://localhost/',
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
+  testEnvironment: 'jsdom',
   collectCoverageFrom: [
     '<rootDir>/src/components/**/*.ts',
     '<rootDir>/src/libs/**/*.ts',
