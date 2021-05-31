@@ -1,5 +1,5 @@
-import { tail } from 'fp-ts/es6/Array';
-import { getOrElse } from 'fp-ts/es6/Option';
+import { tail } from 'fp-ts/Array';
+import { getOrElse } from 'fp-ts/Option';
 import { Line, Memory } from '../types';
 
 export type Transcript = {

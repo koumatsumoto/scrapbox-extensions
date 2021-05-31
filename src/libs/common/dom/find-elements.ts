@@ -1,5 +1,5 @@
-import { filter, Option, tryCatch } from 'fp-ts/es6/Option';
-import { pipe } from 'fp-ts/es6/pipeable';
+import { filter, Option, tryCatch } from 'fp-ts/Option';
+import { pipe } from 'fp-ts/pipeable';
 
 export const findElementOrFail = <T extends Element>(selector: string, parent: ParentNode = document) => {
   const elem = parent.querySelector<T>(selector);

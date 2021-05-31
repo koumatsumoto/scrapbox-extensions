@@ -1,7 +1,7 @@
-import { toError } from 'fp-ts/es6/Either';
-import { chain, fold, left, map, right, TaskEither, tryCatch } from 'fp-ts/es6/TaskEither';
-import { Lazy } from 'fp-ts/es6/function';
-import { pipe } from 'fp-ts/es6/pipeable';
+import { toError } from 'fp-ts/Either';
+import { chain, fold, left, map, right, TaskEither, tryCatch } from 'fp-ts/TaskEither';
+import { Lazy } from 'fp-ts/function';
+import { pipe } from 'fp-ts/pipeable';
 import { Page } from 'scrapbox-tools/scrapbox-client';
 import { getCurrentProjectName } from '../../libs';
 import { DynamicConfig } from '../config';
