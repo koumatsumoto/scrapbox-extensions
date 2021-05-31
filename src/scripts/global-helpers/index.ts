@@ -1,1 +1,1 @@
-export { setupGlobalHelpers, getGlobalHelpers } from './setup-and-getter';
+export { getGlobalHelpers } from './setup-and-getter';

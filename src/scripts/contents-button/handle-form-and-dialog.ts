@@ -1,5 +1,12 @@
 import { SxDialogComponent } from '../../libs/components/dialog';
-import { getCurrentPageName, getFirstLineOrFail, isEmptyPage, isTitleOnlyPage, loadPage } from '../../libs/scrapbox/browser-api';
+import {
+  getCurrentPageName,
+  getCurrentProjectName,
+  getFirstLineOrFail,
+  isEmptyPage,
+  isTitleOnlyPage,
+  loadPage,
+} from '../../libs/scrapbox/browser-api';
 import { getGlobalHelpers } from '../global-helpers';
 import { defineElementsIfNeeded } from './form/define-elements-if-needed';
 import { SxAddEpisodeFormComponent } from './form/form.component';
@@ -9,7 +16,7 @@ import { makeInsertParams } from './make-insert-params/make-insert-params';
 
 export const handleFormAndDialog = async () => {
   defineElementsIfNeeded();
-  const { scrapboxClient } = await getGlobalHelpers();
+  const { scrapboxClient } = getGlobalHelpers();
 
   const tags = await getConfigOrFail();
   const dialog = new SxDialogComponent();
@@ -35,7 +42,7 @@ export const handleFormAndDialog = async () => {
   if (!pageName) {
     throw new Error('Page name not found');
   }
-  await scrapboxClient.changeLine(pageName, makeInsertParams(formResult));
+  await scrapboxClient.changeLine(getCurrentProjectName(), pageName, makeInsertParams(formResult));
 
   const titleLine = getFirstLineOrFail();
   const title = titleLine.text;
