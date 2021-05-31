@@ -4,9 +4,7 @@ import { ScrapboxLine, TagLine, TextStartWithHash } from '../../libs/scrapbox/ty
 // can integrate its information into Φ (ii)
 export type Phiable<A> = A & {
   // TODO: not implemented yet
-  Φ?: (
-    data: A,
-  ) => {
+  Φ?: (data: A) => {
     value: number;
     rank: number;
   };
