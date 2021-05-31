@@ -1,0 +1,31 @@
+name: CI/CD
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - run: yarn --frozen-lockfile
+      - run: yarn ci:check:build
+      - run: yarn ci:check:lint
+      - run: yarn ci:check:test
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+      - run: yarn --frozen-lockfile
+      - run: yarn ci:deploy
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
