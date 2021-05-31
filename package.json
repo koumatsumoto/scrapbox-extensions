@@ -19,7 +19,7 @@
     "ci:check:lint": "yarn format && yarn check:diff",
     "ci:check:test": "yarn test:unit --ci --silent --detectOpenHandles --forceExit",
     "ci:deploy": "yarn deploy",
-    "deploy": "yarn build:prod && yarn ts-node deploy.ts --project tsconfig.deploy.json",
+    "deploy": "yarn build:prod && yarn :deploy:js && yarn :deploy:css",
     "format": "yarn lint:scss --fix && yarn lint:ts --fix && prettier --config .prettierrc --write '{deploy,src,.circleci}/**/*.{ts,js,scss,html,md,yml}' ./*.{js,json}",
     "lint:scss": "stylelint 'src/{libs,scripts,styles}/**/*.scss'",
     "lint:ts": "eslint 'src/**/*.ts'",
@@ -32,6 +32,8 @@
     ":build:dev:scss:watch": "yarn :build:dev:scss && yarn :build:dev:scss -w",
     ":build:dev:ts": "webpack --config webpack.config.dev.js",
     ":build:dev:ts:watch": "yarn :build:dev:ts -w",
+    ":deploy:js": "scrapbox-tools deploy km-study/kou dist/km-study.min.js",
+    ":deploy:css": "scrapbox-tools deploy km-study/settings dist/km-study.min.css",
     "// 1": "special scripts",
     "prebuild:prod:ts": "yarn make:version-file",
     "prepare": "yarn make:version-file"
@@ -44,7 +46,7 @@
     "fp-ts": "^2.5.4",
     "node-fetch": "^2.6.1",
     "rxjs": "^7.0.0-beta.0",
-    "scrapbox-tools": "0.0.3",
+    "scrapbox-tools": "0.0.6",
     "ws": "^7.3.0"
   },
   "devDependencies": {

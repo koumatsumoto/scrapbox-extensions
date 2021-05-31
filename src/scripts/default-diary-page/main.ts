@@ -1,5 +1,4 @@
 import { findElements } from '../../libs/common/dom';
-import { logOnly } from '../../libs/common/logger';
 import { getDiaryPageTitle } from '../../libs/scrapbox';
 import { getGlobalHelpers } from '../global-helpers';
 
@@ -16,7 +15,6 @@ export const main = () => {
   replaceNewButtonLink();
 
   // on url change
-  getGlobalHelpers()
-    .then(({ router }) => router.urlChange.subscribe(() => replaceNewButtonLink()))
-    .catch(logOnly);
+  const { router } = getGlobalHelpers();
+  router.urlChange.subscribe(() => replaceNewButtonLink());
 };

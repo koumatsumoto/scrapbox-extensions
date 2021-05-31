@@ -13,11 +13,11 @@ const retrieveTitle = (e: HTMLElement) => {
  */
 export const removeSettingsAndUserPages = async () => {
   const { scrapboxClient } = await getGlobalHelpers();
-  const userName = scrapboxClient.getCurrentUser().name;
+  const user = await scrapboxClient.getUser();
 
   for (const e of listItemSelectorFn()) {
     const title = retrieveTitle(e);
-    if (title === userName || title === settingsPageName) {
+    if (title === user.name || title === settingsPageName) {
       e.style.display = 'none';
     }
   }

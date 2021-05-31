@@ -1,27 +1,19 @@
 import { Router } from 'scrapbox-tools/router';
-import { getScrapboxClient, ScrapboxClient } from 'scrapbox-tools/scrapbox-client';
-import { getCurrentProjectName } from '../../libs/scrapbox/browser-api';
+import { ScrapboxClient } from 'scrapbox-tools/scrapbox-client';
 
 type HelpersObject = Readonly<{
   scrapboxClient: ScrapboxClient;
   router: Router;
 }>;
-let initializingHelpers: Promise<HelpersObject>;
+let globalHelpers: HelpersObject | undefined;
 
-export const setupGlobalHelpers = () => {
-  const initClient = getScrapboxClient({ projectName: getCurrentProjectName() });
-  const initRouter = Promise.resolve(new Router({ debug: true }));
-
-  initializingHelpers = Promise.all([initClient, initRouter]).then(([scrapboxClient, router]) => ({
-    scrapboxClient,
-    router,
-  }));
-};
-
-export const getGlobalHelpers = async () => {
-  if (!initializingHelpers) {
-    setupGlobalHelpers();
+export const getGlobalHelpers = () => {
+  if (globalHelpers === undefined) {
+    globalHelpers = {
+      scrapboxClient: new ScrapboxClient(),
+      router: new Router({ debug: true }),
+    };
   }
 
-  return initializingHelpers;
+  return globalHelpers;
 };
