@@ -11,7 +11,7 @@ export const getGlobalHelpers = () => {
   if (globalHelpers === undefined) {
     globalHelpers = {
       scrapboxClient: new ScrapboxClient(),
-      router: new Router({ debug: true }),
+      router: new Router(),
     };
   }
 
