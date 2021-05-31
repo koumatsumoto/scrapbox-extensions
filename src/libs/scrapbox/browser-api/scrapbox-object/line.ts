@@ -1,6 +1,6 @@
-import { filter, map } from 'fp-ts/es6/Array';
-import { fromNullable, getOrElse, mapNullable } from 'fp-ts/es6/Option';
-import { pipe } from 'fp-ts/es6/pipeable';
+import { filter, map } from 'fp-ts/Array';
+import { fromNullable, getOrElse, mapNullable } from 'fp-ts/Option';
+import { pipe } from 'fp-ts/pipeable';
 // window.scrapbox type is loaded also
 import { ScrapboxLine, TagLine } from '../../types';
 

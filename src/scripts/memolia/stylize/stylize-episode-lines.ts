@@ -1,5 +1,5 @@
-import { compact, map } from 'fp-ts/es6/Array';
-import { pipe } from 'fp-ts/es6/pipeable';
+import { compact, map } from 'fp-ts/Array';
+import { pipe } from 'fp-ts/pipeable';
 import { findElementById, updateDataset } from '../../../libs/common/dom';
 import { Line, Memory } from '../types';
 

@@ -1,4 +1,4 @@
-import { tryCatch } from 'fp-ts/es6/Option';
+import { tryCatch } from 'fp-ts/Option';
 import { logOnly } from '../../libs/common/logger';
 import { DynamicConfig } from '../config';
 import { isValid, storageKey, syncAndPersist } from './internal';

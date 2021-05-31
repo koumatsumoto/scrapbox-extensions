@@ -1,4 +1,4 @@
-import { groupBy } from 'fp-ts/es6/NonEmptyArray';
+import { groupBy } from 'fp-ts/NonEmptyArray';
 import { DynamicConfigTag } from '../../config';
 
 const groupByType = groupBy((tag: DynamicConfigTag) => tag.type);

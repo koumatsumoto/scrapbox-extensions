@@ -1,4 +1,4 @@
-import { none } from 'fp-ts/es6/Option';
+import { none } from 'fp-ts/Option';
 import { setupBodyForTest } from '../../../test-helpers';
 import { findElement, findElementOrFail, findElements } from './find-elements';
 

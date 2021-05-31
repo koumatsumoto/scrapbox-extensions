@@ -1,4 +1,4 @@
-import { pipe } from 'fp-ts/es6/pipeable';
+import { pipe } from 'fp-ts/pipeable';
 import { ScrapboxLine } from '../../../libs/scrapbox/types';
 import { Memory, Name } from '../types';
 import { BlockParseResult, parseToBlock } from './block';
