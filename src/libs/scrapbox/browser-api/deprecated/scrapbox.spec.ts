@@ -1,4 +1,4 @@
-import { getFirstLineOrFail, getPageIdMap, getPageTitleMap } from './scrapbox';
+import { getFirstLineOrFail, getPageTitleMap } from './scrapbox';
 
 describe('scrap box public api', () => {
   describe('getFirstLineOrFail', () => {
@@ -17,17 +17,6 @@ describe('scrap box public api', () => {
           Page: { lines: [] },
         } as any),
       ).toThrow();
-    });
-  });
-
-  describe('getPageIdMap', () => {
-    it('should work', () => {
-      expect(getPageIdMap({ Project: { pages: [{ id: '1', exists: true }, { id: '2' }, { id: '3', exists: true }, {}] } } as any)).toEqual(
-        new Map([
-          ['1', { id: '1', exists: true }],
-          ['3', { id: '3', exists: true }],
-        ]),
-      );
     });
   });
 

@@ -4,6 +4,5 @@
   "exclude": ["**/*.spec.ts"],
   "compilerOptions": {
     "baseUrl": "./",
-    "module": "es2015"
   }
 }

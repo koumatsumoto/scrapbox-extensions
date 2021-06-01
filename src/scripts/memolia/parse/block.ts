@@ -1,4 +1,3 @@
-import { isTagLine } from '../../../libs/scrapbox/browser-api/scrapbox-object/line';
 import { ScrapboxLine, TagLine } from '../../../libs/scrapbox/types';
 import { Memory, Name } from '../types';
 
@@ -22,6 +21,8 @@ export type BlockParseResult = {
   semanteme: SemantemeBlock | null;
   episodes: EpisodeBlock[];
 };
+
+export const isTagLine = (line: ScrapboxLine): line is TagLine => line.text.startsWith('#');
 
 // scrapbox.Page.lines.map((l) => ({ n: l.section.number, t: l.text }))
 export const parseToBlock = (lines: ScrapboxLine[]): BlockParseResult => {
