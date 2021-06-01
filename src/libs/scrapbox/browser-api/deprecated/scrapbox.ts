@@ -1,6 +1,4 @@
-import { ExistentPageListItem, RawScrapbox, ScrapboxProjectPage } from '../../types';
-
-const baseUrl = 'https://scrapbox.io';
+import { RawScrapbox, ScrapboxProjectPage } from '../../types';
 
 export const getScrapbox = () => window.scrapbox;
 
@@ -18,18 +16,6 @@ export const getFirstLineOrFail = (scrapbox: RawScrapbox = getScrapbox()) => {
 
 export const getPages = (scrapbox: RawScrapbox = getScrapbox()) => scrapbox.Project.pages;
 
-export const getPageIdMap = (scrapbox: RawScrapbox = getScrapbox()) => {
-  const map = new Map<string, ExistentPageListItem>();
-
-  for (const page of getPages(scrapbox)) {
-    if (page.exists && page.id) {
-      map.set(page.id, page);
-    }
-  }
-
-  return map;
-};
-
 export const getPageTitleMap = (scrapbox: RawScrapbox = getScrapbox()) => {
   const map = new Map<string, ScrapboxProjectPage>();
 
@@ -45,11 +31,6 @@ export const getPageTitleMap = (scrapbox: RawScrapbox = getScrapbox()) => {
 export const getCurrentProjectName = (scrapbox: RawScrapbox = getScrapbox()) => scrapbox.Project.name;
 
 export const getCurrentPageName = () => getScrapbox().Page.title;
-
-export const getPageUrl = (title: string) => `${baseUrl}/${encodeURIComponent(getCurrentProjectName())}/${encodeURIComponent(title)}`;
-
-// ready after api requests initiated on react bootstrap completed
-export const isScrapboxReady = () => getCurrentProjectName() !== undefined && getCurrentPageName() !== undefined;
 
 // TODO: use react-router instead window.location to improve performance
 export const loadPage = (title: string, scrapbox: RawScrapbox = getScrapbox()) => {

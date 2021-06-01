@@ -1,10 +1,10 @@
-import { runOnDocumentReady } from '../../libs/common';
+import { documentReady } from '../../libs/common';
 
 const cssClassName = '--us-logged-in';
 
 // if UserScript enabled, user must be logged in
 export const main = () => {
-  runOnDocumentReady(() => {
+  documentReady().subscribe(() => {
     document.body.classList.add(cssClassName);
   });
 };
