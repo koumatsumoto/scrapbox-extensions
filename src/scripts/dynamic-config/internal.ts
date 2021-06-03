@@ -3,7 +3,7 @@ import { chain, fold, left, map, right, TaskEither, tryCatch } from 'fp-ts/TaskE
 import { Lazy } from 'fp-ts/function';
 import { pipe } from 'fp-ts/pipeable';
 import { Page } from 'scrapbox-tools/scrapbox-client';
-import { getCurrentProjectName } from '../../libs';
+import { ScrapboxScriptApi } from '../../libs';
 import { DynamicConfig } from '../config';
 import { getGlobalHelpers } from '../global-helpers';
 
@@ -52,7 +52,7 @@ export const storeToStorage = (data: DynamicConfig, w = window): TaskEither<Erro
 const fetchConfigPage: Lazy<Promise<Page>> = () => {
   const { scrapboxClient } = getGlobalHelpers();
 
-  return scrapboxClient.getPage(getCurrentProjectName(), 'config');
+  return scrapboxClient.getPage(ScrapboxScriptApi.projectName, 'config');
 };
 
 const fromThunk = (thunk: Lazy<Promise<Page>>): TaskEither<Error, Page> => {
