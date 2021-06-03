@@ -1,4 +1,4 @@
-import { makeInsertParams } from './make-insert-params';
+import { endWithEmptyLine, makeInsertParams } from './make-insert-params';
 
 const jstOffset = -540; // UTC+9
 
@@ -70,5 +70,21 @@ describe('makeInsertParams', () => {
       { type: 'insert', text: '##2020-02-09 #tag1 #tag2' },
       { type: 'insert', text: '' },
     ]);
+  });
+});
+
+describe('page', () => {
+  describe('endWithEmptyLine', () => {
+    it('should work', () => {
+      expect(
+        endWithEmptyLine([
+          { id: '1', text: 'hello' },
+          { id: '2', text: 'world' },
+          { id: '3', text: 'hello world' },
+        ] as any),
+      ).toBe(false);
+      expect(endWithEmptyLine([{ text: '' }] as any)).toBe(true);
+      expect(endWithEmptyLine([{ text: 'first' }, { text: '' }] as any)).toBe(true);
+    });
   });
 });

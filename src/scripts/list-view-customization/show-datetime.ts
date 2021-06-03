@@ -1,6 +1,6 @@
-import { getFormattedDateString } from '../../libs/scrapbox';
-import { getPageTitleMap } from '../../libs/scrapbox/browser-api';
+import { getFormattedDateString, ScrapboxScriptApi } from '../../libs/scrapbox';
 import { retrieveListItemsWithTitle, selectContainer } from '../../libs/scrapbox/dom';
+import { ScrapboxProjectPage } from '../../libs/scrapbox/types';
 import { customCSSClassName } from '../config';
 
 const createDatetimeElement = (timestamp: number) => {
@@ -12,10 +12,14 @@ const createDatetimeElement = (timestamp: number) => {
   return elem;
 };
 
+export const getPageTitleMap = (pages: ScrapboxProjectPage[]) => {
+  return new Map(pages.filter((page) => Boolean(page.title)).map((page) => [page.title, page]));
+};
+
 export const showDatetime = () => {
   const added = new Set<string>(); // page title
 
-  const dictionary = getPageTitleMap();
+  const dictionary = getPageTitleMap(ScrapboxScriptApi.data.Project.pages);
   for (const [title, element] of retrieveListItemsWithTitle()) {
     if (!added.has(title)) {
       const data = dictionary.get(title);

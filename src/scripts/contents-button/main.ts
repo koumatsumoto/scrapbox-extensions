@@ -1,6 +1,6 @@
+import { ScrapboxScriptApi } from '../../libs';
 import { createElement } from '../../libs/common/dom';
 import { openAlert } from '../../libs/common/logger';
-import { DomManipulator } from '../../libs/scrapbox/dom/dom-manipulator';
 import { handleFormAndDialog } from './handle-form-and-dialog';
 
 const createAddEpisodeButton = () => {
@@ -17,7 +17,7 @@ const createAddEpisodeButton = () => {
 
 export const attachAddEpisodeButton = () => {
   // for page bottom
-  DomManipulator.getPageContainer().appendChild(createAddEpisodeButton());
+  ScrapboxScriptApi.pageContainerElement.appendChild(createAddEpisodeButton());
 };
 
 export const main = () => {
