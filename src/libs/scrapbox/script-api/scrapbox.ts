@@ -36,12 +36,16 @@ export class ScrapboxScriptApi {
   }
 
   static get update() {
-    this.pageChange = this.pageChange || nodeChange(findElementOrFail('#app-container .page'), { childList: true, subtree: true });
+    this.pageChange = this.pageChange || nodeChange(this.pageContainerElement, { childList: true, subtree: true });
 
     return concat(this.ready, this.pageChange).pipe(
       map(() => this.data),
       share(),
     );
+  }
+
+  static get pageContainerElement() {
+    return findElementOrFail('#app-container .page');
   }
 
   static get pageTitle() {
