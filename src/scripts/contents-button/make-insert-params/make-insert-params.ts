@@ -1,6 +1,6 @@
 import { ChangeRequestCreateParams } from 'scrapbox-tools/scrapbox-client';
 import { Line } from 'scrapbox-tools/user-script-api';
-import { getDiaryPageTitle, makeTag } from '../../../libs/scrapbox';
+import { getDiaryPageTitle, makeTag } from '../../../libs/common';
 
 export const endWithEmptyLine = (lines: Line[]) => {
   const last = lines[lines.length - 1];

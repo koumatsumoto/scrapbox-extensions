@@ -1,5 +1,4 @@
-import { findElements } from '../../libs/common/dom';
-import { getDiaryPageTitle } from '../../libs/scrapbox';
+import { findElements, getDiaryPageTitle } from '../../libs/common';
 import { getGlobalHelpers } from '../global-helpers';
 
 export const selectNewButtons = () => findElements<HTMLAnchorElement>('a.new-button');

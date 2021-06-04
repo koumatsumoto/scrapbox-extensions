@@ -1,5 +1,4 @@
-import { registerElementManagement, removeHead } from '../../libs/common';
-import { isTagString } from '../../libs/scrapbox';
+import { isTagString, registerElementManagement, removeHead } from '../../libs/common';
 import { customCSSClassName } from '../config';
 import { tagTextSelectorFn } from './config';
 
