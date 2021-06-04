@@ -45,7 +45,7 @@
   "dependencies": {
     "fp-ts": "^2.10.5",
     "rxjs": "^7.1.0",
-    "scrapbox-tools": "0.0.8-dev1"
+    "scrapbox-tools": "0.0.8"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
