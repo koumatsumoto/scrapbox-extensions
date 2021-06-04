@@ -1,13 +1,13 @@
-import { TagLine } from '../../../libs/scrapbox/types';
+import { Line } from 'scrapbox-tools/user-script-api';
 import { ChildEpisode, Episode } from '../types';
 import { EpisodeBlock } from './block';
 import { EpisodeTitleLineMetadata, makeLineWithMetadata } from './line';
 import { parseTag } from './tag';
 
-export const getContext = (line: TagLine) => parseTag(line).map((t) => t.name);
+export const getContext = (line: Line) => parseTag(line).map((t) => t.name);
 
 export const parseChildEpisodes = (block: EpisodeBlock): ChildEpisode[] => {
-  const header = block.lines[0] as TagLine;
+  const header = block.lines[0];
   const lines = block.lines.slice(1); // remove header (a tag-line)
   if (header == null || lines.length < 1) {
     return [];

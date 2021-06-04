@@ -1,5 +1,5 @@
+import { Line as SLine } from 'scrapbox-tools/user-script-api';
 import { Brand } from '../../libs/common';
-import { ScrapboxLine, TagLine, TextStartWithHash } from '../../libs/scrapbox/types';
 
 // can integrate its information into Φ (ii)
 export type Phiable<A> = A & {
@@ -16,7 +16,7 @@ export type Name = Brand<string, 'Name'>;
 // ii: differentiate by type
 export type Tag = Phiable<{
   name: string;
-  raw: TextStartWithHash;
+  raw: string;
 }>;
 
 // TODO: arrange type
@@ -32,7 +32,7 @@ export type Context = Phiable<{
 export type Line = Phiable<{
   id: string;
   text: string;
-  nodes: ScrapboxLine['nodes'];
+  nodes: SLine['nodes'];
 }>;
 
 // TODO: arrange type
@@ -65,14 +65,14 @@ export type ChildEpisode = Phiable<{
 
 // Episodic-Memory
 export type Episode = Phiable<{
-  headline: TagLine;
+  headline: SLine;
   // where episode belongs to
   of: Memory['name'];
   // have an array of tag
   context: string[];
   // all lines in episode block
   // non empty array
-  lines: Line[] & { 0: Line };
+  lines: Line[];
   // all references to linked to episode
   children: ChildEpisode[];
 }>;

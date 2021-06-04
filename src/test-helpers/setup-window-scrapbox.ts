@@ -1,10 +1,10 @@
-import { ScrapboxLine, RawScrapbox } from '../libs/scrapbox/types';
+import { Line, Scrapbox } from 'scrapbox-tools/user-script-api';
 
 export type SetupWindowScrapboxOption = {
-  layout?: RawScrapbox['Layout'];
+  layout?: Scrapbox['Layout'];
   pageTitle?: string;
   projectName?: string;
-  pageLines?: ScrapboxLine[];
+  pageLines?: Line[];
 };
 
 const empty: () => void = () => {

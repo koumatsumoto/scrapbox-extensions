@@ -1,5 +1,5 @@
 import { pipe } from 'fp-ts/pipeable';
-import { ScrapboxLine } from '../../../libs/scrapbox/types';
+import { Line } from 'scrapbox-tools/user-script-api';
 import { Memory, Name } from '../types';
 import { BlockParseResult, parseToBlock } from './block';
 import { makeEpisode } from './episode';
@@ -13,4 +13,4 @@ export const makeFromBlock = (blocks: BlockParseResult): Memory => {
   };
 };
 
-export const makeMemory = (lines: ScrapboxLine[]) => pipe(parseToBlock(lines), makeFromBlock);
+export const makeMemory = (lines: Line[]) => pipe(parseToBlock(lines), makeFromBlock);

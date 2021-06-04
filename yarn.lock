@@ -7297,10 +7297,10 @@ schema-utils@^3.0.0:
     ajv "^6.12.5"
     ajv-keywords "^3.5.2"
 
-scrapbox-tools@0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/scrapbox-tools/-/scrapbox-tools-0.0.7.tgz#9ac4cd2bc81dd5919808e6b5c1d66e2e05e420b9"
-  integrity sha512-v6NJwKDxQKH/3JV3M516zx/6zh6roHn9sAkhGysLRLBDI1upuB+Gsi971TgQ4ccSvxQ2Gg6+19hFu7kxNoCkpA==
+scrapbox-tools@0.0.8-dev1:
+  version "0.0.8-dev1"
+  resolved "https://registry.yarnpkg.com/scrapbox-tools/-/scrapbox-tools-0.0.8-dev1.tgz#8b12d281fdaf961a427dc026730c343f41a547c3"
+  integrity sha512-OB+GmtlqCeHNZna0fzIZR9re9SQNlm1ZDZyxAVKG0VVBeAz6zMdlWplDhfciefbvrb0/sq3R/Ba6r01akw/4Nw==
   dependencies:
     minimist "^1.2.5"
     node-fetch "^2.6.1"
