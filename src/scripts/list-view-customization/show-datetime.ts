@@ -1,6 +1,6 @@
 import { Project, UserScriptApi } from 'scrapbox-tools/user-script-api';
-import { getFormattedDateString } from '../../libs/scrapbox';
-import { retrieveListItemsWithTitle, selectContainer } from '../../libs/scrapbox/dom';
+import { findElementOrFail, findElements } from '../../libs';
+import { getFormattedDateString } from '../../libs/common';
 import { customCSSClassName } from '../config';
 
 const createDatetimeElement = (timestamp: number) => {
@@ -16,15 +16,24 @@ export const getPageTitleMap = (pages: Project['pages']) => {
   return new Map(pages.filter((page) => Boolean(page.title)).map((page) => [page.title, page]));
 };
 
+export const getTitleToElementMap = (parent: ParentNode = document) => {
+  const listItems = findElements('.app .page-list .page-list-item', parent) as Element[];
+
+  // Map<title, element>
+  return new Map(
+    listItems.map((elem) => [findElementOrFail('.title', elem).textContent ?? '', elem] as const).filter(([title]) => Boolean(title)),
+  );
+};
+
 export const showDatetime = () => {
   const added = new Set<string>(); // page title
 
   const dictionary = getPageTitleMap(UserScriptApi.data.Project.pages);
-  for (const [title, element] of retrieveListItemsWithTitle()) {
+  for (const [title, element] of getTitleToElementMap()) {
     if (!added.has(title)) {
       const data = dictionary.get(title);
       if (data) {
-        selectContainer(element).appendChild(createDatetimeElement(data.updated));
+        findElementOrFail('.content', element).appendChild(createDatetimeElement(data.updated));
         added.add(title);
       }
     }

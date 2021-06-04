@@ -1,4 +1,4 @@
-import { getDiaryPageTitle, getFormattedDateString, isDiaryPageTitle, scrapboxCustomFormat } from './datetime';
+import { getDiaryPageTitle, getFormattedDateString, scrapboxCustomFormat } from './datetime';
 
 describe('datetime-operations', () => {
   describe('getFormattedDateString', () => {
@@ -11,15 +11,6 @@ describe('datetime-operations', () => {
   describe('getDiaryPageTitle', () => {
     it('should get string', () => {
       expect(getDiaryPageTitle()).toMatch(scrapboxCustomFormat.diaryPageTitle);
-    });
-  });
-
-  describe('isDiaryPageTitle', () => {
-    it('should work', () => {
-      expect(isDiaryPageTitle('#2020-02-09')).toBe(true);
-      expect(isDiaryPageTitle('a#2020-02-28')).toBe(false);
-      expect(isDiaryPageTitle('#2020-02-09a')).toBe(false);
-      expect(isDiaryPageTitle('else')).toBe(false);
     });
   });
 });

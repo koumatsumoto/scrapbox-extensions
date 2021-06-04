@@ -10,4 +10,3 @@ export const getFormattedDateString = (date: Date) => `${date.getFullYear()}-${z
 
 // NOTE: use new format `#YYYY-MM-DD` since 2021.
 export const getDiaryPageTitle = (date: Date = new Date()) => `#${getFormattedDateString(date)}`;
-export const isDiaryPageTitle = (title: string) => title.match(scrapboxCustomFormat.diaryPageTitle) !== null;
