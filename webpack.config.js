@@ -16,6 +16,7 @@ module.exports = {
         test: /\.ts$/,
         exclude: /node_modules/,
         options: {
+          compiler: 'typescript',
           configFile: 'src/tsconfig.app.json',
         },
       },

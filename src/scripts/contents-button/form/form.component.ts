@@ -27,7 +27,7 @@ export class SxAddEpisodeFormComponent extends HTMLElement {
     // construct DOM of checkboxes
     this.checkboxContainer = this.querySelector<HTMLDivElement>('#checkboxContainer')!;
     this.checkboxContainer.innerHTML = makeCheckboxesHTML(tagOptions);
-    for (const e of this.querySelectorAll<HTMLInputElement>('input[type=checkbox]')) {
+    for (const e of Array.from(this.querySelectorAll<HTMLInputElement>('input[type=checkbox]'))) {
       e.addEventListener('change', () => {
         if (e.checked) {
           addWord(e.value, this.textInput);
