@@ -1,5 +1,5 @@
+import { UserScriptApi } from 'scrapbox-tools/user-script-api';
 import { SxDialogComponent } from '../../libs/components/dialog';
-import { ScrapboxScriptApi } from '../../libs/scrapbox';
 import { getGlobalHelpers } from '../global-helpers';
 import { defineElementsIfNeeded } from './form/define-elements-if-needed';
 import { SxAddEpisodeFormComponent } from './form/form.component';
@@ -27,23 +27,19 @@ export const handleFormAndDialog = async () => {
   }
 
   // FIXME: scrapbox editor can not receive line changes if title-only page.
-  const needReloadAfterUpdation = ScrapboxScriptApi.pageLines.length === 1;
+  const needReloadAfterUpdation = UserScriptApi.pageLines.length === 1;
 
   // show loading indicator while api request
   dialog.setContent(loading);
-  const pageTitle = ScrapboxScriptApi.pageTitle;
+  const pageTitle = UserScriptApi.pageTitle;
   if (!pageTitle) {
     throw new Error('Page name not found');
   }
-  await scrapboxClient.changeLine(
-    ScrapboxScriptApi.projectName,
-    pageTitle,
-    makeInsertParams(formResult, new Date(), ScrapboxScriptApi.pageLines),
-  );
+  await scrapboxClient.changeLine(UserScriptApi.projectName, pageTitle, makeInsertParams(formResult, new Date(), UserScriptApi.pageLines));
 
   if (needReloadAfterUpdation) {
     // TODO: move page without reload
-    window.location.assign(`/${encodeURIComponent(ScrapboxScriptApi.projectName)}/${encodeURIComponent(pageTitle)}`);
+    window.location.assign(`/${encodeURIComponent(UserScriptApi.projectName)}/${encodeURIComponent(pageTitle)}`);
   }
 
   dialog.close();

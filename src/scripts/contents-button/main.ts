@@ -1,4 +1,4 @@
-import { ScrapboxScriptApi } from '../../libs';
+import { UserScriptApi } from 'scrapbox-tools/user-script-api';
 import { createElement } from '../../libs/common/dom';
 import { openAlert } from '../../libs/common/logger';
 import { handleFormAndDialog } from './handle-form-and-dialog';
@@ -17,7 +17,7 @@ const createAddEpisodeButton = () => {
 
 export const attachAddEpisodeButton = () => {
   // for page bottom
-  ScrapboxScriptApi.pageContainerElement.appendChild(createAddEpisodeButton());
+  UserScriptApi.pageContainerElement.appendChild(createAddEpisodeButton());
 };
 
 export const main = () => {
