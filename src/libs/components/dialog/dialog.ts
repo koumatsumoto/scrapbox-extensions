@@ -1,5 +1,5 @@
 import { removeElement } from '../../common';
-import './dialog.component.scss';
+import './dialog.scss';
 
 export interface DialogOptions {
   contents: HTMLElement;
@@ -14,7 +14,7 @@ const defaultOptions = {
   },
 };
 
-export class SxDialogComponent extends HTMLElement {
+export class SxDialog extends HTMLElement {
   static elementName = 'sx-dialog';
   private readonly options: Required<DialogOptions>;
   private readonly dialog: HTMLDialogElement;
@@ -62,7 +62,7 @@ export class SxDialogComponent extends HTMLElement {
 // register customElement once
 // @see https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define
 try {
-  customElements.define(SxDialogComponent.elementName, SxDialogComponent);
+  customElements.define(SxDialog.elementName, SxDialog);
 } catch {
   // ignore for storybook reloading
 }

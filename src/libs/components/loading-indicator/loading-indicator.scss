@@ -1,0 +1,22 @@
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+sx-loading-indicator {
+  display: grid;
+  place-content: center;
+  width: 50px;
+  margin: auto;
+  aspect-ratio: 1 / 1;
+
+  svg {
+    width: 36px;
+    aspect-ratio: 1 / 1;
+    animation: spin 1200ms linear infinite;
+  }
+}

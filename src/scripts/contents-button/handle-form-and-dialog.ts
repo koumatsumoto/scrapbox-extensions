@@ -1,10 +1,10 @@
 import { UserScriptApi } from 'scrapbox-tools/user-script-api';
-import { SxDialogComponent } from '../../libs/components/dialog';
+import { SxDialog } from '../../libs/components/dialog';
+import { SxLoadingIndicator } from '../../libs/components/loading-indicator/loading-indicator';
 import { getGlobalHelpers } from '../global-helpers';
 import { defineElementsIfNeeded } from './form/define-elements-if-needed';
 import { SxAddEpisodeFormComponent } from './form/form.component';
 import { getConfigOrFail } from './form/get-config-or-fail';
-import { SxLoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
 import { makeInsertParams } from './make-insert-params/make-insert-params';
 
 export const handleFormAndDialog = async () => {
@@ -13,8 +13,8 @@ export const handleFormAndDialog = async () => {
 
   const tags = await getConfigOrFail();
   const form = new SxAddEpisodeFormComponent(tags);
-  const dialog = new SxDialogComponent({ contents: form });
-  const loading = new SxLoadingIndicatorComponent();
+  const dialog = new SxDialog({ contents: form });
+  const loading = new SxLoadingIndicator();
   dialog.open();
 
   const formResult = await form.result; // wait for form submitted

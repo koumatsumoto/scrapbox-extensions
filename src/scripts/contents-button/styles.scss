@@ -7,8 +7,6 @@ $dialog-max-width: 84vw;
 // don't use vh because viewport will be changed on keyboard area appeared
 $dialog-min-height: 400px;
 $dialog-max-height: 80vh;
-$loading-indicator-container-width: 200px;
-$loading-indicator-container-height: 200px;
 $animation: 158ms map_get($easing, 'easeInOutQuad');
 
 .sx-add-episode-button {
@@ -205,16 +203,4 @@ sx-add-episode-form {
       transition: 0.4s;
     }
   }
-}
-
-sx-loading-indicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: $loading-indicator-container-width;
-  max-width: $loading-indicator-container-width;
-  min-height: $loading-indicator-container-height;
-  max-height: $loading-indicator-container-height;
-  font-size: 36px;
-  color: $ui-color;
 }

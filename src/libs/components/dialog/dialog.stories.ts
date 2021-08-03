@@ -1,11 +1,11 @@
-import { SxDialogComponent } from './dialog.component';
+import { SxDialog } from './dialog';
 
 export default {
-  title: 'SxDialogComponent',
-  component: SxDialogComponent,
+  title: 'SxDialog',
+  component: SxDialog,
 };
 
-let dialog: SxDialogComponent;
+let dialog: SxDialog;
 
 const getContents = () => {
   const div = document.createElement('div');
@@ -25,7 +25,7 @@ export const OpenDialog = () => {
   btn.type = 'button';
   btn.innerText = 'Open Dialog';
   btn.addEventListener('click', () => {
-    dialog = new SxDialogComponent({ contents: getContents() });
+    dialog = new SxDialog({ contents: getContents() });
     dialog.open();
   });
   return btn;
