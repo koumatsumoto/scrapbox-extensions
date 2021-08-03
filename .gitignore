@@ -67,3 +67,4 @@ typings/
 /dist
 /src/*.js
 /version.ts
+/storybook-static

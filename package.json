@@ -36,7 +36,9 @@
     ":deploy:css": "scrapbox-tools deploy km-study/settings dist/km-study.min.css",
     "// 1": "special scripts",
     "prebuild:prod:ts": "yarn make:version-file",
-    "prepare": "yarn make:version-file"
+    "prepare": "yarn make:version-file",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "engines": {
     "node": ">= 14.0.0",
@@ -48,6 +50,10 @@
     "scrapbox-tools": "0.0.8"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "^6.3.6",
+    "@storybook/addon-essentials": "^6.3.6",
+    "@storybook/addon-links": "^6.3.6",
+    "@storybook/html": "^6.3.6",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.6.1",
     "@types/ws": "^7.4.4",
@@ -55,6 +61,7 @@
     "@typescript-eslint/parser": "^4.25.0",
     "browser-sync": "^2.26.14",
     "concurrently": "^6.2.0",
+    "css-loader": "^5.2.7",
     "date-fns": "^2.22.1",
     "dotenv": "^10.0.0",
     "eslint": "^7.27.0",
@@ -65,6 +72,9 @@
     "jest": "^27.0.3",
     "node-sass": "^6.0.0",
     "prettier": "^2.3.0",
+    "sass": "^1.37.2",
+    "sass-loader": "^10.2.0",
+    "style-loader": "^2.0.0",
     "stylelint": "^13.13.1",
     "stylelint-config-recess-order": "^2.4.0",
     "stylelint-config-recommended-scss": "^4.2.0",

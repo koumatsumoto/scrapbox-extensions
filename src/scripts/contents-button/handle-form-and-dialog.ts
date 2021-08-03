@@ -12,11 +12,9 @@ export const handleFormAndDialog = async () => {
   const { scrapboxClient } = getGlobalHelpers();
 
   const tags = await getConfigOrFail();
-  const dialog = new SxDialogComponent();
   const form = new SxAddEpisodeFormComponent(tags);
+  const dialog = new SxDialogComponent({ contents: form });
   const loading = new SxLoadingIndicatorComponent();
-
-  dialog.setContent(form);
   dialog.open();
 
   const formResult = await form.result; // wait for form submitted
