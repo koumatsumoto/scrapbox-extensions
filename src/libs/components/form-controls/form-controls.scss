@@ -1,3 +1,5 @@
+@import '../../../styles/variables';
+
 input[is='sx-input'] {
   box-sizing: border-box;
   width: 100%;
@@ -10,5 +12,26 @@ input[is='sx-input'] {
 
   &:focus {
     border-bottom: 1px solid #fb8c00;
+  }
+}
+
+input[is='sx-checkbox'] {
+  padding: 6px 12px;
+  appearance: none;
+  color: #333;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: all 120ms;
+
+  &::after {
+    white-space: nowrap;
+    content: attr(data-label);
+  }
+
+  &:checked {
+    color: #ffffff;
+    background-color: #fb8c00;
+    border-color: #fb8c00;
   }
 }

@@ -11,7 +11,7 @@ export const makeCheckboxesHTML = (tags: DynamicConfigTag[]) => {
     html += `<div class="tag-group ${type}">`;
     for (const tag of items) {
       const id = `tag-${labelId++}`;
-      html += `<input id="${id}" type="checkbox" name="tags" value="${tag.name}"><label for="${id}">${tag.name}</label>`;
+      html += `<input is="sx-checkbox" type="checkbox" name="tags" value="${tag.name}" label="${tag.name}">`;
     }
     html += `</div>`;
   }
