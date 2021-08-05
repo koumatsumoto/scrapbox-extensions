@@ -1,6 +1,5 @@
 import { UserScriptApi } from 'scrapbox-tools/user-script-api';
-import { SxDialog } from '../../libs/components/dialog';
-import { SxLoadingIndicator } from '../../libs/components/loading-indicator/loading-indicator';
+import { SxDialog, SxLoadingIndicator } from '../../libs';
 import { getGlobalHelpers } from '../global-helpers';
 import { defineElementsIfNeeded } from './form/define-elements-if-needed';
 import { SxAddEpisodeFormComponent } from './form/form.component';

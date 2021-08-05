@@ -51,6 +51,7 @@ sx-add-episode-form {
   .button-container {
     display: flex;
     flex: 0 1 auto;
+    gap: 8px;
     align-items: center;
     justify-content: flex-end;
     padding-bottom: 2px;
@@ -122,46 +123,6 @@ sx-add-episode-form {
   input[type='checkbox']:checked + label::before {
     content: '\f00c';
     transform: translate(0, -50%) rotate(-360deg);
-  }
-
-  button {
-    position: relative;
-    box-sizing: border-box;
-    display: inline-block;
-    min-width: 64px;
-    padding: 0 16px;
-    margin: 0;
-    overflow: visible;
-    font-family: Roboto, 'Helvetica Neue', sans-serif;
-    font-weight: 500;
-    line-height: 34px;
-    text-align: center;
-    text-decoration: none;
-    white-space: nowrap;
-    vertical-align: baseline;
-    cursor: pointer;
-    user-select: none;
-    border: none;
-    border-radius: 4px;
-    outline: none;
-    box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
-      0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-    transform: translate3d(0, 0, 0);
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  button:not(:first-of-type) {
-    margin-left: 8px;
-  }
-
-  button[value='cancel'] {
-    color: #a7a7a7;
-    background-color: #ffffff;
-  }
-
-  button[value='default'] {
-    color: #ffffff;
-    background-color: #fb8c00;
   }
 
   // @see https://codepen.io/maheshambure21/pen/EozKKy
