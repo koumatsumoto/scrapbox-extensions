@@ -6,8 +6,8 @@ import { makeInsertParams } from './make-insert-params/make-insert-params';
 export const handleFormAndDialog = async () => {
   const { scrapboxClient, dynamicConfig } = getGlobalObject();
 
-  const { tagOptions = [] } = await dynamicConfig.data;
-  const form = new SxEditWordsForm({ tagOptions: tagOptions as [] });
+  const { tags = [] } = await dynamicConfig.data;
+  const form = new SxEditWordsForm({ tagOptions: tags as [] });
   const dialog = new SxDialog({ contents: form });
   const loading = new SxLoadingIndicator();
   dialog.open();

@@ -1,11 +1,23 @@
 import './buttons.scss';
 
+interface Props {
+  type?: '' | 'flat';
+  color?: '' | 'primary';
+}
+
 /**
- * <sx-button></sx-button>
+ * ```
+ * <button is="sx-button"></button>
+ * <button is="sx-button" data-type="flat" data-color="primary"></button>
+ * ```
  */
 export class SxButton extends HTMLButtonElement {
-  constructor() {
+  constructor({ type = '', color = '' }: Props = {}) {
     super();
+
+    this.dataset.type ||= type;
+    this.dataset.color ||= color;
+    this.setAttribute('is', 'sx-button');
   }
 }
 

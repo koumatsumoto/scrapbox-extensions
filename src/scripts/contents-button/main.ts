@@ -1,27 +1,16 @@
 import { UserScriptApi } from 'scrapbox-tools/user-script-api';
-import { createElement } from '../../libs/common/dom';
-import { openAlert } from '../../libs/common/logger';
+import { openAlert, SxButton } from '../../libs';
 import { handleFormAndDialog } from './handle-form-and-dialog';
 
-const createAddEpisodeButton = () => {
-  return createElement({
-    tag: 'button',
-    contents: 'Add Contents',
-    class: 'sx-add-episode-button',
-    onClick: (ev) => {
-      ev.stopPropagation();
-      handleFormAndDialog().catch(openAlert);
-    },
-  });
-};
-
-export const attachAddEpisodeButton = () => {
-  // for page bottom
-  UserScriptApi.pageContainerElement.appendChild(createAddEpisodeButton());
-};
-
 export const main = () => {
-  // no need to attach new button on page change.
-  // scrapbox.io don't clear DOM of page container.
-  attachAddEpisodeButton();
+  const button = new SxButton({ type: 'flat' });
+  button.innerText = 'Add Note';
+  button.style.marginTop = '32px';
+  button.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    handleFormAndDialog().catch(openAlert);
+  });
+
+  // for page bottom
+  UserScriptApi.pageContainerElement.appendChild(button);
 };

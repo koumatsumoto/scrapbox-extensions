@@ -22,7 +22,7 @@ export class SxEditWordsForm extends HTMLElement {
         <div><input is="sx-input" name="tagInput" type="text" /></div>
         <footer>
           <button is="sx-button" value="cancel">Cancel</button>
-          <button is="sx-button" color="primary" value="default" autofocus>Add</button>
+          <button is="sx-button" data-color="primary" value="default" autofocus>Add</button>
         </footer>
       </form>
     `;
