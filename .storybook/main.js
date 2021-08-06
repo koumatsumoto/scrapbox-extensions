@@ -15,7 +15,7 @@ module.exports = {
       exclude: /node_modules/,
       options: {
         compiler: 'typescript',
-        configFile: 'src/tsconfig.app.json',
+        configFile: 'tsconfig.json',
       },
     });
     config.module.rules.push({

@@ -9,16 +9,23 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: '[name].js',
   },
+  resolve: {
+    extensions: ['.ts', '.js'],
+  },
   module: {
     rules: [
       {
-        loader: 'ts-loader',
         test: /\.ts$/,
         exclude: /node_modules/,
-        options: {
-          compiler: 'typescript',
-          configFile: 'src/tsconfig.app.json',
-        },
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              compiler: 'typescript',
+              configFile: 'tsconfig.json',
+            },
+          },
+        ],
       },
       {
         test: /\.scss$/i,
@@ -31,24 +38,6 @@ module.exports = {
           'sass-loader',
         ],
       },
-      {
-        test: /\.(html)$/,
-        use: [
-          {
-            loader: 'html-loader',
-            options: {
-              minimize: true,
-            },
-          },
-        ],
-      },
-      {
-        test: /\.svg$/,
-        loader: 'svg-inline-loader',
-      },
     ],
-  },
-  resolve: {
-    extensions: ['.ts', '.js'],
   },
 };

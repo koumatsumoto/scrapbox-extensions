@@ -1,4 +1,4 @@
-import { isObject, tail } from 'lodash';
+import { isObject, tail } from 'lodash-es';
 import { firstValueFrom, ReplaySubject } from 'rxjs';
 import { ScrapboxClient } from 'scrapbox-tools/scrapbox-client';
 import { UserScriptApi } from 'scrapbox-tools/user-script-api';

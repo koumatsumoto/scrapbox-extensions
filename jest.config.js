@@ -5,7 +5,10 @@ module.exports = {
   globals: { 'ts-jest': { tsConfig: 'tsconfig.json' } },
   moduleDirectories: ['node_modules'],
   moduleFileExtensions: ['js', 'json', 'ts'],
-  moduleNameMapper: { '\\.(css|scss)$': '<rootDir>/__mocks__/styleMock.js' },
+  moduleNameMapper: {
+    '^lodash-es$': 'lodash',
+    '\\.(css|scss)$': '<rootDir>/__mocks__/styleMock.js',
+  },
   transform: { '^.+\\.ts$': 'ts-jest' },
   testURL: 'http://localhost/',
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
