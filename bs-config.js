@@ -77,8 +77,8 @@ module.exports = {
     'scroll:element',
     'input:text',
     'input:toggles',
-    'form:submit',
-    'form:reset',
+    'edit-words-form:submit',
+    'edit-words-form:reset',
     'click',
   ],
   socket: {

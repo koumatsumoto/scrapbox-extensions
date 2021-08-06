@@ -1,23 +1,20 @@
 import { UserScriptApi } from 'scrapbox-tools/user-script-api';
-import { SxDialog, SxLoadingIndicator } from '../../libs';
+import { SxEditWordsForm, SxDialog, SxLoadingIndicator } from '../../libs';
 import { getGlobalHelpers } from '../global-helpers';
-import { defineElementsIfNeeded } from './form/define-elements-if-needed';
-import { SxAddEpisodeFormComponent } from './form/form.component';
-import { getConfigOrFail } from './form/get-config-or-fail';
+import { getConfigOrFail } from './get-config-or-fail';
 import { makeInsertParams } from './make-insert-params/make-insert-params';
 
 export const handleFormAndDialog = async () => {
-  defineElementsIfNeeded();
   const { scrapboxClient } = getGlobalHelpers();
 
-  const tags = await getConfigOrFail();
-  const form = new SxAddEpisodeFormComponent(tags);
+  const tagOptions = await getConfigOrFail();
+  const form = new SxEditWordsForm({ tagOptions });
   const dialog = new SxDialog({ contents: form });
   const loading = new SxLoadingIndicator();
   dialog.open();
 
-  const formResult = await form.result; // wait for form submitted
-  // form canceled
+  const formResult = await form.submitResult; // wait for edit-words-form submitted
+  // edit-words-form canceled
   if (formResult === null) {
     dialog.close();
     return;

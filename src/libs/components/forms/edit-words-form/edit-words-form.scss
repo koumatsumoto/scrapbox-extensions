@@ -1,0 +1,32 @@
+sx-edit-words-form {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 13px;
+
+  form {
+    display: grid;
+    grid-template: 1fr auto auto / auto;
+    gap: 12px;
+    padding: 8px;
+    overflow: auto;
+    border: none;
+  }
+
+  .checkbox-container {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 6px;
+  }
+
+  .checkbox-row {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 6px;
+  }
+
+  footer {
+    display: flex;
+    flex-flow: row;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+}

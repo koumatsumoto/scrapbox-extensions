@@ -1,9 +1,5 @@
 import './form-controls.scss';
 
-const getAttributes = (elem: HTMLElement) => {
-  return Object.fromEntries(elem.getAttributeNames().map((name) => [name, elem.getAttribute(name) ?? '']));
-};
-
 export class SxInput extends HTMLInputElement {
   constructor() {
     super();

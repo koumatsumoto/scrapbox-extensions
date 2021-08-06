@@ -16,9 +16,12 @@ input[is='sx-input'] {
 }
 
 input[is='sx-checkbox'] {
-  padding: 6px 12px;
-  appearance: none;
-  color: #333;
+  all: unset;
+  display: inline-grid;
+  place-content: center;
+  height: 30px;
+  padding: 0 12px;
+  color: #333b;
   cursor: pointer;
   border: 1px solid #ccc;
   border-radius: 4px;

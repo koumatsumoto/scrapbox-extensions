@@ -1,4 +1,4 @@
-import { getDynamicConfig } from '../../dynamic-config';
+import { getDynamicConfig } from '../dynamic-config';
 
 export const getConfigOrFail = async () => {
   const config = await getDynamicConfig();

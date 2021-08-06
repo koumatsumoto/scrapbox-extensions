@@ -1,5 +1,5 @@
 export * from './dom';
 export * from './logger';
-export * from './text-format';
+export * from './text-operations';
 export * from './types';
 export * from './util';
