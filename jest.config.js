@@ -1,36 +1,24 @@
 module.exports = {
   rootDir: '.',
-  setupFilesAfterEnv: ['./jest.setup.js'],
+  testEnvironment: 'jsdom',
+  preset: 'ts-jest',
+  globals: { 'ts-jest': { tsConfig: 'tsconfig.json' } },
   moduleDirectories: ['node_modules'],
   moduleFileExtensions: ['js', 'json', 'ts'],
-  globals: {
-    'ts-jest': {
-      tsConfig: 'tsconfig.json',
-    },
-  },
-  transform: {
-    '^.+\\.ts$': 'ts-jest',
-    '^.+\\.html$': 'html-loader-jest',
-    '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
-      '<rootDir>/jest.transformer-for-testing.js',
-  },
+  moduleNameMapper: { '\\.(css|scss)$': '<rootDir>/__mocks__/styleMock.js' },
+  transform: { '^.+\\.ts$': 'ts-jest' },
   testURL: 'http://localhost/',
   testMatch: ['<rootDir>/src/**/*.spec.ts'],
-  testEnvironment: 'jsdom',
-  collectCoverageFrom: [
-    '<rootDir>/src/components/**/*.ts',
-    '<rootDir>/src/libs/**/*.ts',
-    '<rootDir>/src/scripts/**/*.ts',
-  ],
+  collectCoverageFrom: ['<rootDir>/src/**/*.spec.ts'],
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '/specs/',
-    '/test-helpers/',
-    '/testing/',
     '/tests/',
+    '/testing/',
+    '/test-helpers/',
+    '/__mocks__/',
   ],
   coverageReporters: ['lcov', 'text-summary'],
-  verbose: true,
-  preset: 'ts-jest',
   restoreMocks: true,
+  verbose: true,
 };
