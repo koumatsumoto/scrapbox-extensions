@@ -1,1 +1,1 @@
-export { setupDynamicConfig, getDynamicConfig } from './get-dynamic-config';
+export * from './dynamic-config';

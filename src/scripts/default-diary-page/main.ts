@@ -1,5 +1,5 @@
 import { findElements, getDiaryPageTitle } from '../../libs/common';
-import { getGlobalHelpers } from '../global-helpers';
+import { getGlobalObject } from '../global-object';
 
 export const selectNewButtons = () => findElements<HTMLAnchorElement>('a.new-button');
 export const replaceText = (source: string, word: string) => source.replace('new', encodeURIComponent(word));
@@ -14,6 +14,6 @@ export const main = () => {
   replaceNewButtonLink();
 
   // on url change
-  const { router } = getGlobalHelpers();
+  const { router } = getGlobalObject();
   router.urlChange.subscribe(() => replaceNewButtonLink());
 };
