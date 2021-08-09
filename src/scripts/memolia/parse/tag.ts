@@ -1,14 +1,14 @@
-import { Line } from 'scrapbox-tools/user-script-api';
+import { USLine } from 'scrapbox-tools/';
 import { Tag } from '../types';
 
 // full-width space separator is allowed
-export const splitToWords = (text: Line['text']): string[] => text.split(/\s/);
+export const splitToWords = (text: USLine['text']): string[] => text.split(/\s/);
 // e.g. '#word'
 export const isValidTagText = (word: string) => /^#\S+$/.test(word);
 // e.g. '#word' => 'word'
 export const extractWord = (word: string) => word.slice(1);
 
-export const parseTag = (line: Line): Tag[] => {
+export const parseTag = (line: USLine): Tag[] => {
   const words = splitToWords(line.text);
   const tags: Tag[] = [];
   for (const word of words) {

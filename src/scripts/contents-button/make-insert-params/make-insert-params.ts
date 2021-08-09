@@ -1,14 +1,13 @@
-import { ChangeRequestCreateParams } from 'scrapbox-tools/scrapbox-client';
-import { Line } from 'scrapbox-tools/user-script-api';
-import { getDiaryPageTitle, makeTag } from '../../../libs/common';
+import { ChangeRequestCreateParams, USLine } from 'scrapbox-tools';
+import { getDiaryPageTitle, makeTag } from '../../../libs';
 
-export const endWithEmptyLine = (lines: Line[]) => {
+export const endWithEmptyLine = (lines: USLine[]) => {
   const last = lines[lines.length - 1];
 
   return last.text === '';
 };
 
-export const getLastLineId = (lines: Line[]): string => lines[lines.length - 1]!.id;
+export const getLastLineId = (lines: USLine[]): string => lines[lines.length - 1]!.id;
 const EMPTY_LINE = '';
 
 /**
@@ -16,7 +15,7 @@ const EMPTY_LINE = '';
  * @param tagLineText
  * @param lines - for testing
  */
-export const makeInsertParams = (words: string[], date: Date = new Date(), lines: Line[]) => {
+export const makeInsertParams = (words: string[], date: Date = new Date(), lines: USLine[]) => {
   if (lines.length < 1) {
     throw new Error('Bad impl, this function requires at least one line');
   }

@@ -1,5 +1,4 @@
-import { Router } from 'scrapbox-tools/router';
-import { ScrapboxClient } from 'scrapbox-tools/scrapbox-client';
+import { Router, ScrapboxClient } from 'scrapbox-tools';
 import { DynamicConfig } from '../dynamic-config';
 
 interface GlobalObject {

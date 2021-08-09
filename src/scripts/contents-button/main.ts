@@ -1,4 +1,4 @@
-import { UserScriptApi } from 'scrapbox-tools/user-script-api';
+import { UserScriptApi } from 'scrapbox-tools';
 import { openAlert, SxButton } from '../../libs';
 import { handleFormAndDialog } from './handle-form-and-dialog';
 

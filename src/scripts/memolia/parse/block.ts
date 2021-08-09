@@ -1,19 +1,19 @@
-import { Line } from 'scrapbox-tools/user-script-api';
+import { USLine } from 'scrapbox-tools/';
 import { Memory, Name } from '../types';
 
 export type TitleBlock = {
   of: Memory['name'];
-  lines: [Line];
+  lines: [USLine];
 };
 
 export type SemantemeBlock = {
   of: Memory['name'];
-  lines: Line[];
+  lines: USLine[];
 };
 
 export type EpisodeBlock = {
   of: Memory['name'];
-  lines: Line[];
+  lines: USLine[];
 };
 
 export type BlockParseResult = {
@@ -22,16 +22,16 @@ export type BlockParseResult = {
   episodes: EpisodeBlock[];
 };
 
-export const isTagLine = (line: Line) => line.text.startsWith('#');
+export const isTagLine = (line: USLine) => line.text.startsWith('#');
 
 // scrapbox.Page.lines.map((l) => ({ n: l.section.number, t: l.text }))
-export const parseToBlock = (lines: Line[]): BlockParseResult => {
+export const parseToBlock = (lines: USLine[]): BlockParseResult => {
   // iteration point
   let cursor = 0;
   // head is title-line
   const titleLine = lines[cursor];
   const getSemantemeBlock = (): SemantemeBlock => ({ of: titleLine.text as Name, lines: [] });
-  const getEpisodeBlock = (first: Line): EpisodeBlock => ({ of: titleLine.text as Name, lines: [first] });
+  const getEpisodeBlock = (first: USLine): EpisodeBlock => ({ of: titleLine.text as Name, lines: [first] });
 
   // title block
   const titleBlock: TitleBlock = {

@@ -1,7 +1,6 @@
 import { isObject, tail } from 'lodash-es';
 import { firstValueFrom, ReplaySubject } from 'rxjs';
-import { ScrapboxClient } from 'scrapbox-tools/scrapbox-client';
-import { UserScriptApi } from 'scrapbox-tools/user-script-api';
+import { ScrapboxClient, UserScriptApi } from 'scrapbox-tools/';
 
 type ConfigObject = Record<string, unknown>;
 const fallback: ConfigObject = {};

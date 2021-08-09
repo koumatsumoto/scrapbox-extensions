@@ -1,4 +1,4 @@
-import { Line as SLine } from 'scrapbox-tools/user-script-api';
+import { USLine } from 'scrapbox-tools/';
 import { Brand } from '../../libs/common';
 
 // can integrate its information into Φ (ii)
@@ -32,7 +32,7 @@ export type Context = Phiable<{
 export type Line = Phiable<{
   id: string;
   text: string;
-  nodes: SLine['nodes'];
+  nodes: USLine['nodes'];
 }>;
 
 // TODO: arrange type
@@ -65,7 +65,7 @@ export type ChildEpisode = Phiable<{
 
 // Episodic-Memory
 export type Episode = Phiable<{
-  headline: SLine;
+  headline: USLine;
   // where episode belongs to
   of: Memory['name'];
   // have an array of tag

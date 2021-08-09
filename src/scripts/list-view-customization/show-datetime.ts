@@ -1,6 +1,5 @@
-import { Project, UserScriptApi } from 'scrapbox-tools/user-script-api';
-import { findElementOrFail, findElements } from '../../libs';
-import { getFormattedDateString } from '../../libs/common';
+import { USProject, UserScriptApi } from 'scrapbox-tools/';
+import { findElementOrFail, findElements, getFormattedDateString } from '../../libs';
 import { customCSSClassName } from '../config';
 
 const createDatetimeElement = (timestamp: number) => {
@@ -12,7 +11,7 @@ const createDatetimeElement = (timestamp: number) => {
   return elem;
 };
 
-export const getPageTitleMap = (pages: Project['pages']) => {
+export const getPageTitleMap = (pages: USProject['pages']) => {
   return new Map(pages.filter((page) => Boolean(page.title)).map((page) => [page.title, page]));
 };
 

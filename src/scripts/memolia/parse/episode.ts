@@ -1,10 +1,10 @@
-import { Line } from 'scrapbox-tools/user-script-api';
+import { USLine } from 'scrapbox-tools/';
 import { ChildEpisode, Episode } from '../types';
 import { EpisodeBlock } from './block';
 import { EpisodeTitleLineMetadata, makeLineWithMetadata } from './line';
 import { parseTag } from './tag';
 
-export const getContext = (line: Line) => parseTag(line).map((t) => t.name);
+export const getContext = (line: USLine) => parseTag(line).map((t) => t.name);
 
 export const parseChildEpisodes = (block: EpisodeBlock): ChildEpisode[] => {
   const header = block.lines[0];

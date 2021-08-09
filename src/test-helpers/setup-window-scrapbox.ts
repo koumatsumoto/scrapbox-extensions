@@ -1,10 +1,10 @@
-import { Line, Scrapbox } from 'scrapbox-tools/user-script-api';
+import { USLine, Scrapbox } from 'scrapbox-tools/';
 
 export type SetupWindowScrapboxOption = {
   layout?: Scrapbox['Layout'];
   pageTitle?: string;
   projectName?: string;
-  pageLines?: Line[];
+  pageLines?: USLine[];
 };
 
 const empty: () => void = () => {

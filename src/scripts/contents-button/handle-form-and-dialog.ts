@@ -1,4 +1,4 @@
-import { UserScriptApi } from 'scrapbox-tools/user-script-api';
+import { UserScriptApi } from 'scrapbox-tools';
 import { SxEditWordsForm, SxDialog, SxLoadingIndicator } from '../../libs';
 import { getGlobalObject } from '../global-object';
 import { makeInsertParams } from './make-insert-params/make-insert-params';
