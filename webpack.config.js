@@ -14,6 +14,7 @@ module.exports = {
   },
   externals: {
     ws: 'ws',
+    'node-fetch': 'node-fetch',
   },
   module: {
     rules: [
