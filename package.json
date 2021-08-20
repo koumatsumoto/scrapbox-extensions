@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "main": "dist/main.js",
   "repository": "git@github.com:kouMatsumoto/scrapbox-extensions.git",
-  "author": "kou.matsumoto <kou.matsumoto.jp@gmail.com>",
+  "author": "Kou Matsumoto <developer@kou-matsumoto.jp>",
   "license": "MIT",
   "scripts": {
     "build:dev": "concurrently 'yarn :build:dev:scss' 'yarn :build:dev:ts'",
