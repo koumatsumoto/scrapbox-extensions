@@ -30,8 +30,8 @@
     ":build:dev:scss:watch": "yarn :build:dev:scss && yarn :build:dev:scss -w",
     ":build:dev:ts": "webpack --config webpack.config.dev.js",
     ":build:dev:ts:watch": "yarn :build:dev:ts -w",
-    ":deploy:js": "scrapbox-tools deploy km-study/kou dist/km-study.min.js",
-    ":deploy:css": "scrapbox-tools deploy km-study/settings dist/km-study.min.css",
+    ":deploy:js": "scrapbox-tools deploy-userscript --project=km-study dist/km-study.min.js",
+    ":deploy:css": "scrapbox-tools deploy-usercss --project=km-study dist/km-study.min.css",
     ":jest": "node --max_old_space_size=4096 ./node_modules/.bin/jest",
     "// 1": "special scripts",
     "prebuild:prod:ts": "yarn make:version-file",
@@ -49,7 +49,7 @@
     "fp-ts": "^2.10.5",
     "lodash-es": "^4.17.21",
     "rxjs": "^7.3.0",
-    "scrapbox-tools": "0.2.0"
+    "scrapbox-tools": "0.3.0"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^6.3.6",
