@@ -12,6 +12,9 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js'],
   },
+  externals: {
+    ws: 'ws',
+  },
   module: {
     rules: [
       {
