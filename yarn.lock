@@ -10855,10 +10855,10 @@ schema-utils@^3.1.0:
     ajv "^6.12.5"
     ajv-keywords "^3.5.2"
 
-scrapbox-tools@0.3.2:
-  version "0.3.2"
-  resolved "https://registry.yarnpkg.com/scrapbox-tools/-/scrapbox-tools-0.3.2.tgz#02d7f25538d4649fcaf824a0f3d3d24621c024aa"
-  integrity sha512-on7w+YAMgcwvTGqSEmE8qj2g/hQpK9Nhq2eHb0foe4Uu+i4Ug5zAZjsZVIjXgekDtyfFrXkBppooBXXPLfEHGQ==
+scrapbox-tools@0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/scrapbox-tools/-/scrapbox-tools-0.3.3.tgz#75f0297d70d78b150ae7237deea516618065f588"
+  integrity sha512-nHpR6J2RCpPm/1gv79gQNhor/KLOZJUDZxvOKxbHq+8+Fipe+pHc19tZhtVXyndmXgIuyYigQ6pFx7XnECxqrg==
   dependencies:
     commander "^8.1.0"
     date-fns "^2.23.0"
