@@ -1,13 +1,13 @@
 const path = require('path');
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
   entry: {
     'km-study': path.join(__dirname, 'src/km-study.ts'),
   },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: '[name].js',
+    filename: '[name].min.js',
   },
   resolve: {
     extensions: ['.ts', '.js'],
