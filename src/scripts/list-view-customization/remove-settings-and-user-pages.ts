@@ -12,8 +12,8 @@ const retrieveTitle = (e: HTMLElement) => {
  * Remove settings and user pages from first loaded list items
  */
 export const removeSettingsAndUserPages = async () => {
-  const { scrapboxClient } = await getGlobalObject();
-  const user = await scrapboxClient.getUser();
+  const { scrapboxApi } = await getGlobalObject();
+  const user = await scrapboxApi.getUser();
 
   for (const e of listItemSelectorFn()) {
     const title = retrieveTitle(e);

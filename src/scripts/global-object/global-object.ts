@@ -1,8 +1,8 @@
-import { Router, ScrapboxClient } from 'scrapbox-tools';
+import { Router, ScrapboxApi } from 'scrapbox-tools';
 import { DynamicConfig } from '../dynamic-config';
 
 interface GlobalObject {
-  scrapboxClient: ScrapboxClient;
+  scrapboxApi: ScrapboxApi;
   router: Router;
   dynamicConfig: DynamicConfig;
 }
@@ -14,12 +14,12 @@ export const getGlobalObject = () => {
     return globalObject;
   }
 
-  const scrapboxClient = new ScrapboxClient();
+  const scrapboxApi = new ScrapboxApi();
   const router = new Router();
-  const dynamicConfig = new DynamicConfig(scrapboxClient);
+  const dynamicConfig = new DynamicConfig(scrapboxApi);
 
   globalObject = {
-    scrapboxClient,
+    scrapboxApi,
     router,
     dynamicConfig,
   };

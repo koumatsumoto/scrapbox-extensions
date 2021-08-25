@@ -1,6 +1,6 @@
 import { isObject, tail } from 'lodash-es';
 import { firstValueFrom, ReplaySubject } from 'rxjs';
-import { ScrapboxClient, UserScriptApi } from 'scrapbox-tools/';
+import { ScrapboxApi, UserScriptApi } from 'scrapbox-tools/';
 
 type ConfigObject = Record<string, unknown>;
 const fallback: ConfigObject = {};
@@ -12,13 +12,13 @@ export class DynamicConfig {
     return firstValueFrom(this.data$);
   }
 
-  constructor(private readonly scrapboxClient: ScrapboxClient) {
+  constructor(private readonly api: ScrapboxApi) {
     this.loadConfig().catch();
   }
 
   async loadConfig() {
     try {
-      const page = await this.scrapboxClient.getPage(UserScriptApi.projectName, 'config');
+      const page = await this.api.getPage(UserScriptApi.projectName, 'config');
       const text = tail(page.lines)
         .map((line) => line.text)
         .join('');

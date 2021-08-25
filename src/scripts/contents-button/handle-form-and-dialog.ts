@@ -4,7 +4,7 @@ import { getGlobalObject } from '../global-object';
 import { makeInsertParams } from './make-insert-params/make-insert-params';
 
 export const handleFormAndDialog = async () => {
-  const { scrapboxClient, dynamicConfig } = getGlobalObject();
+  const { scrapboxApi, dynamicConfig } = getGlobalObject();
 
   const { tags = [] } = await dynamicConfig.data;
   const form = new SxEditWordsForm({ tagOptions: tags as [] });
@@ -28,7 +28,7 @@ export const handleFormAndDialog = async () => {
   if (!pageTitle) {
     throw new Error('Page name not found');
   }
-  await scrapboxClient.changeLine(UserScriptApi.projectName, pageTitle, makeInsertParams(formResult, new Date(), UserScriptApi.pageLines));
+  await scrapboxApi.changeLine(UserScriptApi.projectName, pageTitle, makeInsertParams(formResult, new Date(), UserScriptApi.pageLines));
 
   if (needReloadAfterUpdation) {
     // TODO: move page without reload
