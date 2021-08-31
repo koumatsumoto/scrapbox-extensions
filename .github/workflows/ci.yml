@@ -1,13 +1,30 @@
-name: CI
-on: push
+name: CI/CD
+on:
+  push:
+  pull_request:
+  page_build:
 jobs:
-  build-and-test:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: 16
-          cache: 'npm'
+          cache: npm
       - run: npm ci
       - run: npm run check
+  deploy:
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/deploy'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: npm
+      - run: npm ci
+      - run: npm run deploy
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
