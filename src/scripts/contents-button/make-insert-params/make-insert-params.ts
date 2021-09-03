@@ -1,4 +1,4 @@
-import { ChangeRequestCreateParams, USLine } from 'scrapbox-tools';
+import { ChangeRequest, USLine } from 'scrapbox-tools';
 import { getDiaryPageTitle, makeTag } from '../../../libs';
 
 export const endWithEmptyLine = (lines: USLine[]) => {
@@ -20,7 +20,7 @@ export const makeInsertParams = (words: string[], date: Date = new Date(), lines
     throw new Error('Bad impl, this function requires at least one line');
   }
 
-  const changes: ChangeRequestCreateParams[] = [];
+  const changes: ChangeRequest[] = [];
   const titleLine = lines[0];
   const diaryTitle = getDiaryPageTitle(date);
   const tags = [`#${diaryTitle}`, ...words].map(makeTag).join(' ');
