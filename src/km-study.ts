@@ -1,6 +1,6 @@
 // webpack use this file as entry file to build
 import { documentReady } from './libs';
-import { replaceLinkToNewPage, episodeButton, listViewCustomization, loggedInCss, memolia } from './scripts';
+import { customPageStyle, episodeButton, listViewCustomization, loggedInCss, replaceLinkToNewPage } from './scripts';
 
 const main = () => {
   documentReady().subscribe(() => {
@@ -8,7 +8,7 @@ const main = () => {
     listViewCustomization();
     loggedInCss();
     episodeButton();
-    memolia();
+    customPageStyle();
   });
 };
 
