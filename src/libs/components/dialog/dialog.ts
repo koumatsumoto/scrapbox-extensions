@@ -7,6 +7,13 @@ export interface DialogOptions {
   closeTrigger?: string;
 }
 
+// from ts@4.4.3
+export interface HTMLDialogElement extends HTMLElement {
+  open: boolean;
+  showModal(): void;
+  close(): void;
+}
+
 const defaultOptions = {
   closeTrigger: 'data-close-dialog',
   onClose: () => {
@@ -24,7 +31,7 @@ export class SxDialog extends HTMLElement {
 
     this.options = { ...options, ...defaultOptions };
 
-    this.dialog = document.createElement('dialog');
+    this.dialog = document.createElement('dialog') as HTMLDialogElement;
     this.dialog.addEventListener('close', () => removeElement(this), { once: true }); // NOTE: support ESC key
 
     const closeTriggerElement = this.options.contents.querySelector(`[${this.options.closeTrigger}]`);
