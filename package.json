@@ -29,7 +29,7 @@
     "fp-ts": "^2.11.1",
     "lodash-es": "^4.17.21",
     "rxjs": "^7.3.0",
-    "scrapbox-tools": "0.5.5"
+    "scrapbox-tools": "0.5.6"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^6.3.7",
@@ -61,7 +61,7 @@
     "ts-jest": "^27.0.5",
     "ts-loader": "^9.2.5",
     "ts-node": "^10.2.1",
-    "typescript": "^4.3.5",
+    "typescript": "^4.4.3",
     "uglifycss": "^0.0.29",
     "webpack": "^5.51.1",
     "webpack-bundle-analyzer": "^4.4.2",
