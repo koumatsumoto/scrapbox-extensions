@@ -1,5 +1,5 @@
-import { Router, ScrapboxApi } from 'scrapbox-tools';
-import { addContentsButton, customListStyle, customPageStyle, DynamicConfig, replaceLinkToNewPage } from './scripts';
+import { DynamicConfig, Router, ScrapboxApi } from 'scrapbox-tools';
+import { addContentsButton, customListStyle, customPageStyle, replaceLinkToNewPage } from './scripts';
 
 const main = () => {
   const scrapboxApi = new ScrapboxApi();

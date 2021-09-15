@@ -1,6 +1,5 @@
-import { ScrapboxApi, UserScriptApi } from 'scrapbox-tools';
+import { DynamicConfig, ScrapboxApi, UserScriptApi } from 'scrapbox-tools';
 import { SxButton } from '../../libs';
-import { DynamicConfig } from '../dynamic-config';
 import { handleFormAndDialog } from './handle-form-and-dialog';
 
 export const addContentsButton = ({ scrapboxApi, dynamicConfig }: { scrapboxApi: ScrapboxApi; dynamicConfig: DynamicConfig }) => {

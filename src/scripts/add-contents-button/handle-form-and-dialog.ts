@@ -1,6 +1,5 @@
-import { ScrapboxApi, UserScriptApi } from 'scrapbox-tools';
+import { DynamicConfig, ScrapboxApi, UserScriptApi } from 'scrapbox-tools';
 import { SxDialog, SxEditWordsForm, SxLoadingIndicator } from '../../libs';
-import { DynamicConfig } from '../dynamic-config';
 import { makeInsertParams } from './make-insert-params/make-insert-params';
 
 export const handleFormAndDialog = async ({ scrapboxApi, dynamicConfig }: { scrapboxApi: ScrapboxApi; dynamicConfig: DynamicConfig }) => {
