@@ -1,4 +1,4 @@
-import { addWord, joinWords, removeWord, splitIntoWords } from './word';
+import { addWord, joinWords, toTag, removeWord, splitIntoWords } from './word';
 
 test('splitIntoWords', () => {
   expect(splitIntoWords('a b c')).toEqual(['a', 'b', 'c']);
@@ -19,4 +19,12 @@ test('addWord', () => {
 test('should remove existing word', () => {
   expect(removeWord('a b c', 'a')).toBe('b c');
   expect(removeWord('a b c', 'd')).toBe('a b c');
+});
+
+describe('makeTag', () => {
+  it('should make values as expected', () => {
+    expect(toTag('')).toBe('');
+    expect(toTag('tag')).toBe('#tag');
+    expect(toTag('#tag')).toBe('#tag');
+  });
 });

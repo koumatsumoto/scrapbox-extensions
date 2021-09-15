@@ -1,5 +1,5 @@
 import { ChangeRequest, USLine } from 'scrapbox-tools';
-import { getDiaryPageTitle, makeTag } from '../../../libs';
+import { getDiaryPageTitle, toTag } from '../../../libs';
 
 export const endWithEmptyLine = (lines: USLine[]) => {
   const last = lines[lines.length - 1];
@@ -23,7 +23,7 @@ export const makeInsertParams = (words: string[], date: Date = new Date(), lines
   const changes: ChangeRequest[] = [];
   const titleLine = lines[0];
   const diaryTitle = getDiaryPageTitle(date);
-  const tags = [`#${diaryTitle}`, ...words].map(makeTag).join(' ');
+  const tags = [`#${diaryTitle}`, ...words].map(toTag).join(' ');
 
   switch (lines.length) {
     // an empty or title-only page

@@ -1,2 +1,2 @@
-export * from './dom';
-export * from './text-operations';
+export * from './datetime';
+export * from './word';
