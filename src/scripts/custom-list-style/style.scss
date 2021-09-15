@@ -1,0 +1,17 @@
+.us-colored-square-in-list-item {
+  display: inline-block !important;
+  padding: 4px;
+  margin: 0 0 4px 0;
+  font-size: 0.88em;
+  line-height: 10px;
+  color: map_get($COLORS, 'hash-tag') !important;
+  background: #fff;
+  border: 1px solid map_get($COLORS, 'hash-tag');
+  border-radius: 2px;
+}
+
+// datetime element add-on by UserScript
+.us-datetime-on-list {
+  order: 3;
+  white-space: nowrap;
+}

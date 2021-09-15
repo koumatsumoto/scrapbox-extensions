@@ -1,6 +1,6 @@
 import { UserScriptApi, USProject } from 'scrapbox-tools/';
 import { getFormattedDateString } from '../../libs';
-import { customCSSClassName } from '../config';
+import { customCSSClassName } from './config';
 
 const createDatetimeElement = (timestamp: number) => {
   const elem = document.createElement('div');

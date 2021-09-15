@@ -1,6 +1,5 @@
 import { extractWord, isTagString, registerElementManagement } from '../../libs';
-import { customCSSClassName } from '../config';
-import { tagTextSelectorFn } from './config';
+import { customCSSClassName, tagTextSelectorFn } from './config';
 
 /**
  * Remove hash and add custom css class to link-text in list-item

@@ -3,3 +3,11 @@ export const defaultImageUrl = 'https://gyazo.com/f1aff01ad67e7abbde1e6a0dffb140
 export const tagTextSelectorFn = () => Array.from(document.querySelectorAll<HTMLElement>('.page-list-item .description .page-link'));
 export const listItemContentSelectorFn = () => Array.from(document.querySelectorAll<HTMLElement>('.page-list .page-list-item .content'));
 export const listItemSelectorFn = () => Array.from(document.querySelectorAll<HTMLElement>('.page-list .page-list-item'));
+
+/**
+ * Custom CSS Class Name
+ */
+export const customCSSClassName = {
+  hashInListItem: 'us-colored-square-in-list-item',
+  datetimeOnListItem: 'us-datetime-on-list',
+};
