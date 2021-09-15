@@ -1,5 +1,5 @@
 import { UserScriptApi } from 'scrapbox-tools';
-import { openAlert, SxButton } from '../../libs';
+import { SxButton } from '../../libs';
 import { handleFormAndDialog } from './handle-form-and-dialog';
 
 export const main = () => {
@@ -8,7 +8,7 @@ export const main = () => {
   button.style.marginTop = '32px';
   button.addEventListener('click', (ev) => {
     ev.stopPropagation();
-    handleFormAndDialog().catch(openAlert);
+    handleFormAndDialog().catch(window.alert);
   });
 
   // for page bottom

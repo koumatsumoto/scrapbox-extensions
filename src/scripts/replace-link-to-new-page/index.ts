@@ -1,4 +1,4 @@
-import { findElements, getDiaryPageTitle } from '../../libs';
+import { getDiaryPageTitle } from '../../libs';
 import { getGlobalObject } from '../global-object';
 
 const replaceHref = (element: { href: string }) => {
@@ -8,6 +8,6 @@ const replaceHref = (element: { href: string }) => {
 export const replaceLinkToNewPage = () => {
   const { router } = getGlobalObject();
   router.url.subscribe(() => {
-    findElements<HTMLAnchorElement>('a.new-button').forEach(replaceHref);
+    Array.from(document.querySelectorAll<HTMLAnchorElement>('a.new-button')).forEach(replaceHref);
   });
 };

@@ -1,5 +1,4 @@
 import { Observable } from 'rxjs';
-import { share } from 'rxjs/operators';
 
 export const documentReady = () => {
   return new Observable<void>((subscriber) => {
@@ -18,13 +17,4 @@ export const documentReady = () => {
       { once: true },
     );
   });
-};
-
-export const nodeChange = <N extends Node>(node: N, options: MutationObserverInit) => {
-  return new Observable<N>((subscriber) => {
-    const mo = new MutationObserver(() => subscriber.next());
-    mo.observe(node, options);
-
-    return () => mo.disconnect();
-  }).pipe(share());
 };

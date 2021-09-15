@@ -1,4 +1,4 @@
-import { isTagString, registerElementManagement, removeHead } from '../../libs/common';
+import { extractWord, isTagString, registerElementManagement } from '../../libs';
 import { customCSSClassName } from '../config';
 import { tagTextSelectorFn } from './config';
 
@@ -13,7 +13,7 @@ export const highlightTags = () =>
     onFirstCheck: (elem) => {
       const text = elem.textContent || '';
       if (isTagString(text)) {
-        elem.textContent = removeHead(text);
+        elem.textContent = extractWord(text);
         elem.classList.add(customCSSClassName.hashInListItem);
       }
     },

@@ -1,4 +1,3 @@
-import { removeElement } from '../../common';
 import './dialog.scss';
 
 export interface DialogOptions {
@@ -32,7 +31,7 @@ export class SxDialog extends HTMLElement {
     this.options = { ...options, ...defaultOptions };
 
     this.dialog = document.createElement('dialog') as HTMLDialogElement;
-    this.dialog.addEventListener('close', () => removeElement(this), { once: true }); // NOTE: support ESC key
+    this.dialog.addEventListener('close', () => this.parentNode?.removeChild(this), { once: true }); // NOTE: support ESC key
 
     const closeTriggerElement = this.options.contents.querySelector(`[${this.options.closeTrigger}]`);
     closeTriggerElement?.addEventListener('click', () => this.close(), { once: true });
