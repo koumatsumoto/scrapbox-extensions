@@ -7,7 +7,7 @@
   "private": "true",
   "scripts": {
     "build": "concurrently 'npm run build:scss' 'npm run build:ts'",
-    "build:scss": "sass src/styles/km-study.scss dist/km-study.css && uglifycss dist/km-study.css --output dist/km-study.min.css",
+    "build:scss": "sass src/styles/main.scss dist/main.css && uglifycss dist/main.css --output dist/main.min.css",
     "build:ts": "webpack --config webpack.config.js",
     "check": "npm run build && npm run test && npm run format && git diff --exit-code --name-only .",
     "deploy": "npm run build && npm run deploy:js && npm run deploy:css",
