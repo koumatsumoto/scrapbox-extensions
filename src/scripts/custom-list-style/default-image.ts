@@ -1,4 +1,4 @@
-import { registerElementManagement } from '../../libs/common/dom';
+import { registerElementManagement } from '../../libs';
 import { defaultImageUrl, listItemContentSelectorFn } from './config';
 
 const appendImg = (elem: HTMLElement) => {
