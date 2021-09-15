@@ -1,12 +1,18 @@
-// webpack use this file as entry file to build
+import { Router, ScrapboxApi } from 'scrapbox-tools';
 import { documentReady } from './libs';
-import { customPageStyle, episodeButton, listViewCustomization, replaceLinkToNewPage } from './scripts';
+import { customPageStyle, DynamicConfig, episodeButton, listViewCustomization, replaceLinkToNewPage } from './scripts';
 
 const main = () => {
+  const scrapboxApi = new ScrapboxApi();
+  const router = new Router();
+  const dynamicConfig = new DynamicConfig(scrapboxApi);
+  // for debug
+  (window as any)['sx'] = { scrapboxApi, router, dynamicConfig };
+
   documentReady().subscribe(() => {
-    replaceLinkToNewPage();
-    listViewCustomization();
-    episodeButton();
+    replaceLinkToNewPage({ router });
+    listViewCustomization({ scrapboxApi });
+    episodeButton({ scrapboxApi, dynamicConfig });
     customPageStyle();
   });
 };

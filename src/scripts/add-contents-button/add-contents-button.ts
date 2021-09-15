@@ -1,14 +1,15 @@
-import { UserScriptApi } from 'scrapbox-tools';
+import { ScrapboxApi, UserScriptApi } from 'scrapbox-tools';
 import { SxButton } from '../../libs';
+import { DynamicConfig } from '../dynamic-config';
 import { handleFormAndDialog } from './handle-form-and-dialog';
 
-export const main = () => {
+export const addContentsButton = ({ scrapboxApi, dynamicConfig }: { scrapboxApi: ScrapboxApi; dynamicConfig: DynamicConfig }) => {
   const button = new SxButton({ type: 'flat' });
   button.innerText = 'Add Note';
   button.style.marginTop = '32px';
   button.addEventListener('click', (ev) => {
     ev.stopPropagation();
-    handleFormAndDialog().catch(window.alert);
+    handleFormAndDialog({ scrapboxApi, dynamicConfig }).catch(window.alert);
   });
 
   // for page bottom
