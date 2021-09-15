@@ -1,6 +1,6 @@
 import { Router, ScrapboxApi } from 'scrapbox-tools';
 import { documentReady } from './libs';
-import { customPageStyle, DynamicConfig, episodeButton, listViewCustomization, replaceLinkToNewPage } from './scripts';
+import { addContentsButton, customListStyle, customPageStyle, DynamicConfig, replaceLinkToNewPage } from './scripts';
 
 const main = () => {
   const scrapboxApi = new ScrapboxApi();
@@ -10,10 +10,10 @@ const main = () => {
   (window as any)['sx'] = { scrapboxApi, router, dynamicConfig };
 
   documentReady().subscribe(() => {
-    replaceLinkToNewPage({ router });
-    listViewCustomization({ scrapboxApi });
-    episodeButton({ scrapboxApi, dynamicConfig });
+    customListStyle({ scrapboxApi });
     customPageStyle();
+    addContentsButton({ scrapboxApi, dynamicConfig });
+    replaceLinkToNewPage({ router });
   });
 };
 
