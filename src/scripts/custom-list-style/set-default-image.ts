@@ -1,6 +1,4 @@
-import { timer, withLatestFrom } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import { DynamicConfig } from 'scrapbox-tools';
+import { timer } from 'rxjs';
 
 const appendIcon = (imageUrl: unknown) => {
   return (elem: HTMLElement) => {
@@ -18,15 +16,16 @@ const hasNoIcon = (elem: HTMLElement) => {
 /**
  * Add <img> into list item that does not have own image.
  */
-export const setDefaultImage = ({ dynamicConfig }: { dynamicConfig: DynamicConfig }) => {
+export const setDefaultImage = ({ imageUrl }: { imageUrl: string }) => {
   timer(0, 1000 * 5)
-    .pipe(
-      withLatestFrom(dynamicConfig.data),
-      filter(([, config]) => Boolean(config['defaultListItemImage']) && window.scrapbox.Layout === 'list'),
-    )
-    .subscribe(([, config]) => {
-      const listElements = Array.from(document.querySelectorAll<HTMLElement>('.page-list .page-list-item .content'));
+    .pipe()
+    .subscribe(() => {
+      if (window.scrapbox.Layout !== 'list') {
+        return;
+      }
 
-      listElements.filter(hasNoIcon).forEach(appendIcon(config['defaultListItemImage']));
+      Array.from(document.querySelectorAll<HTMLElement>('.page-list .page-list-item .content'))
+        .filter(hasNoIcon)
+        .forEach(appendIcon(imageUrl));
     });
 };

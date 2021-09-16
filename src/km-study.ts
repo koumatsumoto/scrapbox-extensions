@@ -9,7 +9,7 @@ const main = () => {
   (window as any)['sx'] = { scrapboxApi, router, dynamicConfig };
 
   router.documentReady.subscribe(() => {
-    customListStyle({ scrapboxApi, dynamicConfig });
+    customListStyle({ scrapboxApi, dynamicConfig }).catch(console.error);
     customPageStyle();
     addContentsButton({ scrapboxApi, dynamicConfig });
     replaceLinkToNewPage({ router });
