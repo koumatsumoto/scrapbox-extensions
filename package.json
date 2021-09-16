@@ -7,11 +7,11 @@
   "private": "true",
   "scripts": {
     "build": "concurrently 'npm run build:scss' 'npm run build:ts'",
-    "build:scss": "sass src/styles/main.scss dist/main.css && uglifycss dist/main.css --output dist/main.min.css",
+    "build:scss": "sass src/main.scss dist/main.css && uglifycss dist/main.css --output dist/main.min.css",
     "build:ts": "webpack --config webpack.config.js",
     "check": "npm run build && npm run test && npm run format && git diff --exit-code --name-only .",
     "deploy": "npm run build && npm run deploy:js && npm run deploy:css",
-    "deploy:js": "scrapbox-tools deploy-userscript --project=km-study dist/km-study.min.js",
+    "deploy:js": "scrapbox-tools deploy-userscript --project=km-study dist/main.min.js",
     "deploy:css": "scrapbox-tools deploy-usercss --project=km-study dist/main.min.css",
     "format": "npm run format:scss && npm run format:ts && prettier --config .prettierrc --write '{deploy,src,.circleci}/**/*.{ts,js,scss,html,md,yml}' ./*.{js,json}",
     "format:scss": "stylelint 'src/{libs,scripts,styles}/**/*.scss' --fix",

@@ -3,7 +3,7 @@ const path = require('path');
 module.exports = {
   mode: 'production',
   entry: {
-    'km-study': path.join(__dirname, 'src/km-study.ts'),
+    main: path.join(__dirname, 'src/main.ts'),
   },
   output: {
     path: path.join(__dirname, 'dist'),
