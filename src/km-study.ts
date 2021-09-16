@@ -1,3 +1,4 @@
+import { forkJoin } from 'rxjs';
 import { DynamicConfig, Router, ScrapboxApi } from 'scrapbox-tools';
 import { addContentsButton, customListStyle, customPageStyle, replaceLinkToNewPage } from './scripts';
 
@@ -8,10 +9,10 @@ const main = () => {
   // for debug
   (window as any)['sx'] = { scrapboxApi, router, dynamicConfig };
 
-  router.documentReady.subscribe(() => {
-    customListStyle({ scrapboxApi, dynamicConfig }).catch(console.error);
+  forkJoin([router.documentReady, dynamicConfig.data]).subscribe(([, config]) => {
+    customListStyle({ scrapboxApi, config });
     customPageStyle();
-    addContentsButton({ scrapboxApi, dynamicConfig });
+    addContentsButton({ scrapboxApi, config });
     replaceLinkToNewPage({ router });
   });
 };
