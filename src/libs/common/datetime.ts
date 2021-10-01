@@ -6,7 +6,6 @@ export const scrapboxCustomFormat = {
 const zerofill = (num: number) => (`${num}`.length < 2 ? `0${num}` : `${num}`);
 
 // NOTE: use new format `YYYY-MM-DD` since 2021.
-export const getFormattedDateString = (date: Date) => `${date.getFullYear()}-${zerofill(date.getMonth() + 1)}-${zerofill(date.getDate())}`;
-
-// NOTE: use new format `#YYYY-MM-DD` since 2021.
-export const getDiaryPageTitle = (date: Date = new Date()) => `#${getFormattedDateString(date)}`;
+export const getFormattedDateString = (date: Date = new Date()) => {
+  return `${date.getFullYear()}-${zerofill(date.getMonth() + 1)}-${zerofill(date.getDate())}`;
+};

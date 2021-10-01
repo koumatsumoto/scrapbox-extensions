@@ -1,8 +1,8 @@
 import { Router } from 'scrapbox-tools';
-import { getDiaryPageTitle } from '../../libs';
+import { getFormattedDateString } from '../../libs';
 
 const replaceHref = (element: { href: string }) => {
-  element.href = element.href.replace('new', encodeURIComponent(getDiaryPageTitle()));
+  element.href = element.href.replace('new', encodeURIComponent(getFormattedDateString()));
 };
 
 export const replaceLinkToNewPage = ({ router }: { router: Router }) => {

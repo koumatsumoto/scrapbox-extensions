@@ -1,5 +1,5 @@
 import { ChangeRequest, USLine } from 'scrapbox-tools';
-import { getDiaryPageTitle, toTag } from '../../../libs';
+import { getFormattedDateString, toTag } from '../../../libs';
 
 export const endWithEmptyLine = (lines: USLine[]) => {
   const last = lines[lines.length - 1];
@@ -22,7 +22,7 @@ export const makeInsertParams = (words: string[], date: Date = new Date(), lines
 
   const changes: ChangeRequest[] = [];
   const titleLine = lines[0];
-  const diaryTitle = getDiaryPageTitle(date);
+  const diaryTitle = getFormattedDateString(date);
   const tags = [`#${diaryTitle}`, ...words].map(toTag).join(' ');
 
   switch (lines.length) {
